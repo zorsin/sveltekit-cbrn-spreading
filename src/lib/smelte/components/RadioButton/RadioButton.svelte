@@ -11,8 +11,9 @@ Slots: label
   import Ripple from '../Ripple';
   import Label from '../Checkbox/Label.svelte';
   import { ClassBuilder } from '../../utils/classes';
+  import type { Colors } from '$types/Colors';
 
-  const classesDefault = 'inline-flex block items-center mb-2 cursor-pointer z-0';
+  const classesDefault = 'flex items-center mb-2 cursor-pointer z-0';
   /** Selected state. If selected===value then radiobutton is checked. Bindable
    *
    * Default: ""
@@ -26,7 +27,7 @@ Slots: label
   /** Color variant, accepts any of the main colors described in Tailwind config.
    *
    * Default: "primary" */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   /** Disabled variant.
    *
    * Default: false
@@ -77,6 +78,6 @@ Slots: label
     </Ripple>
   </div>
   <slot name="label">
-    <Label {disabled} {label} class={labelClasses} />
+    <Label {name} {disabled} {label} class={labelClasses} />
   </slot>
 </div>
