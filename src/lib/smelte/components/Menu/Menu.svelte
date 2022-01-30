@@ -28,7 +28,7 @@
   export let classes: string | ((s: string) => string) = classesDefault;
   export let listClasses: string | ((s: string) => string) = listClassesDefault;
   /** Additional props for the list component */
-  export let listProps: ListProps = {};
+  export let listProps: Record<string, string> = {};
 
   const cb = new ClassBuilder($$props.class, '');
 

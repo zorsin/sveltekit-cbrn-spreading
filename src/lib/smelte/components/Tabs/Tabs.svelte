@@ -13,6 +13,7 @@ Slots (slot-props): item (color, item), content (selected)
   import Indicator from './Indicator.svelte';
   import ProgressLinear from '../ProgressLinear';
   import TabButton from './TabButton.svelte';
+  import type { Colors } from '$types/Colors';
 
   interface ITabButtonProps {
     text?: string;
@@ -41,7 +42,7 @@ Slots (slot-props): item (color, item), content (selected)
    *
    * Default: "white"
    */
-  export let color = 'white';
+  export let color: Colors = 'white';
   /** Not Selected Color
    *
    * Default: "white"

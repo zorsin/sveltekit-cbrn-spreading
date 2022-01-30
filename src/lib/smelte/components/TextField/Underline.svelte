@@ -2,6 +2,8 @@
   Underline for TextField component 
 -->
 <script lang="ts">
+  import type { Colors } from '$types/Colors';
+
   import utils, { ClassBuilder, filterProps } from '../../utils/classes';
   const defaultClasses = `mx-auto w-0`;
   /** No underline variant.
@@ -28,7 +30,7 @@
    *
    * Default: "primary"
    */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
 
   /** List of classes to add to the component (blank space separated).
    *

@@ -4,6 +4,8 @@ Sliders allow users to make selections from a range of values.
 Props: value, label, color, disabled, min, max, step, classes
 -->
 <script lang="ts">
+  import type { Colors } from '$types/Colors';
+
   import { ClassBuilder } from '../../utils/classes';
   // import Ripple from '../Ripple';
 
@@ -20,7 +22,7 @@ Props: value, label, color, disabled, min, max, step, classes
   /** Color variant, accepts any of the main colors described in Tailwind config.
    *
    * Default: "primary" */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   /** Disabled variant.
    *
    * Default: false

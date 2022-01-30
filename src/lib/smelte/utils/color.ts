@@ -37,7 +37,7 @@ function buildPaletteByVarColor(varColor) {
   };
 }
 
-function buildPalette(hex): Record<string, string> {
+function buildPalette(hex: string): Record<string, string> {
   const varColorMatch = hex.match(/var\((?<color>[^)]+)/);
   if (varColorMatch) {
     return buildPaletteByVarColor(varColorMatch.groups.color);
@@ -68,7 +68,7 @@ function buildPalette(hex): Record<string, string> {
   };
 }
 
-function generate(colors: string[]): Record<string, string> {
+function generate(colors: Record<string, string>): Record<string, string> {
   return Object.keys(colors).reduce(
     (acc, cur) => ({
       ...acc,

@@ -16,12 +16,13 @@ Slots: select, options
   import TextField from '../TextField';
   import { ClassBuilder } from '../../utils/classes';
   import { hideListAction } from '../../utils/hide-list-action';
+  import type { Colors } from '$types/Colors';
 
   const optionsClassesDefault =
     'absolute left-0 bg-white rounded shadow w-full z-20 dark:bg-dark-500';
   const classesDefault = 'cursor-pointer relative pb-4';
 
-  const noop = (i) => i;
+  const noop = (i: string): string => i;
   /** Array of Items
    *
    * Default: []
@@ -31,7 +32,7 @@ Slots: select, options
    *
    * Default: empty string
    */
-  export let value: string | number = '';
+  export let value: string = '';
   export const text = '';
   /** Label of the TextField
    *
@@ -48,7 +49,7 @@ Slots: select, options
   /** Color variant, accepts any of the main colors described in Tailwind config.
    *
    * Default: "primary" */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   /** Outlined variant.
    *
    * Default: false

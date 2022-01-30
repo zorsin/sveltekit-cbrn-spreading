@@ -4,7 +4,7 @@ Label component used by Checkbox
 <script lang="ts">
   import { ClassBuilder } from '../../utils/classes';
 
-  const classesDefault = "pl-2 cursor-pointer 'text-gray-700 dark:text-gray-300'";
+  const classesDefault = 'pl-2 cursor-pointer text-gray-700 dark:text-gray-300';
 
   export let classes: string | ((s: string) => string) = classesDefault;
   /** Text of the label
@@ -22,7 +22,7 @@ Label component used by Checkbox
    * Default: "text-gray-500 dark:text-gray-600"
    */
   export let disabledClasses = 'text-gray-500 dark:text-gray-600';
-
+  export let name: string;
   const cb = new ClassBuilder(classes, classesDefault);
   $: c = cb
     .flush()
@@ -32,6 +32,6 @@ Label component used by Checkbox
     .get();
 </script>
 
-<label aria-hidden="true" {...$$props} class={c}>
+<label for={name} aria-hidden="true" {...$$props} class={c}>
   <slot>{label}</slot>
 </label>

@@ -9,6 +9,7 @@ Props: value, label, color, checked, disabled, classes, labelClasses
   import { ClassBuilder } from '../../utils/classes';
   import Icon from '../Icon';
   import Ripple from '../Ripple';
+  import type { Colors } from '$types/Colors';
 
   const classesDefault = 'inline-flex items-center mb-2 cursor-pointer z-10';
 
@@ -26,7 +27,7 @@ Props: value, label, color, checked, disabled, classes, labelClasses
    *
    * Default: "primary"
    */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   /** Checked state.
    *
    * Default; false
@@ -86,6 +87,7 @@ Props: value, label, color, checked, disabled, classes, labelClasses
 
   const cb = new ClassBuilder(classes, classesDefault);
   $: c = cb.flush().add(classes, true, classesDefault).add($$props.class).get();
+  let name = `checkbox-${Math.random()}`;
 </script>
 
 <div class={$$props.class}>
@@ -113,7 +115,7 @@ Props: value, label, color, checked, disabled, classes, labelClasses
       </Ripple>
     </div>
     <slot name="label">
-      <Label {disabled} {label} class={labelClasses} />
+      <Label {name} {disabled} {label} class={labelClasses} />
     </slot>
   </div>
 </div>

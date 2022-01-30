@@ -25,9 +25,9 @@
   export const text = '';
   export const item = {};
   export const to = null;
-  export const selectedClasses = (i) => i;
-  export const itemClasses = (i) => i;
-  export const disabledClasses = (i) => i;
+  export const selectedClasses: string | ((s: string) => string) = (i) => i;
+  export const itemClasses: string | ((s: string) => string) = (i) => i;
+  export const disabledClasses: string | ((s: string) => string) = (i) => i;
   export let classes: string | ((s: string) => string) = classesDefault;
 
   function id(i) {

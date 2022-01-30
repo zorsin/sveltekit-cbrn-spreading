@@ -1,20 +1,18 @@
-<script>
+<script lang="ts">
   export let small = false;
   export let xs = false;
   export let reverse = false;
   export let tip = false;
-  export let color = 'default';
 </script>
 
 <i
   aria-hidden="true"
-  class="material-icons icon text-xl select-none {$$props.class} duration-200 ease-in"
+  class="material-icons icon text-xl select-none duration-200 ease-in {$$props.class}"
   class:reverse
   class:tip
   on:click
   class:text-base={small}
   class:text-xs={xs}
-  style={color ? `color: ${color}` : ''}
 >
   <slot />
 </i>

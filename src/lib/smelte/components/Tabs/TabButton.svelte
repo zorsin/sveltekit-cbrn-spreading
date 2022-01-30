@@ -10,6 +10,7 @@ Slots: default
   import Icon from '../Icon';
   import createRipple from '../Ripple/ripple';
   import utils, { ClassBuilder } from '../../utils/classes';
+  import type { Colors } from '$types/Colors';
 
   const classesDefault =
     'duration-100 relative overflow-hidden text-center w-full h-full p-4 cursor-pointer flex mx-auto items-center text-sm h-full';
@@ -46,7 +47,7 @@ Slots: default
   /** Color variant, accepts any of the main colors described in Tailwind config.
    *
    * Default: "primary" */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   /** Not Selected Color.
    *
    * Default: "white"

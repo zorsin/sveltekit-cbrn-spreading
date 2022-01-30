@@ -8,6 +8,7 @@ thumbClasses, labelClasses, classes
   import Ripple from '../Ripple';
 
   import { ClassBuilder } from '../../utils/classes';
+  import type { Colors } from '$types/Colors';
 
   const classesDefault = `inline-flex items-center mb-2 cursor-pointer z-10`;
   const trackClassesDefault =
@@ -28,7 +29,7 @@ thumbClasses, labelClasses, classes
    *
    * Default: "primary"
    */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   /** Disabled variant.
    *
    * Default: false

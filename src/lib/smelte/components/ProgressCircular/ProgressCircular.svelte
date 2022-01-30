@@ -4,6 +4,8 @@ Circular Progress Indicator
 Props: progress, color, width, size
 -->
 <script lang="ts">
+  import type { Colors } from '$types/Colors';
+
   /** Progress. If not is provided it becomes indefinite variant
    *
    * Default: null
@@ -12,7 +14,7 @@ Props: progress, color, width, size
   /** Color variant, accepts any of the main colors described in Tailwind config.
    *
    * Default: "primary" */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   /** Width
    *
    * Default: 3

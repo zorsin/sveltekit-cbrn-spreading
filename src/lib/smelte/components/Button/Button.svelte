@@ -9,6 +9,7 @@ textClasses, iconClasses, fabClasses, smallClasses, disabledClasses, elevationCl
   import Icon from '../Icon';
   import utils, { ClassBuilder, filterProps } from '../../utils/classes';
   import createRipple from '../Ripple/ripple';
+  import type { Colors } from '$types/Colors';
 
   /** Bound boolean value.
    *
@@ -57,7 +58,7 @@ textClasses, iconClasses, fabClasses, smallClasses, disabledClasses, elevationCl
   /** Color variant, accepts any of the main colors described in Tailwind config.
    *
    * Default: "primary" */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   /** if href is supplied, button is a link
    *
    * Default: null*/

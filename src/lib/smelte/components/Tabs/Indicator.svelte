@@ -6,6 +6,8 @@ Props: width, left, color
 No Slots.
 -->
 <script lang="ts">
+  import type { Colors } from '$types/Colors';
+
   import { slide } from 'svelte/transition';
   import utils from '../../utils/classes';
   /** Width.
@@ -22,7 +24,7 @@ No Slots.
    *
    * Default: "primary"
    */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
 
   const { bg } = utils(color);
 </script>

@@ -27,6 +27,7 @@ Slots: default, action
   import Button from '../Button';
   import { Spacer } from '../Util';
   import utils, { ClassBuilder } from '../../utils/classes';
+  import type { Colors } from '$types/Colors';
 
   /** Value. Bindable.
    *
@@ -55,7 +56,7 @@ Slots: default, action
   /** Color variant, accepts any of the main colors described in Tailwind config.
    *
    * Default: "gray" */
-  export let color = 'gray';
+  export let color: Colors = 'gray';
   /** Text Color variant, accepts any of the main colors described in Tailwind config.
    *
    * Default: "white" */

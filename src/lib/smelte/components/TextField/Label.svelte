@@ -2,6 +2,8 @@
   Default Label for TextField
 -->
 <script lang="ts">
+  import type { Colors } from '$types/Colors';
+
   import utils, { ClassBuilder, filterProps } from '../../utils/classes';
 
   const labelDefault = `pt-4 absolute top-0 label-transition block pb-2 px-4 pointer-events-none cursor-text`;
@@ -35,7 +37,7 @@
    *
    * Default: "primary"
    */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   /** Background Color.
    *
    * Default: "white"
@@ -64,6 +66,7 @@
 
   export let labelClasses: string | ((s: string) => string) = labelDefault;
 
+  export let name;
   const { border, txt } = utils(color);
   const l = new ClassBuilder(labelClasses, labelDefault);
 
@@ -92,7 +95,7 @@
   );
 </script>
 
-<label class="{lClasses} {$$props.class}" {...props}>
+<label for={name} class="{lClasses} {$$props.class}" {...props}>
   <slot />
 </label>
 

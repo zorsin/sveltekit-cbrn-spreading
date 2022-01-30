@@ -17,6 +17,7 @@ Slots: label, append, prepend
   import Label from './Label.svelte';
   import Hint from './Hint.svelte';
   import Underline from './Underline.svelte';
+  import type { Colors } from '$types/Colors';
 
   const inputDefault = 'pb-2 pt-6 px-4 rounded-t text-black dark:text-gray-100 w-full';
   const classesDefault = 'mt-2 mb-6 relative text-gray-600 dark:text-gray-100';
@@ -111,7 +112,7 @@ Slots: label, append, prepend
    *
    * Default: "primary"
    */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
   // for outlined button label
   /** Background color to match for outlined elevated label.
    *
@@ -237,12 +238,14 @@ Slots: label, append, prepend
   );
 
   const dispatch = createEventDispatcher();
+  let name = `text-${Math.random()}`;
 </script>
 
 <div class={wClasses}>
   {#if label}
     <slot name="label">
       <Label
+        {name}
         labelOnTop={!!labelOnTop}
         {focused}
         {error}
@@ -257,6 +260,7 @@ Slots: label, append, prepend
 
   {#if (!textarea && !select) || autocomplete}
     <input
+      {name}
       aria-label={label}
       class={iClasses}
       on:focus={toggleFocused}
@@ -277,6 +281,7 @@ Slots: label, append, prepend
   {:else if textarea && !select}
     <textarea
       {rows}
+      {name}
       aria-label={label}
       class={iClasses}
       on:change
@@ -297,6 +302,7 @@ Slots: label, append, prepend
   {:else if select && !autocomplete}
     <input
       readonly
+      {name}
       class={iClasses}
       on:change
       on:input

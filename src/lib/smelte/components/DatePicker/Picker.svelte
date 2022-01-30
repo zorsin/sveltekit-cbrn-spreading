@@ -8,6 +8,7 @@ Picker for DatePicker
   import Button from '../Button';
   import Ripple from '../Ripple';
   import { getWeekDays, weekStart } from './util';
+  import type { Colors } from '$types/Colors';
 
   const dispatch = createEventDispatcher();
   /** Open. Bindable.
@@ -39,7 +40,7 @@ Picker for DatePicker
   export let dense: boolean;
   let selected: number;
   export let paginatorProps = {
-    color: 'gray',
+    color: <Colors>'gray',
     text: true,
     flat: true,
     dark: true,

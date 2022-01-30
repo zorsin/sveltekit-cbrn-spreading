@@ -4,6 +4,8 @@ Linear Progress Indicator
 Props: app, progress, color
  -->
 <script lang="ts">
+  import type { Colors } from '$types/Colors';
+
   import { onMount } from 'svelte';
   import { slide } from 'svelte/transition';
   /** class:fixed & class:z-50 wanted?
@@ -19,7 +21,7 @@ Props: app, progress, color
   /** Color variant, accepts any of the main colors described in Tailwind config.
    *
    * Default: "primary" */
-  export let color = 'primary';
+  export let color: Colors = 'primary';
 
   let initialized = false;
 
