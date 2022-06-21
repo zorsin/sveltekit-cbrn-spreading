@@ -51,8 +51,8 @@ Hint for TextField component
 
   $: classes = l
     .flush()
+    .add('text-gray-600', !!hint && !error)
     .add('text-error-500', !!error)
-    .add('text-gray-600', !!hint)
     .add(add)
     .remove(remove)
     .replace(replace)
@@ -63,5 +63,4 @@ Hint for TextField component
 
 <div class={classes} transition:fly={transitionProps}>
   {@html hint || ''}
-  {error || ''}
 </div>
