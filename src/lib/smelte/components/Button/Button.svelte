@@ -194,11 +194,11 @@ textClasses, iconClasses, fabClasses, smallClasses, disabledClasses, elevationCl
 </script>
 
 {#if href}
-  <a {href} {...$$props}>
+  <a {href} {...props}>
     <button
       use:ripple
       class={classes}
-      {...$$props}
+      {...props}
       {type}
       {disabled}
       on:click={() => (value = !value)}
@@ -216,7 +216,7 @@ textClasses, iconClasses, fabClasses, smallClasses, disabledClasses, elevationCl
   <button
     use:ripple
     class={classes}
-    {...$$props}
+    {...props}
     {type}
     {disabled}
     on:click={() => (value = !value)}
