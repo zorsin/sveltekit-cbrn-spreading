@@ -63,7 +63,7 @@ Slots: default, title, actions
 {#if value}
   <div class="fixed w-full h-full top-0 left-0 z-30">
     <Scrim {opacity} on:click={() => !persistent && (value = false)} />
-    <div class="h-full w-full absolute flex items-center justify-center">
+    <div class="h-full w-full absolute flex items-center justify-center px-24">
       <div in:scale={transitionProps} class={c}>
         <div class={t}>
           <slot name="title" />
