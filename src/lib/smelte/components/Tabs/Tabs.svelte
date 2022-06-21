@@ -80,8 +80,7 @@ Slots (slot-props): item (color, item), content (selected)
             [index2, item2]: [number, ITabButtonProps],
           ) => (item2.to || item2.id).length - (item1.to || item1.id).length,
         )[0];
-
-      if (typeof longestMatch === 'number') {
+      if (typeof longestMatch[0] === 'number') {
         left = <number>longestMatch[0];
         offset = left * indicatorWidth;
       }
@@ -89,7 +88,6 @@ Slots (slot-props): item (color, item), content (selected)
       offset = null;
     }
   }
-
   onMount(() => calcIndicator(selected));
 
   $: calcIndicator(selected);
