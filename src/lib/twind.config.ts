@@ -1,3 +1,6 @@
+import { defineConfig } from 'twind';
+import presetAutoprefix from '@twind/preset-autoprefix';
+import presetTailwind from '@twind/preset-tailwind';
 import { generate as buildPalette } from '$lib/smelte/utils/color.js';
 
 const defaultColors = {
@@ -30,8 +33,9 @@ const defaultColors = {
 };
 
 /** @type {import('twind').Configuration} */
-export default {
+export default defineConfig({
   hash: false,
+  presets: [presetAutoprefix(), presetTailwind()],
   theme: {
     extend: {
       width: {
@@ -89,4 +93,4 @@ export default {
       },
     },
   },
-};
+});
