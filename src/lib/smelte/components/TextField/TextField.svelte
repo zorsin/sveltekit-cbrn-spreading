@@ -144,6 +144,10 @@ Slots: label, append, prepend
    * Default: {}
    */
   export let replace: Record<string, string> = {};
+  /** Name of the input for forms
+   *
+   */
+  export let name = undefined;
 
   export let inputClasses: string | ((s: string) => string) = inputDefault;
   export let classes: string | ((s: string) => string) = classesDefault;
@@ -238,7 +242,9 @@ Slots: label, append, prepend
   );
 
   const dispatch = createEventDispatcher();
-  let name = `text-${Math.random()}`;
+  if (!name) {
+    name = `text-${Math.random().toString().slice(4)}`;
+  }
 </script>
 
 <div class={wClasses}>
