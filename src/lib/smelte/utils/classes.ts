@@ -88,7 +88,7 @@ export class ClassBuilder {
 
 const defaultReserved = ['class', 'add', 'remove', 'replace', 'value'];
 
-export function filterProps(reserved: string[], props: unknown): unknown {
+export function filterProps(reserved: string[], props: unknown): Record<string, unknown> {
   const r = [...reserved, ...defaultReserved];
 
   return Object.keys(props).reduce(
