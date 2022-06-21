@@ -27,7 +27,7 @@
 <Dialog bind:value={showDialog} persistent>
   <h5 slot="title">{$t('pages.commander.dialog.title')}</h5>
   <div>{$t('pages.commander.dialog.descr')}</div>
-  <TextField label={$t('pages.commander.dialog.input-label')} bind:value={inputValue} />
+  <TextField label={$t('pages.commander.dialog.label-input')} bind:value={inputValue} />
   <div slot="actions">
     <Button on:click={closeDialog}>{$t('common.back')}</Button>
     <Button on:click={gotoSpread}>{$t('common.next')}</Button>

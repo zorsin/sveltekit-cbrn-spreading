@@ -1,33 +1,55 @@
 {
-  "common":{
-    "next":"Weiter",
-    "back": "Zurück"
+  "common": {
+    "next": "Weiter",
+    "back": "Zurück",
+    "view": "Anzeigen",
+    "save": "Speichern"
   },
   "title": "CBRN Ausbreitung",
-  "pages":{
+  "pages": {
     "landing": {
-      "title":"CBRN Ausbreitung",
+      "title": "CBRN Ausbreitung",
       "descr": "Mit 'CBRN Ausbreitung' können Gefahrstoffausbreitungen für Übungsmessfahrten simuliert werden. Der Einsatzleiter legt eine Ausbreitung mit verschiedensten Parametern an. Die Einheiten können sich dann mit dem Registrigungscode des Einsatzleiters an der Ausbreitung anmelden und eine simulierte Messfahrt durchführen."
     },
-    "commander":{
+    "commander": {
       "title": "Einsatzleiter",
       "descr": "Hier kannst du neue Ausbreitungen anlegen oder bestehende Ausbreitungen starten, sodass sich Einheiten registrieren können.",
-      "btn-create":"Neue Ausbreitung anlegen",
-      "btn-view":"Ausbreitung anzeigen",
-      "dialog":{
-        "title":"Ausbreitungsnummer eingeben",
-        "descr":"Gebe hier die Nummer deiner Ausbreitung ein:",
-        "input-label":"Ausbreitungsnummer"
+      "btn-create": "Neue Ausbreitung anlegen",
+      "btn-view": "Ausbreitung anzeigen",
+      "dialog": {
+        "title": "Ausbreitungsnummer eingeben",
+        "descr": "Gebe hier die Nummer deiner Ausbreitung ein:",
+        "label-input": "Ausbreitungsnummer"
       }
     },
-    "commander-create":{
-      "title": "Neue Ausbreitung anlegen"
+    "commander-create": {
+      "title": "Neue Ausbreitung anlegen",
+      "labels": {
+        "start": "Startkoordinate",
+        "select-start": "Startkoordinate auswählen",
+        "length": "Länge",
+        "width": "Breite",
+        "angle": "Winkel (Grad)",
+        "strength": "Stärke"
+      },
+      "errors": {
+        "start": "Du muss eine Startkoordinate angeben!",
+        "width": "Die Breite muss eine Nummer sein!",
+        "length": "Die Länge muss eine Nummer sein!",
+        "angle": "Der Winkel muss eine Nummer sein!",
+        "strength": "Die Stärke muss eine Nummer sein!"
+      },
+      "dialog": {
+        "title": "Ausbreitung speichern",
+        "descr": "Bitte gebe zum speichern eine Namen für die Ausbreitung an. Mit dem Namen kannst du deine gespeicherten Ausbreitungen später leicht wieder finden.",
+        "label-name": "Name für die Ausbreitung"
+      }
     },
-    "commander-view":{
+    "commander-view": {
       "title": "Ausbreitung {id}"
     },
-    "unit":{
-      "title":"Einheit"
+    "unit": {
+      "title": "Einheit"
     }
   }
 }
