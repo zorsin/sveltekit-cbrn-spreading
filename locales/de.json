@@ -1,0 +1,33 @@
+{
+  "common":{
+    "next":"Weiter",
+    "back": "Zurück"
+  },
+  "title": "CBRN Ausbreitung",
+  "pages":{
+    "landing": {
+      "title":"CBRN Ausbreitung",
+      "descr": "Mit 'CBRN Ausbreitung' können Gefahrstoffausbreitungen für Übungsmessfahrten simuliert werden. Der Einsatzleiter legt eine Ausbreitung mit verschiedensten Parametern an. Die Einheiten können sich dann mit dem Registrigungscode des Einsatzleiters an der Ausbreitung anmelden und eine simulierte Messfahrt durchführen."
+    },
+    "commander":{
+      "title": "Einsatzleiter",
+      "descr": "Hier kannst du neue Ausbreitungen anlegen oder bestehende Ausbreitungen starten, sodass sich Einheiten registrieren können.",
+      "btn-create":"Neue Ausbreitung anlegen",
+      "btn-view":"Ausbreitung anzeigen",
+      "dialog":{
+        "title":"Ausbreitungsnummer eingeben",
+        "descr":"Gebe hier die Nummer deiner Ausbreitung ein:",
+        "input-label":"Ausbreitungsnummer"
+      }
+    },
+    "commander-create":{
+      "title": "Neue Ausbreitung anlegen"
+    },
+    "commander-view":{
+      "title": "Ausbreitung {id}"
+    },
+    "unit":{
+      "title":"Einheit"
+    }
+  }
+}

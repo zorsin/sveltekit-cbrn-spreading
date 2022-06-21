@@ -1,20 +1,17 @@
-import { create } from 'twind';
-import { virtualSheet, getStyleTag, shim } from 'twind/shim/server';
-import twindConfig from '$lib/twind.config';
-const sheet = virtualSheet();
-const { tw } = create({ ...twindConfig, sheet });
-sheet.reset();
+import handleTwind from '@twind/with-sveltekit/hooks';
+import { handleSession } from 'svelte-kit-cookie-session';
+import { sequence } from '@sveltejs/kit/hooks';
+
+export const getSession = ({request}) => {
+  let acceptedLanguage = request.headers["accept-language"] && request.headers["accept-language"].split(',')[0];
+  return { acceptedLanguage };
+}
 
 /** @type {import('@sveltejs/kit').Handle} */
-export async function handle({ event, resolve }): Promise<Response> {
-  const response = await resolve(event);
+const customHandle = async ({ event, resolve }) => {
+  return resolve(event);
+};
 
-  if (response.headers.get('content-type')?.startsWith('text/html')) {
-    const body = await response.text();
-    const shimedBody = shim(body, { tw });
-    const style = getStyleTag(sheet);
-    const final = shimedBody.replace(/<\/head>/g, `${style}</head>`);
-    return new Response(final, response);
-  }
-  return response;
-}
+export const handle = sequence(handleSession({
+  secret: "tQFvVrst4gUcaWXkLwZ45hzJtRtNKSbX7RkkRQETnkFSxXMTuXJrJYKpysqz"
+}),handleTwind(), customHandle);
