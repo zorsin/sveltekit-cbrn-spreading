@@ -1,13 +1,7 @@
 <script lang="ts">
-  import { Button, TextField, PageTitle, Checkbox } from '$lib/smelte';
-  let disabled = true;
+  import { PageTitle } from '$lib/smelte';
+  import { t } from 'svelte-intl-precompile';
 </script>
 
-<PageTitle>Hello</PageTitle>
-<TextField label="Enter name" />
-<Button
-  on:click={() => {
-    disabled = !disabled;
-  }}>ASD</Button
->
-<Checkbox {disabled} label="A checkbox" checked />
+<PageTitle>{$t('pages.landing.title')}</PageTitle>
+<span>{$t('pages.landing.descr')}</span>
