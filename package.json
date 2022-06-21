@@ -38,6 +38,8 @@
   "author": "Sören Wirries <soeren.wirries@gmail.com>",
   "private": true,
   "dependencies": {
+    "felte": "^1.2.2",
+    "leaflet": "^1.8.0",
     "merge-deep": "^3.0.0",
     "svelte-intl-precompile": "^0.11.1",
     "svelte-kit-cookie-session": "^3.0.3",
