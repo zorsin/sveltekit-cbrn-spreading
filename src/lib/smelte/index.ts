@@ -24,6 +24,7 @@ import Treeview from './components/Treeview';
 import Ripple from './components/Ripple';
 import DatePicker from './components/DatePicker';
 import breakpoints from './breakpoints';
+export * from './components/Heroicons';
 import notificationQueue from './notification-queue';
 
 import PageTitle from './components/PageTitle';
