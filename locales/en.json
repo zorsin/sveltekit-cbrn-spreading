@@ -5,6 +5,11 @@
     "view": "",
     "save": ""
   },
+  "errors": {
+    "save": {
+      "save-not-successful": ""
+    }
+  },
   "title": "",
   "pages": {
     "landing": {
@@ -43,10 +48,12 @@
         "title": "",
         "descr": "",
         "label-name": ""
-      }
+      },
+      "notification": ""
     },
     "commander-view": {
-      "title": ""
+      "title": "",
+      "not-found": ""
     },
     "unit": {
       "title": ""

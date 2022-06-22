@@ -1,11 +1,11 @@
 import { connect, close } from '$lib/logic/mongo';
-import { Spread } from '$lib/model';
+// import { Spread } from '$lib/model';
 
 export const get = async ({ params }) => {
   const collection = await connect('spread');
-  // TODO: catch invalid names
-  // TODO: also support id
-  const dbSpread = await collection.findOne({ name: `${params.id}` });
+  const dbSpread = await collection.findOne({
+    $or: [{ name: params.id }, { uuid: params.id }],
+  });
   close();
   // NOTE: a colored spread can be > 30MB, this is to much to transmit
   // change to colored view

@@ -8,22 +8,24 @@
   export let spread;
   export let lines = [];
 
-  const spreadModel = new Spread(
-    spread.start,
-    spread.width,
-    spread.length,
-    spread.angle,
-    spread.strength,
-  );
-  // TODO: check if this also works on mobile, transmitting this is to much load (>30MB)
-  spreadModel.calculateEllipse();
-  lines = spreadModel.getColoredSpread();
+  if (spread) {
+    const spreadModel = new Spread(
+      spread.start,
+      spread.width,
+      spread.length,
+      spread.angle,
+      spread.strength,
+    );
+    // TODO: check if this also works on mobile, transmitting this is to much load (>30MB)
+    spreadModel.calculateEllipse();
+    lines = spreadModel.getColoredSpread();
+  }
 
   //#region leaflet
   let map;
   let loaded = false;
-  let markerLocation = spread.start;
-  const initialView = spread.start;
+  let markerLocation = spread?.start;
+  const initialView = spread?.start;
 
   function resizeMap() {
     if (map) {
@@ -49,8 +51,8 @@
 <PageTitle>{$t('pages.commander-view.title', { values: { id: spreadId } })}</PageTitle>
 
 <div class="grid(& cols-12) gap-4">
-  <div class="col-span-12 h-[40rem] bg-error-500 z-20">
-    {#if (loaded || document.readyState === 'complete') && window}
+  <div class="col-span-12 h-[40rem] z-20">
+    {#if (loaded || document.readyState === 'complete') && window && spread}
       <Leaflet bind:map view={initialView} zoom={13}>
         {#each lines as line (line.id)}
           <Polyline latLngs={line.latLngs} color={line.color} />
@@ -61,6 +63,8 @@
           </Marker>
         {/if}
       </Leaflet>
+    {:else}
+      <span>Es wurde keine Ausbreitung mit diesem Namen oder der ID gefunden!</span>
     {/if}
   </div>
 </div>

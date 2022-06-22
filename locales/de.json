@@ -5,6 +5,11 @@
     "view": "Anzeigen",
     "save": "Speichern"
   },
+  "errors": {
+    "save": {
+      "save-not-successful": "Es ist ein Fehler beim Speicher aufgetreten. Bitte versuche es später noch einmal"
+    }
+  },
   "title": "CBRN Ausbreitung",
   "pages": {
     "landing": {
@@ -43,10 +48,12 @@
         "title": "Ausbreitung speichern",
         "descr": "Bitte gebe zum speichern eine Namen für die Ausbreitung an. Mit dem Namen kannst du deine gespeicherten Ausbreitungen später leicht wieder finden.",
         "label-name": "Name für die Ausbreitung"
-      }
+      },
+      "notification": "Deine Ausbreitung {name} wurder erfolgreich mit der ID {id} angelegt"
     },
     "commander-view": {
-      "title": "Ausbreitung {id}"
+      "title": "Ausbreitung {id}",
+      "not-found": "Es wurde keine Ausbreitung mit diesem Namen oder der ID gefunden!"
     },
     "unit": {
       "title": "Einheit"
