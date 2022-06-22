@@ -125,7 +125,7 @@
     });
     if (result.ok) {
       showDialog = false;
-      sleep(50);
+      await sleep(10);
       goto('/commander');
     }
   };

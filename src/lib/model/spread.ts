@@ -76,7 +76,7 @@ export default class Spread {
     // replace to diffrent ellips with custom values
     const spreadDivider = 500;
     const outerStrength = this.strength / spreadDivider;
-    const spreadStrength = {};
+    const spreadStrength = [];
     for (let i = 1; i < spreadDivider + 1; i++) {
       // console.log('innerWidth', ((this.width * 2) / spreadDivider) * i);
       const innerWidth = ((this.width * 2) / spreadDivider) * i;
@@ -88,24 +88,57 @@ export default class Spread {
         this.angle,
       );
       const innerSpreadStrength = this.strength - outerStrength * (i - 1);
-      spreadStrength[i] = {
-        points: innerSpread.toCoordnates(),
+      spreadStrength.push({
+        id: i,
+        latLngs: innerSpread.toCoordnates(),
         value: innerSpreadStrength,
         width: innerWidth,
         length: innerLength,
-      };
+      });
     }
-    // console.log('spread strenght', spreadStrength);
     this.spreadStrength = spreadStrength;
     return spreadStrength;
     // //structure
-    // const s = {
-    //   0: {
-    //     points: this.toCoordnates(),
+    //  [
+    //   {
+    //     id: 0
+    //     latLngs: this.toCoordnates(),
     //     value: 700,
     //     // color: '#330099' // blue
     //   },
-    // };
-    // return s;
+    // ];
+  }
+
+  getColoredSpread() {
+    const spreadData = this.getSpreadStrength();
+
+    Object.keys(spreadData).forEach((key) => {
+      spreadData[key].color = this.calcSpreadColor(spreadData[key].value);
+    });
+    return spreadData;
+  }
+
+  calcSpreadColor(strength) {
+    // values in nSv
+    if (strength < 300) {
+      return '#FFF'; // white
+    } else if (strength < 800) {
+      return '#84CC16'; // light green
+    } else if (strength < 1000) {
+      return '#365314'; // dark green
+    } else if (strength < 10000) {
+      return '#06B6D4'; // light blue
+    } else if (strength < 20000) {
+      return '#3B82F6'; // blue
+    } else if (strength < 50000) {
+      return '#1E3A8A'; // dark blue
+    } else if (strength < 100000) {
+      return '#EA580C'; // orange
+    } else if (strength < 200000) {
+      return '#EAB308'; // yellow
+    } else {
+      // over 200000 = 200uSv
+      return '#DC2626'; // red
+    }
   }
 }

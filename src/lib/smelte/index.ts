@@ -11,7 +11,7 @@ import Checkbox, { Label as SelectionLabel } from './components/Checkbox';
 import RadioButtonGroup, { RadioButton } from './components/RadioButton';
 import AppBar from './components/AppBar';
 import Select from './components/Select';
-import ProgressLinear from './components/ProgressLinear';
+import { ProgressLinear } from './components/ProgressLinear';
 import ProgressCircular from './components/ProgressCircular';
 import Slider from './components/Slider';
 import Snackbar, { notifier, Notifications } from './components/Snackbar';

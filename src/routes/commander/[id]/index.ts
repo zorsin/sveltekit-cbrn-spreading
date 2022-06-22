@@ -7,30 +7,24 @@ export const get = async ({ params }) => {
   // TODO: also support id
   const dbSpread = await collection.findOne({ name: `${params.id}` });
   close();
-  const spread = new Spread(
-    dbSpread.start,
-    dbSpread.width,
-    dbSpread.length,
-    dbSpread.angle,
-    dbSpread.strength,
-  );
-  spread.calculateEllipse();
-  const latLngs = spread.toCoordnates();
-  // TODO: change to colored view
-  const lines = [
-    {
-      id: '0',
-      latLngs,
-      color: '#000',
-    },
-  ];
+  // NOTE: a colored spread can be > 30MB, this is to much to transmit
+  // change to colored view
+  // const spread = new Spread(
+  //   dbSpread.start,
+  //   dbSpread.width,
+  //   dbSpread.length,
+  //   dbSpread.angle,
+  //   dbSpread.strength,
+  // );
+  // spread.calculateEllipse();
+  // const lines = spread.getColoredSpread();
 
   return {
     status: 200,
     body: {
       spreadId: params.id,
       spread: dbSpread,
-      lines,
+      // lines,
     },
   };
 };
