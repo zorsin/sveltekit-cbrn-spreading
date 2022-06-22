@@ -3,11 +3,13 @@
     "next": "",
     "back": "",
     "view": "",
-    "save": ""
+    "save": "",
+    "delete": ""
   },
   "errors": {
     "title": "",
     "save-not-successful": "",
+    "delete-not-successful": "",
     "no-query": "",
     "codes": {
       "500": "",
@@ -61,7 +63,13 @@
     },
     "commander-view": {
       "title": "",
-      "not-found": ""
+      "not-found": "",
+      "delte": "",
+      "delete-success": "",
+      "dialog": {
+        "title": "",
+        "descr": ""
+      }
     },
     "unit": {
       "title": ""

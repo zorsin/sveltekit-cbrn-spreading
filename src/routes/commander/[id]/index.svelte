@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { PageTitle, SolidLocationMarker, notifier } from '$lib/smelte';
+  import { PageTitle, SolidLocationMarker, notifier, Button, Dialog } from '$lib/smelte';
   import { Leaflet, Polyline, Marker } from '$lib/comps';
   import { Spread } from '$lib/model';
 
   import { t } from 'svelte-intl-precompile';
+  import { goto } from '$app/navigation';
+
   export let spreadId;
   export let spread;
   export let lines = [];
@@ -11,15 +13,6 @@
   let displayText = spreadId;
   if (spread) {
     displayText = spread.name;
-    // const spreadModel = new Spread(
-    //   spread.start,
-    //   spread.width,
-    //   spread.length,
-    //   spread.angle,
-    //   spread.strength,
-    // );
-    // spreadModel.calculateEllipse();
-    // lines = spreadModel.getColoredSpreadLight();
   }
 
   //#region leaflet
@@ -45,6 +38,22 @@
   //   }
   // };
   //#endregion leaflet
+
+  let showDelDialog = false;
+  let loadingDel = false;
+  const onDeleteClick = async () => {
+    const resp = await fetch(`/api/spread?id=${spread.uuid}`, {
+      method: 'delete',
+    });
+    console.log(resp);
+    if (resp.ok) {
+      notifier.success($t('pages.commander-view.delete-success'));
+      goto('/commander');
+    } else {
+      const msgResp = await resp.json();
+      notifier.success($t(msgResp.msg));
+    }
+  };
 </script>
 
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
@@ -68,4 +77,15 @@
       <span>{$t('pages.commander-view.not-found')}</span>
     {/if}
   </div>
+  <Dialog bind:value={showDelDialog} persistent progresscolor="white" loading={loadingDel}>
+    <h5 slot="title">{$t('pages.commander-view.dialog.title')}</h5>
+    <div>{@html $t('pages.commander-view.dialog.descr')}</div>
+    <div slot="actions">
+      <Button on:click={() => (showDelDialog = false)}>{$t('common.back')}</Button>
+      <Button on:click={onDeleteClick}>{$t('common.delete')}</Button>
+    </div>
+  </Dialog>
+  <Button class="col-span-4" on:click={() => (showDelDialog = true)}
+    >{$t('pages.commander-view.delte')}</Button
+  >
 </div>
