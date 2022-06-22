@@ -38,7 +38,7 @@ Props: progress, color, width, size
 
 <svg class="circular" style="width: {size}px; height: {size}px;">
   <circle
-    class="path stroke-{color}"
+    class="path stroke-{color}-500"
     cx={size / 2}
     cy={size / 2}
     fill="none"
