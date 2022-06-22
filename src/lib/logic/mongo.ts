@@ -2,7 +2,11 @@ import { MongoClient, ObjectId } from 'mongodb';
 
 // Connection URL
 const url = 'mongodb://localhost:27017';
-const client = new MongoClient(url);
+const client = new MongoClient(url, {
+  connectTimeoutMS: 10000,
+  socketTimeoutMS: 10000,
+  serverSelectionTimeoutMS: 5000,
+});
 
 // Database Name
 const dbName = 'cbrn-spread';
