@@ -32,7 +32,7 @@
   <Button on:click={() => (showDialog = true)}>{$t('pages.commander.btn-view')}</Button>
 </div>
 {#if recentSpreads.length > 0}
-  <h4 class="mt-16 text-lg mb-4">Zuletzt hinzugefügte Ausbreitungen:</h4>
+  <h4 class="mt-16 text-lg mb-4">{$t('pages.commander.recent-spreads')}</h4>
   <ul>
     {#each recentSpreads as spread}
       <li>

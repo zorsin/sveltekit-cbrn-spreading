@@ -6,6 +6,7 @@
     "save": ""
   },
   "errors": {
+    "title": "",
     "save-not-successful": "",
     "no-query": "",
     "codes": {
@@ -27,6 +28,7 @@
       "descr": "",
       "btn-create": "",
       "btn-view": "",
+      "recent-spreads": "",
       "dialog": {
         "title": "",
         "descr": "",

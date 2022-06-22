@@ -28,6 +28,7 @@
       "descr": "Hier kannst du neue Ausbreitungen anlegen oder bestehende Ausbreitungen starten, sodass sich Einheiten registrieren können.",
       "btn-create": "Neue Ausbreitung anlegen",
       "btn-view": "Ausbreitung anzeigen",
+      "recent-spreads": "Zuletzt hinzugefügte Ausbreitungen:",
       "dialog": {
         "title": "Ausbreitungsnummer eingeben",
         "descr": "Gebe hier die Nummer deiner Ausbreitung ein:",
