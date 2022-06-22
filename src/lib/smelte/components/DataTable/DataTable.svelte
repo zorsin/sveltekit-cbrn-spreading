@@ -11,7 +11,7 @@ A Data Table component visualizes data in a strucured form
   import Icon from '../Icon';
   import Button from '../Button';
   import TextField from '../TextField';
-  import ProgressLinear from '../ProgressLinear';
+  import { ProgressLinear } from '../ProgressLinear';
   import Header from './Header.svelte';
   import Row from './Row.svelte';
   import Pagination from './Pagination.svelte';

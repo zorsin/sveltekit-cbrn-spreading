@@ -37,7 +37,7 @@ Props: app, progress, color
 <div
   class:fixed={app}
   class:z-50={app}
-  class="top-0 left-0 w-full h-1 bg-{color}-100 overflow-hidden relative"
+  class="top-0 left-0 w-full h-1 bg-{color}-100 overflow-hidden relative {$$props.class}"
   class:hidden={app && !initialized}
   transition:slide={{ duration: 300 }}
 >

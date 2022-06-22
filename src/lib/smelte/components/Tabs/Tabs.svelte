@@ -11,7 +11,7 @@ Slots (slot-props): item (color, item), content (selected)
   import { ClassBuilder } from '../../utils/classes';
 
   import Indicator from './Indicator.svelte';
-  import ProgressLinear from '../ProgressLinear';
+  import { ProgressLinear } from '../ProgressLinear';
   import TabButton from './TabButton.svelte';
   import type { Colors } from '$types/Colors';
 
