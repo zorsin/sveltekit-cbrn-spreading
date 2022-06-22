@@ -71,14 +71,21 @@ export default class Spread {
     return coordinates;
   }
 
-  getSpreadStrength() {
+  getSpreadStrength(light = false) {
     if (this.spreadStrength) return this.spreadStrength;
     // replace to diffrent ellips with custom values
     const spreadDivider = 500;
     const outerStrength = this.strength / spreadDivider;
     const spreadStrength = [];
+    let lastColor = '-';
     for (let i = 1; i < spreadDivider + 1; i++) {
       // console.log('innerWidth', ((this.width * 2) / spreadDivider) * i);
+      const innerSpreadStrength = this.strength - outerStrength * (i - 1);
+      const nextColor = this.calcSpreadColor(innerSpreadStrength);
+      if (light && lastColor == nextColor) {
+        continue;
+      }
+      lastColor = nextColor;
       const innerWidth = ((this.width * 2) / spreadDivider) * i;
       const innerLength = ((this.length * 2) / spreadDivider) * i;
       const innerSpread = new Spread(
@@ -87,13 +94,13 @@ export default class Spread {
         innerLength,
         this.angle,
       );
-      const innerSpreadStrength = this.strength - outerStrength * (i - 1);
       spreadStrength.push({
         id: i,
         latLngs: innerSpread.toCoordnates(),
         value: innerSpreadStrength,
         width: innerWidth,
         length: innerLength,
+        color: lastColor,
       });
     }
     this.spreadStrength = spreadStrength;
@@ -112,10 +119,14 @@ export default class Spread {
   getColoredSpread() {
     const spreadData = this.getSpreadStrength();
 
-    Object.keys(spreadData).forEach((key) => {
-      spreadData[key].color = this.calcSpreadColor(spreadData[key].value);
-    });
+    // Object.keys(spreadData).forEach((key) => {
+    //   spreadData[key].color = this.calcSpreadColor(spreadData[key].value);
+    // });
     return spreadData;
+  }
+
+  getColoredSpreadLight() {
+    return this.getSpreadStrength(true);
   }
 
   calcSpreadColor(strength) {

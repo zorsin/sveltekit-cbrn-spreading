@@ -1,6 +1,7 @@
 import { connect, close } from '$lib/logic/mongo';
-// import { Spread } from '$lib/model';
+import { Spread } from '$lib/model';
 
+/** @type {import('@sveltejs/kit').RequestHandler} */
 export const get = async ({ params }) => {
   try {
     const collection = await connect('spread');
@@ -8,23 +9,23 @@ export const get = async ({ params }) => {
       $or: [{ name: params.id }, { uuid: params.id }],
     });
     close();
-    // NOTE: a colored spread can be > 30MB, this is to much to transmit
-    // change to colored view
-    // const spread = new Spread(
-    //   dbSpread.start,
-    //   dbSpread.width,
-    //   dbSpread.length,
-    //   dbSpread.angle,
-    //   dbSpread.strength,
-    // );
-    // spread.calculateEllipse();
-    // const lines = spread.getColoredSpread();
+
+    const spread = new Spread(
+      dbSpread.start,
+      dbSpread.width,
+      dbSpread.length,
+      dbSpread.angle,
+      dbSpread.strength,
+    );
+    spread.calculateEllipse();
+    // NOTE: a colored spread can be > 70MB, this is to much to transmit
+    const lines = spread.getColoredSpreadLight();
     return {
       status: 200,
       body: {
         spreadId: params.id,
         spread: dbSpread,
-        // lines,
+        lines,
       },
     };
   } catch (e) {

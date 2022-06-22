@@ -8,17 +8,18 @@
   export let spread;
   export let lines = [];
 
+  let displayText = spreadId;
   if (spread) {
-    const spreadModel = new Spread(
-      spread.start,
-      spread.width,
-      spread.length,
-      spread.angle,
-      spread.strength,
-    );
-    // TODO: check if this also works on mobile, transmitting this is to much load (>30MB)
-    spreadModel.calculateEllipse();
-    lines = spreadModel.getColoredSpread();
+    displayText = spread.name;
+    // const spreadModel = new Spread(
+    //   spread.start,
+    //   spread.width,
+    //   spread.length,
+    //   spread.angle,
+    //   spread.strength,
+    // );
+    // spreadModel.calculateEllipse();
+    // lines = spreadModel.getColoredSpreadLight();
   }
 
   //#region leaflet
@@ -48,11 +49,11 @@
 
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
 
-<PageTitle>{$t('pages.commander-view.title', { values: { id: spreadId } })}</PageTitle>
+<PageTitle>{$t('pages.commander-view.title', { values: { id: displayText } })}</PageTitle>
 
 <div class="grid(& cols-12) gap-4">
   <div class="col-span-12 h-[40rem] z-20">
-    {#if (loaded || document.readyState === 'complete') && window && spread}
+    {#if (loaded || document.readyState === 'complete') && window}
       <Leaflet bind:map view={initialView} zoom={13}>
         {#each lines as line (line.id)}
           <Polyline latLngs={line.latLngs} color={line.color} />

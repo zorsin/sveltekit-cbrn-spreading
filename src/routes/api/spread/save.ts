@@ -1,7 +1,8 @@
 import { connect, close } from '$lib/logic/mongo';
 import { v4 as uuidv4 } from 'uuid';
 
-export const post = async ({ request }) => {
+/** @type {import('@sveltejs/kit').RequestHandler} */
+export const post = async ({ request, locals }) => {
   const body = await request.json();
   const uuid = uuidv4();
   try {
@@ -30,8 +31,24 @@ export const post = async ({ request }) => {
       body: { msg: 'errors.save-not-successful' },
     };
   }
-
   close();
+  await locals.session.update(({ recentSpreads }) => {
+    const currentSpread = recentSpreads;
+    // keep max
+    if (currentSpread.length > 9) {
+      currentSpread.shift();
+    }
+    return {
+      recentSpreads: [
+        ...currentSpread,
+        {
+          name: body.name,
+          id: uuid,
+        },
+      ],
+    };
+  });
+
   return {
     status: 201,
     body: {

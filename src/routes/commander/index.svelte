@@ -3,7 +3,8 @@
   import { navigating } from '$app/stores';
   import { goto, prefetch } from '$app/navigation';
   import { t } from 'svelte-intl-precompile';
-  // import { sleep } from '$lib/logic/util';
+
+  export let recentSpreads;
 
   let showDialog = false;
   let inputValue = '';
@@ -30,6 +31,19 @@
   <Button href={`/commander/create`}>{$t('pages.commander.btn-create')}</Button>
   <Button on:click={() => (showDialog = true)}>{$t('pages.commander.btn-view')}</Button>
 </div>
+{#if recentSpreads.length > 0}
+  <h4 class="mt-16 text-lg mb-4">Zuletzt hinzugefügte Ausbreitungen:</h4>
+  <ul>
+    {#each recentSpreads as spread}
+      <li>
+        <a class="text-base" href="/commander/{spread.id}" sveltekit:prefetch>
+          {spread.name}
+          <small class="text-sm text-gray-500">({spread.id})</small>
+        </a>
+      </li>
+    {/each}
+  </ul>
+{/if}
 
 <Dialog bind:value={showDialog} persistent progresscolor="white" {loading}>
   <h5 slot="title">{$t('pages.commander.dialog.title')}</h5>
