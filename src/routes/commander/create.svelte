@@ -52,7 +52,7 @@
         errors.length = [$t('pages.commander-create.errors.length')];
       }
       if (!regexp.test('' + values.angle)) {
-        errors.angle = [$t('pages.commander-create.errors.angel')];
+        errors.angle = [$t('pages.commander-create.errors.angle')];
       }
       if (!regexp.test('' + values.strength)) {
         errors.strength = [$t('pages.commander-create.errors.strength')];
@@ -125,7 +125,7 @@
     });
     if (result.ok) {
       showDialog = false;
-      sleep(10);
+      sleep(50);
       goto('/commander');
     }
   };

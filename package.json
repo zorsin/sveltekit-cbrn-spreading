@@ -41,6 +41,7 @@
     "felte": "^1.2.2",
     "leaflet": "^1.8.0",
     "merge-deep": "^3.0.0",
+    "mongodb": "^4.7.0",
     "svelte-intl-precompile": "^0.11.1",
     "svelte-kit-cookie-session": "^3.0.3",
     "tinycolor2": "^1.4.2",

@@ -1,1 +1,55 @@
-{}
+{
+  "common": {
+    "next": "",
+    "back": "",
+    "view": "",
+    "save": ""
+  },
+  "title": "",
+  "pages": {
+    "landing": {
+      "title": "",
+      "descr": ""
+    },
+    "commander": {
+      "title": "",
+      "descr": "",
+      "btn-create": "",
+      "btn-view": "",
+      "dialog": {
+        "title": "",
+        "descr": "",
+        "label-input": ""
+      }
+    },
+    "commander-create": {
+      "title": "",
+      "labels": {
+        "start": "",
+        "select-start": "",
+        "length": "",
+        "width": "",
+        "angle": "",
+        "strength": ""
+      },
+      "errors": {
+        "start": "",
+        "width": "",
+        "length": "",
+        "angle": "",
+        "strength": ""
+      },
+      "dialog": {
+        "title": "",
+        "descr": "",
+        "label-name": ""
+      }
+    },
+    "commander-view": {
+      "title": ""
+    },
+    "unit": {
+      "title": ""
+    }
+  }
+}
