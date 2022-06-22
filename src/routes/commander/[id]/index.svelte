@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PageTitle, SolidLocationMarker } from '$lib/smelte';
+  import { PageTitle, SolidLocationMarker, notifier } from '$lib/smelte';
   import { Leaflet, Polyline, Marker } from '$lib/comps';
   import { Spread } from '$lib/model';
 
@@ -64,7 +64,7 @@
         {/if}
       </Leaflet>
     {:else}
-      <span>Es wurde keine Ausbreitung mit diesem Namen oder der ID gefunden!</span>
+      <span>{$t('pages.commander-view.not-found')}</span>
     {/if}
   </div>
 </div>

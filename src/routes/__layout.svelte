@@ -18,7 +18,7 @@
 </script>
 
 <script lang="ts">
-  import { Tabs, AppBar, Spacer } from '$lib/smelte';
+  import { Tabs, AppBar, Spacer, Notifications } from '$lib/smelte';
   import { page } from '$app/stores';
   import { t } from 'svelte-intl-precompile';
 
@@ -42,3 +42,4 @@
 <main class="relative p-8 mx-auto mb-10 mt-24">
   <slot />
 </main>
+<Notifications />

@@ -1,5 +1,13 @@
 <script lang="ts">
-  import { PageTitle, Button, TextField, Switch, SolidLocationMarker, Dialog } from '$lib/smelte';
+  import {
+    PageTitle,
+    Button,
+    TextField,
+    Switch,
+    SolidLocationMarker,
+    Dialog,
+    notifier,
+  } from '$lib/smelte';
   import { createForm } from 'felte';
   import { t } from 'svelte-intl-precompile';
   import { Leaflet, Polyline, Marker } from '$lib/comps';
@@ -110,8 +118,10 @@
 
   let showDialog = false;
   let nameValue = '';
+  let saving = false;
 
   const onBtnSave = async () => {
+    saving = true;
     const result = await fetch('/api/spread/save', {
       method: 'POST',
       body: JSON.stringify({
@@ -123,10 +133,17 @@
         strength: parseInt($data.strength),
       }),
     });
+    const resp = await result.json();
     if (result.ok) {
-      showDialog = false;
-      await sleep(10);
+      notifier.success(
+        $t('pages.commander-create.notification', { values: { name: resp.name, id: resp.id } }),
+      );
+      // showDialog = false;
+      await sleep(20);
       goto('/commander');
+    } else {
+      notifier.error($t(resp.msg));
+      showDialog = false;
     }
   };
 
@@ -140,7 +157,7 @@
 
 <PageTitle>{$t('pages.commander-create.title')}</PageTitle>
 
-<Dialog bind:value={showDialog} persistent>
+<Dialog bind:value={showDialog} persistent loading={saving} progresscolor="white">
   <h5 slot="title">{$t('pages.commander-create.dialog.title')}</h5>
   <div>{$t('pages.commander-create.dialog.descr')}</div>
   <TextField label={$t('pages.commander-create.dialog.label-name')} bind:value={nameValue} />

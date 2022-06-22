@@ -19,6 +19,7 @@ function withColor(color, store) {
 export default function notificationQueue(): {
   subscribe: Writable<number[]>['subscribe'];
   notify: (message: string) => void;
+  success: (message: string) => void;
   error: (message: string) => void;
   alert: (message: string) => void;
   remove: (index: number) => void;
@@ -29,6 +30,7 @@ export default function notificationQueue(): {
     subscribe: store.subscribe,
 
     notify: withColor('gray', store),
+    success: withColor('success', store),
     error: withColor('error', store),
     alert: withColor('alert', store),
 

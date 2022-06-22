@@ -6,8 +6,15 @@
     "save": "Speichern"
   },
   "errors": {
-    "save": {
-      "save-not-successful": "Es ist ein Fehler beim Speicher aufgetreten. Bitte versuche es später noch einmal"
+    "title": "Fehler",
+    "save-not-successful": "Es ist ein Fehler beim Speicher aufgetreten. Bitte versuche es später noch einmal.",
+    "no-query": "Fehler beim Abfragen der Daten. Bitte versuche es später noch einmal.",
+    "codes": {
+      "500": "Interner Serverfehler",
+      "501": "Diese Funktion ist nicht implementiert",
+      "502": "Fehler beim Herstellen der Verbindungen, bitte versuch es später nochmal.",
+      "503": "Der Dienst ist leider zur Zeit nicht erreichbar, bitte versuch es später nochmal.",
+      "504": "Zeitüberschreitung beim Aufbauen der Verbindungen, bitte versuch es später nochmal."
     }
   },
   "title": "CBRN Ausbreitung",

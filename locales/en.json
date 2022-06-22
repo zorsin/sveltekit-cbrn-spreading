@@ -6,8 +6,14 @@
     "save": ""
   },
   "errors": {
-    "save": {
-      "save-not-successful": ""
+    "save-not-successful": "",
+    "no-query": "",
+    "codes": {
+      "500": "",
+      "501": "",
+      "502": "",
+      "503": "",
+      "504": ""
     }
   },
   "title": "",
