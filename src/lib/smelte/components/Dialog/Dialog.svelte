@@ -11,10 +11,11 @@ Slots: default, title, actions
   import { quadIn } from 'svelte/easing';
   import { Scrim } from '../Util';
   import { ClassBuilder } from '../../utils/classes';
-
-  const classesDefault = 'items-center z-50 rounded bg-white dark:bg-dark-400 p-4 shadow';
-  const titleClassesDefault = 'text-lg font-bold pb-4';
-  const actionsClassesDefault = 'flex w-full justify-end pt-4';
+  import { ProgressLinear } from '../ProgressLinear';
+  import type { Colors } from '$types/Colors';
+  const classesDefault = 'items-center z-50 rounded bg-white dark:bg-dark-400 pb-4 shadow';
+  const titleClassesDefault = 'text-lg font-bold pb-4 px-4 mt-4';
+  const actionsClassesDefault = 'flex w-full justify-end pt-4 px-4';
   /** If true, dialog is shown. Boundable */
   export let value;
   /** List of classes to pass down to dialog div(blank space separated). Can also provide a function that changes defaults, e.g. (s)=>s + " mx-3"
@@ -48,6 +49,16 @@ Slots: default, title, actions
     easing: typeof quadIn;
     delay?: number;
   } = { duration: 150, easing: quadIn, delay: 150 };
+  /** Shows a progressbar over the title
+   *
+   * Default: false
+   */
+  export let loading = false;
+  /** Shows a progressbar over the title
+   *
+   * Default: false
+   */
+  export let progresscolor: Colors = 'primary';
 
   const cb = new ClassBuilder(classes, classesDefault);
   const tcb = new ClassBuilder(titleClasses, titleClassesDefault);
@@ -65,10 +76,15 @@ Slots: default, title, actions
     <Scrim {opacity} on:click={() => !persistent && (value = false)} />
     <div class="h-full w-full absolute flex items-center justify-center px-24">
       <div in:scale={transitionProps} class={c}>
+        {#if loading}
+          <ProgressLinear class="rounded mt-[1px]" color={progresscolor} />
+        {/if}
         <div class={t}>
           <slot name="title" />
         </div>
-        <slot />
+        <div class="px-4">
+          <slot />
+        </div>
         <div class={a}>
           <slot name="actions" />
         </div>
