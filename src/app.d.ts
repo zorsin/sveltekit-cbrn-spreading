@@ -4,6 +4,7 @@
 interface SessionData {
   // Your session data
   recentSpreads: Record<string, string>[];
+  mission: { code: string; uuid: string };
 }
 
 // See https://kit.svelte.dev/docs/types#app

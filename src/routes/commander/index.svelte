@@ -5,6 +5,7 @@
   import { t } from 'svelte-intl-precompile';
 
   export let recentSpreads;
+  export let mission;
 
   let showDialog = false;
   let inputValue = '';
@@ -31,19 +32,32 @@
   <Button href={`/commander/create`}>{$t('pages.commander.btn-create')}</Button>
   <Button on:click={() => (showDialog = true)}>{$t('pages.commander.btn-view')}</Button>
 </div>
-{#if recentSpreads.length > 0}
-  <h4 class="mt-16 text-lg mb-4">{$t('pages.commander.recent-spreads')}</h4>
-  <ul>
-    {#each recentSpreads as spread}
-      <li>
-        <a class="text-base" href="/commander/{spread.id}" sveltekit:prefetch>
-          {spread.name}
-          <small class="text-sm text-gray-500">({spread.id})</small>
-        </a>
-      </li>
-    {/each}
-  </ul>
-{/if}
+<div class="grid(& cols-2) gap-4 mt-16 ">
+  {#if recentSpreads.length > 0}
+    <div>
+      <h4 class="text-lg mb-4">{$t('pages.commander.recent-spreads')}</h4>
+      <ul>
+        {#each recentSpreads as spread}
+          <li>
+            <a class="text-base" href="/commander/{spread.id}" sveltekit:prefetch>
+              {spread.name}
+              <small class="text-sm text-gray-500">({spread.id})</small>
+            </a>
+          </li>
+        {/each}
+      </ul>
+    </div>
+  {/if}
+  {#if mission}
+    <div>
+      <h4 class="text-lg mb-4">{$t('pages.commander.mission')}</h4>
+      <a class="text-base" href="/commander/mission/{mission.uuid}" sveltekit:prefetch>
+        {mission.code}
+        <small class="text-sm text-gray-500">({mission.uuid})</small>
+      </a>
+    </div>
+  {/if}
+</div>
 
 <Dialog bind:value={showDialog} persistent progresscolor="white" {loading}>
   <h5 slot="title">{$t('pages.commander.dialog.title')}</h5>

@@ -4,7 +4,8 @@
     "back": "Zurück",
     "view": "Anzeigen",
     "save": "Speichern",
-    "delete": "Löschen"
+    "delete": "Löschen",
+    "start": "Starten"
   },
   "errors": {
     "title": "Fehler",
@@ -31,6 +32,7 @@
       "btn-create": "Neue Ausbreitung anlegen",
       "btn-view": "Ausbreitung anzeigen",
       "recent-spreads": "Zuletzt hinzugefügte Ausbreitungen:",
+      "mission": "Laufender Einsatz:",
       "dialog": {
         "title": "Ausbreitungsnummer eingeben",
         "descr": "Gebe hier die Nummer deiner Ausbreitung ein:",
@@ -65,10 +67,18 @@
       "title": "Ausbreitung {id}",
       "not-found": "Es wurde keine Ausbreitung mit diesem Namen oder der ID gefunden!",
       "delte": "Ausbreitung löschen",
+      "start": "Einsatz generieren",
       "delete-success": "Ausbreitung wurde erfolgreich gelöscht!",
+      "start-success": "Einsatz wurde erfolgreich angelegt!",
+      "errors": {
+        "code": "Bitte einen Beitrittscode festlegen (min. 5 Zeichen, keine Sonderzeichen)"
+      },
       "dialog": {
         "title": "Ausbreitung löschen",
-        "descr": "Möchtest du die Ausbreitung wirklich löschen?<br>Die Ausbreitung ist danach nicht mehr wiederherstellbar."
+        "descr": "Möchtest du die Ausbreitung wirklich löschen?<br>Die Ausbreitung ist danach nicht mehr wiederherstellbar.",
+        "start-title": "Einsatz generieren",
+        "start-descr": "Möchtest du aus der Ausbreitung einen Einsatz generieren?<br>Nach erfolgreicher Generierung können Einheiten deinem Einsatz beitreren und Messungen durchführen.<br>Um dem Einsatz beizutreten müssen die Einheiten den von dir festgelegten Code eingeben.",
+        "label-code": "Beitrittscode"
       }
     },
     "unit": {

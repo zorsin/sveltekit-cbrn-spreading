@@ -1,8 +1,8 @@
 import { connect, close } from '$lib/logic/mongo';
 import { v4 as uuidv4 } from 'uuid';
+import type { RequestHandler } from './__types/save';
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export const post = async ({ request, locals }) => {
+export const post: RequestHandler = async ({ request, locals }) => {
   const body = await request.json();
   const uuid = uuidv4();
   try {
