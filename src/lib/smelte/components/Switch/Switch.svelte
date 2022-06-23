@@ -77,8 +77,8 @@ thumbClasses, labelClasses, classes
   $: l = lcb
     .flush()
     .add(labelClasses, true, labelClassesDefault)
-    .add('text-gray-500', disabled)
-    .add('text-gray-700', !disabled)
+    .add('text-gray-700', disabled)
+    .add('text-gray-300', !disabled)
     .get();
 
   function check() {
