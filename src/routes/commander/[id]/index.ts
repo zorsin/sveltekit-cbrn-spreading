@@ -17,9 +17,9 @@ export const get: RequestHandler = async ({ params }) => {
       dbSpread.angle,
       dbSpread.strength,
     );
-    spread.calculateEllipse();
     // NOTE: a colored spread can be > 70MB, this is to much to transmit
-    const lines = spread.getColoredSpreadLight();
+    const lines = spread.getSpreadStrengthLight();
+
     return {
       status: 200,
       body: {

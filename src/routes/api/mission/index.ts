@@ -41,7 +41,7 @@ export const post: RequestHandler = async ({ locals, request }) => {
     reqBody.strength,
   );
   spread.toCoordnates();
-  const dataLight = spread.getColoredSpreadLight();
+  const dataLight = spread.getSpreadStrengthLight();
   const uuid = <string>uuidv4();
   try {
     const collection = await connect('mission');
