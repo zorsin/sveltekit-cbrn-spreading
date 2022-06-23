@@ -70,10 +70,13 @@
     "commander-mission": {
       "title": "",
       "descr": "",
-      "delete-success": "",
+      "delete-unit-success": "",
+      "delete-mission-success": "",
       "labels": {
         "code": "",
-        "units": ""
+        "units": "",
+        "update": "",
+        "delete-mission": ""
       }
     },
     "commander-view": {

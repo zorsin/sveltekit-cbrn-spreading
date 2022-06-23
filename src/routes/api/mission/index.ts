@@ -78,3 +78,26 @@ export const post: RequestHandler = async ({ locals, request }) => {
     body: { uuid, code: reqBody.code },
   };
 };
+
+// commander can delete the mission
+export const del: RequestHandler = async ({ request }) => {
+  const { uuid } = await request.json();
+
+  try {
+    const collection = await connect('mission');
+    await collection.deleteOne({
+      uuid,
+    });
+    close();
+  } catch (e) {
+    console.error('Error while find mission', e);
+    return {
+      status: 503,
+      body: { msg: 'errors.delete-not-successful' },
+    };
+  }
+
+  return {
+    status: 200,
+  };
+};

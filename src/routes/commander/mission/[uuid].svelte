@@ -9,7 +9,7 @@
     SolidLocationMarker,
   } from '$lib/smelte';
   import { Leaflet, Marker, Polyline } from '$lib/comps';
-  import { invalidate } from '$app/navigation';
+  import { goto, invalidate } from '$app/navigation';
   import { page } from '$app/stores';
   import Button from '$lib/smelte/components/Button/Button.svelte';
   import { t } from 'svelte-intl-precompile';
@@ -56,7 +56,7 @@
       body: JSON.stringify({ missionUuid: mission.uuid, unitUuid }),
     });
     if (res.ok) {
-      notifier.success($t('pages.commander-mission.delete-success'));
+      notifier.success($t('pages.commander-mission.delete-unit-success'));
       await invalidate($page.url.pathname);
     }
   };
@@ -78,6 +78,17 @@
   } else {
     clearInterval(intervall);
   }
+
+  const onDelMissionClick = async () => {
+    const res = await fetch(`/api/mission`, {
+      method: 'delete',
+      body: JSON.stringify({ uuid: mission.uuid }),
+    });
+    if (res.ok) {
+      notifier.success($t('pages.commander-mission.delete-mission-success'));
+      goto('/commander');
+    }
+  };
 </script>
 
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
@@ -87,10 +98,13 @@
   <span class="col-span-2"
     >{$t('pages.commander-mission.labels.code', { values: { code: mission.code } })}</span
   >
+  <Switch
+    class="col(start-10 end-13)"
+    label={$t('pages.commander-mission.labels.update')}
+    bind:value={toggleUpdate}
+  />
   <div class="row-start-2 col(start-1 end-10) h-[40rem]">
     <!-- map -->
-    <Switch label="Auto Update" bind:value={toggleUpdate} />
-
     {#if loaded || document.readyState === 'complete'}
       <Leaflet bind:map view={initialView} zoom={15}>
         {#each lines as line (line.id)}
@@ -157,4 +171,7 @@
       {/each}
     </div>
   </div>
+  <Button class="col-span-2" on:click={onDelMissionClick}
+    >{$t('pages.commander-mission.labels.delete-mission')}</Button
+  >
 </div>

@@ -70,10 +70,13 @@
     "commander-mission": {
       "title": "Einsatz",
       "descr": "",
-      "delete-success": "Die Einheit wurde erfolgreich entfernt!",
+      "delete-unit-success": "Die Einheit wurde erfolgreich entfernt!",
+      "delete-mission-success": "Der Einsatz wurde erfolgreich gelöscht!",
       "labels": {
         "code": "Beitrittscode: {code}",
-        "units": "Einheiten:"
+        "units": "Einheiten:",
+        "update": "Karte automatisch aktualisieren",
+        "delete-mission": "Einsatz löschen"
       }
     },
     "commander-view": {
