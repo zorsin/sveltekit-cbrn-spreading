@@ -2,10 +2,31 @@ import type { RequestHandler } from './__types/index';
 import { connect, close } from '$lib/logic/mongo';
 import { Spread } from '$lib/model';
 import { v4 as uuidv4 } from 'uuid';
+
 // units checks if the token for the mission is correct
-export const get: RequestHandler = async ({ locals, url }) => {
+export const get: RequestHandler = async ({ url }) => {
+  const code = url.searchParams.get('code');
+  let result;
+  try {
+    const collection = await connect('mission');
+    result = await collection
+      .find({
+        code,
+      })
+      .project({ uuid: 1, _id: 0 })
+      .toArray();
+    close();
+  } catch (e) {
+    console.error('Error while find mission', e);
+    return {
+      status: 503,
+      body: { msg: 'errors.find-not-successful' },
+    };
+  }
+
   return {
     status: 200,
+    body: { mission: result?.[0] },
   };
 };
 

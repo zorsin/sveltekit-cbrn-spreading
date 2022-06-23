@@ -4,12 +4,16 @@
     "back": "",
     "view": "",
     "save": "",
-    "delete": ""
+    "delete": "",
+    "start": "",
+    "register": ""
   },
   "errors": {
     "title": "",
     "save-not-successful": "",
+    "register-not-successful": "",
     "delete-not-successful": "",
+    "find-not-successful": "",
     "no-query": "",
     "codes": {
       "500": "",
@@ -31,6 +35,7 @@
       "btn-create": "",
       "btn-view": "",
       "recent-spreads": "",
+      "mission": "",
       "dialog": {
         "title": "",
         "descr": "",
@@ -61,18 +66,56 @@
       },
       "notification": ""
     },
+    "commander-mission": {
+      "title": "",
+      "descr": "",
+      "delete-success": "",
+      "labels": {
+        "code": "",
+        "units": ""
+      }
+    },
     "commander-view": {
       "title": "",
       "not-found": "",
       "delte": "",
+      "start": "",
       "delete-success": "",
+      "start-success": "",
+      "errors": {
+        "code": ""
+      },
       "dialog": {
         "title": "",
-        "descr": ""
+        "descr": "",
+        "start-title": "",
+        "start-descr": "",
+        "label-code": ""
       }
     },
     "unit": {
-      "title": ""
+      "title": "",
+      "descr": "",
+      "labels": {
+        "code": "",
+        "check": ""
+      }
+    },
+    "unit-register": {
+      "title": "",
+      "descr": "",
+      "register-success": "",
+      "errors": {
+        "uuid": "",
+        "radio": "",
+        "vehicle": "",
+        "crew": ""
+      },
+      "labels": {
+        "radio": "",
+        "vehicle": "",
+        "crew": ""
+      }
     }
   }
 }

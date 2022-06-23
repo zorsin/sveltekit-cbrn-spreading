@@ -5,12 +5,15 @@
     "view": "Anzeigen",
     "save": "Speichern",
     "delete": "Löschen",
-    "start": "Starten"
+    "start": "Starten",
+    "register": "Registrieren"
   },
   "errors": {
     "title": "Fehler",
     "save-not-successful": "Es ist ein Fehler beim Speicher aufgetreten. Bitte versuche es später noch einmal.",
+    "register-not-successful": "Es ist ein Fehler beim Registrieren aufgetreten. Bitte versuche es später noch einmal.",
     "delete-not-successful": "Es ist ein Fehler beim Löschen aufgetreten. Bitte versuche es später noch einmal.",
+    "find-not-successful": "Mit den angebenen Daten wurde kein Eintrag gefunden. Bitte versuche es mit anderen Daten noch einmal.",
     "no-query": "Fehler beim Abfragen der Daten. Bitte versuche es später noch einmal.",
     "codes": {
       "500": "Interner Serverfehler",
@@ -63,6 +66,15 @@
       },
       "notification": "Deine Ausbreitung {name} wurder erfolgreich mit der ID {id} angelegt"
     },
+    "commander-mission": {
+      "title": "Einsatz",
+      "descr": "",
+      "delete-success": "Die Einheit wurde erfolgreich entfernt!",
+      "labels": {
+        "code": "Beitrittscode: {code}",
+        "units": "Einheiten:"
+      }
+    },
     "commander-view": {
       "title": "Ausbreitung {id}",
       "not-found": "Es wurde keine Ausbreitung mit diesem Namen oder der ID gefunden!",
@@ -82,7 +94,28 @@
       }
     },
     "unit": {
-      "title": "Einheit"
+      "title": "Einheit",
+      "descr": "Hier kannst du die als Einheit für einen Einsatz registrieren. Für die Registrierung benötigst du einen Beitrittscode. Den Beitrittscode erhälst du von deinem Einsatzleiter.",
+      "labels": {
+        "code": "Beitrittscode",
+        "check": "Beirittscode prüfen"
+      }
+    },
+    "unit-register": {
+      "title": "Einheit registrieren",
+      "descr": "Registriere jetzt deine Einheit damit du am Einsatz teilnehmen kannst.",
+      "register-success": "Die Registrierung wurde erfolgreich abgeschlossen.",
+      "errors": {
+        "uuid": "Die Sitzung wurde unterbrochen, bitte erneut versuchen.",
+        "radio": "Bitte gib den Funkrufnamen der Einheit an.",
+        "vehicle": "Bitte gib das Fahrzeug der Einheit an.",
+        "crew": "Bitte gib die Mannschaft der Einheit an."
+      },
+      "labels": {
+        "radio": "Funkrufname",
+        "vehicle": "Fahrzeug",
+        "crew": "Mannschaft"
+      }
     }
   }
 }

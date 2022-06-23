@@ -3,6 +3,7 @@ import type { RequestHandler } from './__types/index';
 export const get: RequestHandler = async ({ locals }) => {
   let recentSpreads = [];
   let mission = null;
+  // TODO: check if they exist in DB if not clear values
   if (locals.session?.data?.recentSpreads) {
     recentSpreads = locals.session?.data?.recentSpreads;
   }

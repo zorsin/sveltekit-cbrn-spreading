@@ -3,8 +3,9 @@
 
 interface SessionData {
   // Your session data
-  recentSpreads: Record<string, string>[];
-  mission: { code: string; uuid: string };
+  recentSpreads?: Record<string, string>[];
+  mission?: { code: string; uuid: string };
+  unit?: { uuid: string; missionId?: string };
 }
 
 // See https://kit.svelte.dev/docs/types#app
@@ -19,6 +20,7 @@ declare namespace App {
 
   interface Session extends SessionData {
     acceptedLanguage: string; // used for translations
+    missionUuid?: string; // used by unit for registrarion
   }
 
   //interface Stuff {}
