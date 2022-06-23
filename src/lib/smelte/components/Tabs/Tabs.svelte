@@ -9,7 +9,7 @@ Slots (slot-props): item (color, item), content (selected)
 <script lang="ts">
   import { onMount } from 'svelte';
   import { ClassBuilder } from '../../utils/classes';
-
+  import { tick } from 'svelte';
   import Indicator from './Indicator.svelte';
   import { ProgressLinear } from '../ProgressLinear';
   import TabButton from './TabButton.svelte';
@@ -68,7 +68,6 @@ Slots (slot-props): item (color, item), content (selected)
 
   function calcIndicator(selected: string) {
     indicatorWidth = node ? node.offsetWidth / items.length : 0;
-
     let left = 0;
     if (selected && items.findIndex((i) => selected.includes(i.to || i.id)) !== -1) {
       const longestMatch = items
@@ -88,7 +87,10 @@ Slots (slot-props): item (color, item), content (selected)
       offset = null;
     }
   }
-  onMount(() => calcIndicator(selected));
+  onMount(async () => {
+    await tick();
+    calcIndicator(selected);
+  });
 
   $: calcIndicator(selected);
 
