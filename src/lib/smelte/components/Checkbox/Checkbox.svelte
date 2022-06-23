@@ -11,7 +11,7 @@ Props: value, label, color, checked, disabled, classes, labelClasses
   import Ripple from '../Ripple';
   import type { Colors } from '$types/Colors';
 
-  const classesDefault = 'inline-flex items-center mb-2 cursor-pointer z-10';
+  const classesDefault = 'inline-flex items-center cursor-pointer z-10';
 
   /** Input value. See also prop "checked".
    *
@@ -90,32 +90,28 @@ Props: value, label, color, checked, disabled, classes, labelClasses
   let name = `checkbox-${Math.random()}`;
 </script>
 
-<div class={$$props.class}>
-  <div class={c} on:click={check}>
-    <input bind:checked class="hidden" type="checkbox" on:change {value} />
-    <div class="relative w-auto h-auto z-0">
-      <Ripple color={rippleColor}>
-        {#if checked}
-          <Icon
-            class={disabled
-              ? 'text-gray-500 dark:text-gray-600'
-              : `text-${color}-500 dark:text-${color}-100`}
-          >
-            check_box
-          </Icon>
-        {:else}
-          <Icon
-            class={disabled
-              ? 'text-gray-500 dark:text-gray-600'
-              : 'text-gray-600 dark:text-gray-300'}
-          >
-            check_box_outline_blank
-          </Icon>
-        {/if}
-      </Ripple>
-    </div>
-    <slot name="label">
-      <Label {name} {disabled} {label} class={labelClasses} />
-    </slot>
+<div class={c} on:click={check}>
+  <input bind:checked class="hidden" type="checkbox" on:change {value} />
+  <div class="relative w-auto h-auto z-0">
+    <Ripple color={rippleColor}>
+      {#if checked}
+        <Icon
+          class={disabled
+            ? 'text-gray-500 dark:text-gray-600'
+            : `text-${color}-500 dark:text-${color}-100`}
+        >
+          check_box
+        </Icon>
+      {:else}
+        <Icon
+          class={disabled ? 'text-gray-500 dark:text-gray-600' : 'text-gray-600 dark:text-gray-300'}
+        >
+          check_box_outline_blank
+        </Icon>
+      {/if}
+    </Ripple>
   </div>
+  <slot name="label">
+    <Label {name} {disabled} {label} class={labelClasses} />
+  </slot>
 </div>
