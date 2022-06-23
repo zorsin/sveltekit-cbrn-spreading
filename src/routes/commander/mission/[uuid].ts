@@ -10,7 +10,7 @@ export const get: RequestHandler = async ({ locals, params }) => {
       uuid,
     });
     close();
-    console.log(findResult);
+
     if (!findResult?._id) {
       return {
         status: 503,

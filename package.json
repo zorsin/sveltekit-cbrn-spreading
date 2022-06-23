@@ -38,6 +38,7 @@
   "author": "Sören Wirries <soeren.wirries@gmail.com>",
   "private": true,
   "dependencies": {
+    "@turf/turf": "^6.5.0",
     "felte": "^1.2.2",
     "leaflet": "^1.8.0",
     "merge-deep": "^3.0.0",

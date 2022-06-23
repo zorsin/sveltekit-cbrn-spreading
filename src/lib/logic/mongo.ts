@@ -11,7 +11,7 @@ const client = new MongoClient(url, {
 // Database Name
 const dbName = 'cbrn-spread';
 
-export type CollectionName = 'spread' | 'unit' | 'mission';
+export type CollectionName = 'spread' | 'unit' | 'mission' | 'measure';
 
 export const connect = async (collectionName: CollectionName) => {
   await client.connect();

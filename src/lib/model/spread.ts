@@ -143,7 +143,7 @@ export default class Spread {
     } else if (strength < 200000) {
       return '#EAB308'; // yellow
     } else {
-      // over 200000 = 200uSv
+      // over 200000 = 200µSv (micro)
       return '#DC2626'; // red
     }
   }

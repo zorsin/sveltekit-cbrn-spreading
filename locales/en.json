@@ -16,6 +16,7 @@
     "find-not-successful": "",
     "no-query": "",
     "codes": {
+      "404": "",
       "500": "",
       "501": "",
       "502": "",
@@ -98,7 +99,21 @@
       "descr": "",
       "labels": {
         "code": "",
-        "check": ""
+        "check": "",
+        "join": ""
+      }
+    },
+    "unit-mission": {
+      "title": "",
+      "labels": {
+        "crew": "",
+        "unit": "",
+        "radio": "",
+        "vehicle": "",
+        "start": "",
+        "gps": "",
+        "measurement": "",
+        "value": ""
       }
     },
     "unit-register": {

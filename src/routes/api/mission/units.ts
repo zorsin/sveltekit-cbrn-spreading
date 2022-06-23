@@ -35,7 +35,7 @@ export const post: RequestHandler = async ({ locals, request }) => {
 
   return {
     status: 201,
-    body: { uuid },
+    body: { uuid, missionUuid },
   };
 };
 
@@ -52,6 +52,12 @@ export const del: RequestHandler = async ({ locals, request }) => {
         $pull: { units: { unitUuid } },
       },
     );
+    close();
+    const collectionMeasure = await connect('measure');
+    const resultMeasure = await collectionMeasure.deleteMany({
+      missionUuid,
+      unitUuid,
+    });
     close();
     if (!result?.acknowledged) {
       return {

@@ -16,8 +16,9 @@
         body: JSON.stringify({ missionUuid: $session.missionUuid, radio, vehicle, crew }),
       });
       if (res.ok) {
+        const data = await res.json();
         notifier.success($t('pages.unit-register.register-success'));
-        goto('/unit');
+        goto(`/unit/${data.missionUuid}/${data.uuid}`);
       }
     },
     validate: ({ radio, vehicle, crew }) => {

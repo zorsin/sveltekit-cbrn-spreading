@@ -33,7 +33,6 @@ export const get: RequestHandler = async ({ url }) => {
 // commander creates new mission
 export const post: RequestHandler = async ({ locals, request }) => {
   const reqBody = await request.json();
-  console.time('calc-full-spread');
   const spread = new Spread(
     reqBody.start,
     reqBody.width,
@@ -73,7 +72,6 @@ export const post: RequestHandler = async ({ locals, request }) => {
     };
   }
   close();
-  console.timeEnd('calc-full-spread');
   await locals.session.update(() => ({ mission: { uuid, code: reqBody.code } }));
   return {
     status: 201,

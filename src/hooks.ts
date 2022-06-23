@@ -7,7 +7,7 @@ export const getSession = ({ request }) => {
     request.headers['accept-language'] && request.headers['accept-language'].split(',')[0];
   return { acceptedLanguage };
 };
-const regexpNoSSR = /^\/(commander\/\w+)/;
+const regexpNoSSR = /^\/(commander\/\w+)|(unit\/\w+)/;
 /** @type {import('@sveltejs/kit').Handle} */
 const customHandle = async ({ event, resolve }) => {
   // disable ssr for all pages with leaflet, ssr has missing window
