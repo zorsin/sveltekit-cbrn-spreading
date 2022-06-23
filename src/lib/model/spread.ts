@@ -107,22 +107,17 @@ export default class Spread {
     return spreadStrength;
     // //structure
     //  [
-    //   {
+    //   { // the ellips with this strength
     //     id: 0
-    //     latLngs: this.toCoordnates(),
+    //     latLngs: [[lat,lng],[lat,lng]],
     //     value: 700,
-    //     // color: '#330099' // blue
+    //     color: '#330099' // blue
     //   },
     // ];
   }
 
   getColoredSpread() {
-    const spreadData = this.getSpreadStrength();
-
-    // Object.keys(spreadData).forEach((key) => {
-    //   spreadData[key].color = this.calcSpreadColor(spreadData[key].value);
-    // });
-    return spreadData;
+    return this.getSpreadStrength();
   }
 
   getColoredSpreadLight() {
