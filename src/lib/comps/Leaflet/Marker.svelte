@@ -32,6 +32,12 @@
       },
     };
   }
+
+  $: {
+    if (marker) {
+      marker.setLatLng(latLng);
+    }
+  }
 </script>
 
 <!-- <div class="hidden"> -->
