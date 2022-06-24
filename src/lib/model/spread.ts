@@ -80,7 +80,7 @@ export default class Spread {
     for (let i = 1; i < spreadDivider + 1; i++) {
       const innerSpreadStrength = this.strength - outerStrength * (i - 1);
       const nextColor = this.calcSpreadColor(innerSpreadStrength);
-      spreadStrength.push(spreadDivider, i, nextColor, innerSpreadStrength);
+      spreadStrength.push(this.calcInnerSpread(spreadDivider, i, nextColor, innerSpreadStrength));
     }
 
     this.spreadStrength = spreadStrength;
@@ -111,7 +111,7 @@ export default class Spread {
         continue;
       }
       lastColor = nextColor;
-      spreadStrength.push(spreadDivider, i, nextColor, innerSpreadStrength);
+      spreadStrength.push(this.calcInnerSpread(spreadDivider, i, nextColor, innerSpreadStrength));
     }
     this.spreadStrength = spreadStrength;
     return spreadStrength;
