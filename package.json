@@ -1,5 +1,5 @@
 {
-  "name": "sveltekit-cbrn-spreading",
+  "name": "cbrn-spread",
   "version": "0.0.1",
   "scripts": {
     "dev": "svelte-kit dev",
@@ -16,9 +16,6 @@
   "devDependencies": {
     "@sveltejs/adapter-node": "1.0.0-next.78",
     "@sveltejs/kit": "1.0.0-next.350",
-    "@twind/preset-autoprefix": "1.0.0-next.38",
-    "@twind/preset-tailwind": "1.0.0-next.38",
-    "@twind/with-sveltekit": "1.0.0-next.38",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
     "eslint": "^8.11.0 ",
@@ -41,10 +38,15 @@
   "private": true,
   "dependencies": {
     "@turf/turf": "^6.5.0",
+    "@twind/preset-autoprefix": "1.0.0-next.38",
+    "@twind/preset-tailwind": "1.0.0-next.38",
+    "@twind/with-sveltekit": "1.0.0-next.38",
+    "express": "^4.18.1",
     "felte": "^1.2.2",
     "leaflet": "^1.8.0",
     "merge-deep": "^3.0.0",
     "mongodb": "^4.7.0",
+    "read-pkg-up": "^9.1.0",
     "svelte-geolocation": "^0.3.0",
     "svelte-intl-precompile": "^0.11.1",
     "svelte-kit-cookie-session": "^3.0.3",
