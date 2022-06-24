@@ -6,7 +6,7 @@ export const get: RequestHandler = async ({ locals }) => {
   let mission = null;
   let unit = null;
   // check if the spread available in the db
-  if (locals.session?.data?.recentSpreads) {
+  if (locals.session?.data?.recentSpreads && locals.session?.data?.recentSpreads.length > 0) {
     const cookieSpread = locals.session.data.recentSpreads;
     const filterSpreads = cookieSpread.map((spread) => {
       return { uuid: spread.id };
