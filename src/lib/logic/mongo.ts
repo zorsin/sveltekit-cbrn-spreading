@@ -1,7 +1,8 @@
 import { MongoClient, ObjectId } from 'mongodb';
 
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const host = process.env.MONGO || 'localhost';
+const url = `mongodb://${host}`;
 const client = new MongoClient(url, {
   connectTimeoutMS: 10000,
   socketTimeoutMS: 10000,
