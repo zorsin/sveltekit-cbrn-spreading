@@ -23,7 +23,7 @@
   let loaded = false;
   let lines = [];
   let markerLocation;
-  const initialView = [49.1273755, 9.2176877];
+  let initialView = [49.1273755, 9.2176877];
 
   function resizeMap() {
     if (map) {
@@ -38,6 +38,7 @@
 
   if (mission?.spread?.start) {
     markerLocation = mission.spread.start;
+    initialView = markerLocation;
   }
 
   const startFilter = {};
@@ -106,7 +107,7 @@
   <div class="row-start-2 col(start-1 end-10) h-[40rem]">
     <!-- map -->
     {#if loaded || document.readyState === 'complete'}
-      <Leaflet bind:map view={initialView} zoom={15}>
+      <Leaflet bind:map view={initialView} zoom={14}>
         {#each lines as line (line.id)}
           <Polyline latLngs={line.latLngs} color={line.color} />
         {/each}
