@@ -7,7 +7,6 @@ export const post: RequestHandler = async ({ request, locals }) => {
   const uuid = uuidv4();
   try {
     const collection = await connect('spread');
-    // TODO: check what happens if db not available
     const insertResult = await collection.insertOne({
       uuid,
       name: body.name,

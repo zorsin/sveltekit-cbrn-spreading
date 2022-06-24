@@ -13,6 +13,7 @@
     "save-not-successful": "",
     "register-not-successful": "",
     "delete-not-successful": "",
+    "update-not-successful": "",
     "find-not-successful": "",
     "no-query": "",
     "codes": {
@@ -108,6 +109,10 @@
     },
     "unit-mission": {
       "title": "",
+      "errors": {
+        "start-measure": "",
+        "update-point": ""
+      },
       "labels": {
         "crew": "",
         "unit": "",

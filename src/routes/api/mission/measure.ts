@@ -63,7 +63,10 @@ export const post: RequestHandler = async ({ request }) => {
       });
 
       if (!result.acknowledged || !result.insertedId) {
-        // TODO: do fallback
+        return {
+          status: 503,
+          body: { msg: 'errors.save-not-successful' },
+        };
       }
     }
 
@@ -129,18 +132,22 @@ export const patch: RequestHandler = async ({ request }) => {
     }
 
     const collectionMeasure = await connect('measure');
-    const result = await collectionMeasure.findOneAndUpdate(
+    const result = await collectionMeasure.updateOne(
       {
-        missionUuid,
+        missionUuid: missionUuid,
         unitUuid,
       },
       {
         $push: { lines: { id, color: resColor, value: resValue, latLngs: [lastLatLng, latLng] } },
       },
     );
-    // TODO: handle invalid update
-
     close();
+    if (!result?.acknowledged || result.modifiedCount === 0) {
+      return {
+        status: 503,
+        body: { msg: 'errors.update-not-successful' },
+      };
+    }
 
     return {
       status: 200,

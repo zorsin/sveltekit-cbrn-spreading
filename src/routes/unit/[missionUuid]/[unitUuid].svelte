@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PageTitle, Button, TextField, Switch, SolidTruck } from '$lib/smelte';
+  import { PageTitle, Button, TextField, Switch, SolidTruck, notifier } from '$lib/smelte';
   import { Leaflet, Marker, Polyline } from '$lib/comps';
   import { session } from '$app/stores';
 
@@ -54,6 +54,9 @@
       const { uuid, lines: dblines } = await res.json();
       messureUuid = uuid;
       if (dblines) lines = dblines;
+    } else {
+      notifier.error($t('pages.unit-mission.errors.start-measure'));
+      checked = false;
     }
   };
 
@@ -84,9 +87,10 @@
       };
       lastPoint = markerLocation;
       lines = [...lines, point];
+    } else {
+      notifier.error($t('pages.unit-mission.errors.update-point'));
     }
   };
-  console.log(measureValue / 1000000);
 </script>
 
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />

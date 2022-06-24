@@ -13,6 +13,7 @@
     "save-not-successful": "Es ist ein Fehler beim Speicher aufgetreten. Bitte versuche es später noch einmal.",
     "register-not-successful": "Es ist ein Fehler beim Registrieren aufgetreten. Bitte versuche es später noch einmal.",
     "delete-not-successful": "Es ist ein Fehler beim Löschen aufgetreten. Bitte versuche es später noch einmal.",
+    "update-not-successful": "Es ist ein Fehler beim Aktualisieren aufgetreten. Bitte versuche es später noch einmal.",
     "find-not-successful": "Mit den angebenen Daten wurde kein Eintrag gefunden. Bitte versuche es mit anderen Daten noch einmal.",
     "no-query": "Fehler beim Abfragen der Daten. Bitte versuche es später noch einmal.",
     "codes": {
@@ -108,6 +109,10 @@
     },
     "unit-mission": {
       "title": "Einheit: {unit}",
+      "errors": {
+        "start-measure": "Fehler beim Starten der Messung. Bitte erneut versuchen.",
+        "update-point": "Fehler beim Übertragen der Koordinate. Bitte Verbindung prüfen!"
+      },
       "labels": {
         "crew": "Mannschaft: {crew}",
         "unit": "Einheit",
