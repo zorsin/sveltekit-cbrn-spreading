@@ -30,6 +30,9 @@
   $: selected = $page.url.pathname;
 </script>
 
+<svelte:head>
+  <title>{$t('title')}</title>
+</svelte:head>
 <AppBar>
   <a href="/" class="px-2 md:px-8 flex items-center">
     <img src="/diamond.png" alt="CBRN Logo" width="44" />
