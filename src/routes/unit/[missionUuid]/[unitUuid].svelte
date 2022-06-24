@@ -20,6 +20,7 @@
   let loaded = false;
   let lines = [];
   let markerLocation;
+  let lastColor = 'transparent';
   const initialView = [49.1273755, 9.2176877];
 
   function resizeMap() {
@@ -80,6 +81,7 @@
     if (res.ok) {
       const { color, value } = await res.json();
       measureValue = value;
+      lastColor = color;
       const point = {
         id: lines.length,
         color,
@@ -126,5 +128,6 @@
     <p>{$t('pages.unit-mission.labels.vehicle', { values: { crew: unit?.vehicle } })}</p>
     <h5 class="text-xl mt-4">{$t('pages.unit-mission.labels.measurement')}</h5>
     <p>{$t('pages.unit-mission.labels.value', { values: { value: measureValue / 1000 } })}</p>
+    <div class="w-full h-5" style="background-color: {lastColor};" />
   </div>
 </div>
