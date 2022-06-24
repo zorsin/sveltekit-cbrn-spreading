@@ -44,9 +44,7 @@ export default class Spread {
 
   toCoordnates() {
     const coordinates = [];
-    // const startCoordinate = coordUtils.calcBearing(lat, lon, 0, this.length);
-    // this.startCoordinate = startCoordinate;
-    const direction = (this.angle / 180) * Math.PI; //parseFloat(this.angle);
+    const direction = (this.angle / 180) * Math.PI;
     const centerCoordinate = coordUtils.calcBearing(
       this.startCoordinate.lat,
       this.startCoordinate.lon,

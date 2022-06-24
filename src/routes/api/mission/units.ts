@@ -4,7 +4,7 @@ import { connect, close } from '$lib/logic/mongo';
 import { v4 as uuidv4 } from 'uuid';
 
 // units register them to missions
-export const post: RequestHandler = async ({ locals, request }) => {
+export const post: RequestHandler = async ({ request }) => {
   const { missionUuid, radio, vehicle, crew } = await request.json();
   const uuid = <string>uuidv4();
   try {
@@ -40,7 +40,7 @@ export const post: RequestHandler = async ({ locals, request }) => {
 };
 
 // unregister a unit from a mission
-export const del: RequestHandler = async ({ locals, request }) => {
+export const del: RequestHandler = async ({ request }) => {
   const { missionUuid, unitUuid } = await request.json();
   try {
     const collection = await connect('mission');
@@ -54,7 +54,7 @@ export const del: RequestHandler = async ({ locals, request }) => {
     );
     close();
     const collectionMeasure = await connect('measure');
-    const resultMeasure = await collectionMeasure.deleteMany({
+    await collectionMeasure.deleteMany({
       missionUuid,
       unitUuid,
     });
