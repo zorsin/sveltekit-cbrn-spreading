@@ -21,6 +21,7 @@ specifiers:
   prettier-plugin-svelte: ^2.4.0
   svelte: ^3.46.4
   svelte-check: ^2.2.6
+  svelte-geolocation: ^0.3.0
   svelte-intl-precompile: ^0.11.1
   svelte-kit-cookie-session: ^3.0.3
   svelte-preprocess: ^4.10.4
@@ -37,6 +38,7 @@ dependencies:
   leaflet: 1.8.0
   merge-deep: 3.0.3
   mongodb: 4.7.0
+  svelte-geolocation: 0.3.0
   svelte-intl-precompile: 0.11.1_svelte@3.48.0
   svelte-kit-cookie-session: 3.0.3
   tinycolor2: 1.4.2
@@ -3349,6 +3351,10 @@ packages:
       - stylus
       - sugarss
     dev: true
+
+  /svelte-geolocation/0.3.0:
+    resolution: {integrity: sha512-6SV3vENzyWSiLRLT2uVgl7ZHxU1XY0Uy4dSKHLg3iedagjIoL+u/BJylxuQY2i5ZdJl9gg+09B3oKfUrknExJQ==}
+    dev: false
 
   /svelte-hmr/0.14.12_svelte@3.48.0:
     resolution: {integrity: sha512-4QSW/VvXuqVcFZ+RhxiR8/newmwOCTlbYIezvkeN6302YFRE8cXy0naamHcjz8Y9Ce3ITTZtrHrIL0AGfyo61w==}

@@ -3,6 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "svelte-kit dev",
+    "dev:https": "svelte-kit dev --https",
+    "dev:host": "svelte-kit dev --https --host",
     "build": "svelte-kit build",
     "preview": "svelte-kit preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
@@ -43,6 +45,7 @@
     "leaflet": "^1.8.0",
     "merge-deep": "^3.0.0",
     "mongodb": "^4.7.0",
+    "svelte-geolocation": "^0.3.0",
     "svelte-intl-precompile": "^0.11.1",
     "svelte-kit-cookie-session": "^3.0.3",
     "tinycolor2": "^1.4.2",

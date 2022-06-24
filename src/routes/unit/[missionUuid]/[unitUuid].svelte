@@ -2,6 +2,8 @@
   import { PageTitle, Button, TextField, Switch, SolidTruck, notifier } from '$lib/smelte';
   import { Leaflet, Marker, Polyline } from '$lib/comps';
   import { session } from '$app/stores';
+  import Geolocation from 'svelte-geolocation';
+  import type { GeolocationCoords } from 'svelte-geolocation/types/Geolocation.svelte';
 
   import { t } from 'svelte-intl-precompile';
 
@@ -13,7 +15,8 @@
   let lastPoint;
   let measureValue = 0;
   let messureUuid = null;
-
+  let coords: GeolocationCoords;
+  let getPosition = false;
   //#region leaflet
 
   let map;
@@ -21,7 +24,7 @@
   let lines = [];
   let markerLocation;
   let lastColor = 'transparent';
-  const initialView = [49.1273755, 9.2176877];
+  let initialView = [49.1273755, 9.2176877];
 
   function resizeMap() {
     if (map) {
@@ -93,15 +96,26 @@
       notifier.error($t('pages.unit-mission.errors.update-point'));
     }
   };
+
+  $: console.log(coords);
+  $: if (coords && coords[0] > 1 && coords[1] > 1) {
+    markerLocation = [coords[1], coords[0]];
+    initialView = [coords[1], coords[0]];
+  }
 </script>
 
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
+<Geolocation {getPosition} watch={true} bind:coords />
 <PageTitle>{$t('pages.unit-mission.title', { values: { unit: unit?.radio } })}</PageTitle>
 
 <div class="grid(& cols-12) gap-8 mt-8">
   <Switch class="col-span-2" label="Demo Point" bind:value={checkedDemo} />
 
-  <Switch class="col(start-8 end-10)" label={$t('pages.unit-mission.labels.gps')} />
+  <Switch
+    class="col(start-8 end-10)"
+    label={$t('pages.unit-mission.labels.gps')}
+    bind:value={getPosition}
+  />
   <Switch
     class="col(start-10 end-13)"
     label={$t('pages.unit-mission.labels.start')}
