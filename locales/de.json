@@ -77,6 +77,7 @@
         "code": "Beitrittscode: {code}",
         "units": "Einheiten:",
         "update": "Karte automatisch aktualisieren",
+        "spread": "Ausbreitung anzeigen",
         "delete-mission": "Einsatz löschen"
       }
     },

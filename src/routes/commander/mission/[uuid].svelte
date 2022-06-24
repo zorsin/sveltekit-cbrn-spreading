@@ -49,6 +49,7 @@
 
   let unitMeasures = [];
   let toggleUpdate = false;
+  let toggleSpread = true;
   let intervall;
 
   const onDelUnitClick = async (unitUuid: string) => {
@@ -100,6 +101,11 @@
     >{$t('pages.commander-mission.labels.code', { values: { code: mission.code } })}</span
   >
   <Switch
+    class="col(start-7 end-10)"
+    label={$t('pages.commander-mission.labels.spread')}
+    bind:value={toggleSpread}
+  />
+  <Switch
     class="col(start-10 end-13)"
     label={$t('pages.commander-mission.labels.update')}
     bind:value={toggleUpdate}
@@ -108,22 +114,24 @@
     <!-- map -->
     {#if loaded || document.readyState === 'complete'}
       <Leaflet bind:map view={initialView} zoom={14}>
-        {#each lines as line (line.id)}
-          <Polyline latLngs={line.latLngs} color={line.color} />
-        {/each}
-        {#if markerLocation}
-          <Marker
-            latLng={markerLocation}
-            width={40}
-            height={40}
-            class="text-primary-500 flex items-center flex-col"
-          >
-            <SolidLocationMarker class="w-full h-full relative -top-[19px]" />
-            <small
-              class="w-max h-full relative -top-[19px] block bg-white p-0.5 rounded border border-primary-500"
-              >Start</small
+        {#if toggleSpread}
+          {#each lines as line (line.id)}
+            <Polyline latLngs={line.latLngs} color={line.color} />
+          {/each}
+          {#if markerLocation}
+            <Marker
+              latLng={markerLocation}
+              width={40}
+              height={40}
+              class="text-primary-500 flex items-center flex-col"
             >
-          </Marker>
+              <SolidLocationMarker class="w-full h-full relative -top-[19px]" />
+              <small
+                class="w-max h-full relative -top-[19px] block bg-white p-0.5 rounded border border-primary-500"
+                >Start</small
+              >
+            </Marker>
+          {/if}
         {/if}
         {#each unitMeasures as measure}
           {@const lastVehicle = measure.lines[measure.lines.length - 1]?.latLngs[1]}
