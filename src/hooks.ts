@@ -19,6 +19,7 @@ const customHandle = async ({ event, resolve }) => {
 
 export const handle = sequence(
   handleSession({
+    key: 'cbrn.spread',
     secret: 'tQFvVrst4gUcaWXkLwZ45hzJtRtNKSbX7RkkRQETnkFSxXMTuXJrJYKpysqz',
   }),
   handleTwind(),
