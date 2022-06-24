@@ -35,7 +35,7 @@
     <img src="/diamond.png" alt="CBRN Logo" width="44" />
     <h6 class="pl-3 text-white tracking-widest font-thin text-lg">{$t('title')}</h6>
   </a>
-  <Tabs navigation items={topMenu} {selected} />
+  <Tabs navigation items={topMenu} {selected} tabButtonClasses="!text-lg" />
   <Spacer />
 </AppBar>
 
