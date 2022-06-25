@@ -1,0 +1,23 @@
+version: "3.9"
+name: cbrn-spread
+services:
+  ui:
+    build: .
+    image: wirries/cbrn-spread:v0.1.0-alpha2
+    ports:
+      - "3000:3000"
+    environment:
+      - CBRN_MONGO=mongo:27017
+      - CBRN_SSL_CERT=/import/data/server.crt
+      - CBRN_SSL_KEY=/import/data/server.key
+      - CBRN_LOG_LEVEL=info
+      - CBRN_TIME_LOG=true
+      - HOST=localhost
+    depends_on:
+      - db
+    volumes:
+      - ./config:/import/data
+  db:
+    image: "mongo:4.2.21"
+    ports:
+      - "27017:27017"

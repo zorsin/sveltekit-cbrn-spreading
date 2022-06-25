@@ -5,8 +5,9 @@ FROM node:lts-alpine3.16
 WORKDIR /app
 # order: less changing to often changing
 
-COPY ./config/server.crt .
-COPY ./config/server.key .
+# GEN by openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365 -nodes -subj '/CN=localhost'
+COPY ./config/cert.pem .
+COPY ./config/key.pem .
 # COPY ./config/docker.toml ./local.toml
 
 COPY ./build/package.json ./
@@ -15,9 +16,9 @@ RUN npm install
 
 COPY ./build .
 
-ENV MONGO=127.0.0.1:27017
-ENV SSL_KEY=./server.key
-ENV SSL_CERT=./server.crt
+ENV CBRN_MONGO=127.0.0.1:27017
+ENV CBRN_SSL_KEY=./key.pem
+ENV CBRN_SSL_CERT=./cert.pem
 ENV PORT=3000
 ENV HOST=localhost
 # ENV ORIGIN=localhost
