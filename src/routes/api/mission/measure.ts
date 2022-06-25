@@ -3,11 +3,15 @@ import { connect, close } from '$lib/logic/mongo';
 import { Spread } from '$lib/model';
 import * as turf from '@turf/turf';
 import { v4 as uuidv4 } from 'uuid';
+import * as logger from '$lib/util/logger';
+const TAG = ' api/mission/measure.ts';
 
 // get all messures as commander
 export const get: RequestHandler = async ({ url }) => {
   const missionUuid = url.searchParams.get('mission');
   const filter = url.searchParams.getAll('filter');
+  logger.info(TAG, `get(${missionUuid},${JSON.stringify(filter)})`);
+  logger.time(TAG, `get(${missionUuid},${JSON.stringify(filter)})`);
   try {
     const orFilter = filter?.map((value) => ({ unitUuid: value }));
 
@@ -22,6 +26,12 @@ export const get: RequestHandler = async ({ url }) => {
       })
       .toArray();
     close();
+
+    logger.timeEnd(TAG, `get(${missionUuid},${JSON.stringify(filter)})`);
+    logger.info(
+      TAG,
+      `get(${missionUuid},${JSON.stringify(filter)})::successful::${JSON.stringify(findResult)}`,
+    );
     return {
       status: 200,
       body: {
@@ -29,8 +39,12 @@ export const get: RequestHandler = async ({ url }) => {
       },
     };
   } catch (e) {
-    //
+    logger.error(
+      TAG,
+      `get(${missionUuid},${JSON.stringify(filter)})::find-mission-measurement::${e}`,
+    );
   }
+  logger.timeEnd(TAG, `get(${missionUuid},${JSON.stringify(filter)})`);
   return {
     status: 500,
   };
@@ -39,6 +53,8 @@ export const get: RequestHandler = async ({ url }) => {
 // creates measure to store point per unit
 export const post: RequestHandler = async ({ request }) => {
   const { missionUuid, unitUuid } = await request.json();
+  logger.info(TAG, `post(${missionUuid},${unitUuid})`);
+  logger.time(TAG, `post(${missionUuid},${unitUuid})`);
   try {
     const collection = await connect('measure');
     // check if exists
@@ -63,6 +79,11 @@ export const post: RequestHandler = async ({ request }) => {
       });
 
       if (!result.acknowledged || !result.insertedId) {
+        logger.timeEnd(TAG, `post(${missionUuid},${unitUuid})`);
+        logger.warn(
+          TAG,
+          `post(${missionUuid},${unitUuid})::insert-failed::${JSON.stringify(result)}`,
+        );
         return {
           status: 503,
           body: { msg: 'errors.save-not-successful' },
@@ -71,14 +92,20 @@ export const post: RequestHandler = async ({ request }) => {
     }
 
     close();
-
+    logger.timeEnd(TAG, `post(${missionUuid},${unitUuid})`);
+    logger.info(
+      TAG,
+      `post(${missionUuid},${unitUuid})::successful::${uuid},length:${lines.length}`,
+    );
     return {
       status: 200,
       body: { uuid, lines },
     };
   } catch (e) {
-    console.error(e);
+    logger.error(TAG, `post(${missionUuid},${unitUuid})::find-or-create-measure::${e}`);
+    console.error('while insert or finde measure', e);
   }
+  logger.timeEnd(TAG, `post(${missionUuid},${unitUuid})`);
   return {
     status: 404,
   };
@@ -86,7 +113,8 @@ export const post: RequestHandler = async ({ request }) => {
 
 export const patch: RequestHandler = async ({ request }) => {
   const { missionUuid, unitUuid, latLng, lastLatLng, id } = await request.json();
-
+  logger.info(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
+  logger.time(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
   try {
     const collection = await connect('mission');
     const { spread: dbSpread } = await collection.findOne(
@@ -143,12 +171,24 @@ export const patch: RequestHandler = async ({ request }) => {
     );
     close();
     if (!result?.acknowledged || result.modifiedCount === 0) {
+      logger.timeEnd(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
+      logger.warn(
+        TAG,
+        `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::update-measure::${JSON.stringify(
+          result,
+        )}`,
+      );
       return {
         status: 503,
         body: { msg: 'errors.update-not-successful' },
       };
     }
 
+    logger.timeEnd(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
+    logger.info(
+      TAG,
+      `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::successful::${resColor},${resValue}`,
+    );
     return {
       status: 200,
       body: {
@@ -157,8 +197,13 @@ export const patch: RequestHandler = async ({ request }) => {
       },
     };
   } catch (e) {
-    console.error(e);
+    logger.error(
+      TAG,
+      `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::update-measure::${e}`,
+    );
+    console.error('while updating measure', e);
   }
+  logger.timeEnd(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
   return {
     status: 404,
   };

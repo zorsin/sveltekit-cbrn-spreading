@@ -1,8 +1,8 @@
 import { MongoClient, ObjectId } from 'mongodb';
-
+import config from '$lib/config';
 // Connection URL
-const host = process.env.MONGO || 'localhost';
-const url = `mongodb://${host}`;
+
+const url = `mongodb://${config.get('mongo')}`;
 const client = new MongoClient(url, {
   connectTimeoutMS: 10000,
   socketTimeoutMS: 10000,
