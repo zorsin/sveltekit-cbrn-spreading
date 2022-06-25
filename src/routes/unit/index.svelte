@@ -27,10 +27,14 @@
 
 <PageTitle>{$t('pages.unit.title')}</PageTitle>
 <span>{$t('pages.unit.descr')}</span>
-<div class="w-1/2">
+<div class="w-full md:w-1/2 grid(& cols-1) gap-4 md:block mt-8">
   <TextField label={$t('pages.unit.labels.code')} bind:value={code} />
-  <Button on:click={onCheckClick}>{$t('pages.unit.labels.check')}</Button>
+  <Button on:click={onCheckClick} replace={{ 'w-max': 'w-full md:w-max' }}
+    >{$t('pages.unit.labels.check')}</Button
+  >
   {#if unitUuid && missionUuid}
-    <Button class="ml-4" on:click={onJoinClick}>{$t('pages.unit.labels.join')}</Button>
+    <Button class="md:ml-4" on:click={onJoinClick} replace={{ 'w-max': 'w-full md:w-max' }}
+      >{$t('pages.unit.labels.join')}</Button
+    >
   {/if}
 </div>

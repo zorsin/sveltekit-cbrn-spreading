@@ -167,7 +167,7 @@
   </div>
 </Dialog>
 <div class="grid(& cols-4) gap-4">
-  <div class="col-span-3 h-[40rem] bg-error-500 z-20">
+  <div class="col-span(4 md:3) h-[20rem] md:h-[37rem] bg-error-500 z-20">
     {#if loaded || document.readyState === 'complete'}
       <Leaflet
         bind:map
@@ -188,54 +188,56 @@
       </Leaflet>
     {/if}
   </div>
-  <div>
-    <form use:form>
-      <div>
-        <TextField
-          name="start"
-          label={$t('pages.commander-create.labels.start')}
-          error={!!$errors.start}
-          hint={$errors.start?.[0]}
-          bind:value={initialValues.start}
-        />
-        <Switch label={$t('pages.commander-create.labels.select-start')} bind:value={selectStart} />
-      </div>
+  <form class="col-span(4 md:1)" use:form>
+    <div>
       <TextField
-        name="length"
-        label={$t('pages.commander-create.labels.length')}
-        error={!!$errors.length}
-        hint={$errors.length?.[0]}
-        bind:value={initialValues.length}
+        name="start"
+        label={$t('pages.commander-create.labels.start')}
+        error={!!$errors.start}
+        hint={$errors.start?.[0]}
+        bind:value={initialValues.start}
       />
-      <TextField
-        name="width"
-        label={$t('pages.commander-create.labels.width')}
-        error={!!$errors.width}
-        hint={$errors.width?.[0]}
-        bind:value={initialValues.width}
-      />
-      <TextField
-        name="angle"
-        label={$t('pages.commander-create.labels.angle')}
-        error={!!$errors.angle}
-        hint={$errors.angle?.[0]}
-        bind:value={initialValues.angle}
-      />
-      <TextField
-        name="strength"
-        label={$t('pages.commander-create.labels.strength')}
-        error={!!$errors.strength}
-        hint={$errors.strength?.[0]}
-        bind:value={initialValues.strength}
-      />
-      <div class="flex gap-6">
-        <Button type="submit" disabled={!$isValid}>{$t('common.view')}</Button>
-        {#if isViewed && $interacted === null}
-          <Button disabled={!$isValid} on:click={() => (showDialog = true)}
-            >{$t('common.save')}</Button
-          >
-        {/if}
-      </div>
-    </form>
-  </div>
+      <Switch label={$t('pages.commander-create.labels.select-start')} bind:value={selectStart} />
+    </div>
+    <TextField
+      name="length"
+      label={$t('pages.commander-create.labels.length')}
+      error={!!$errors.length}
+      hint={$errors.length?.[0]}
+      bind:value={initialValues.length}
+    />
+    <TextField
+      name="width"
+      label={$t('pages.commander-create.labels.width')}
+      error={!!$errors.width}
+      hint={$errors.width?.[0]}
+      bind:value={initialValues.width}
+    />
+    <TextField
+      name="angle"
+      label={$t('pages.commander-create.labels.angle')}
+      error={!!$errors.angle}
+      hint={$errors.angle?.[0]}
+      bind:value={initialValues.angle}
+    />
+    <TextField
+      name="strength"
+      label={$t('pages.commander-create.labels.strength')}
+      error={!!$errors.strength}
+      hint={$errors.strength?.[0]}
+      bind:value={initialValues.strength}
+    />
+    <div class="flex(& col md:row) gap-4 md:gap-6">
+      <Button type="submit" disabled={!$isValid} replace={{ 'w-max': 'w-full md:w-max' }}
+        >{$t('common.view')}</Button
+      >
+      {#if isViewed && $interacted === null}
+        <Button
+          disabled={!$isValid}
+          on:click={() => (showDialog = true)}
+          replace={{ 'w-max': 'w-full md:w-max' }}>{$t('common.save')}</Button
+        >
+      {/if}
+    </div>
+  </form>
 </div>

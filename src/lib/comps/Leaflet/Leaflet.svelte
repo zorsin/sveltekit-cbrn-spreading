@@ -80,4 +80,7 @@ Based on: https://github.com/dimfeld/svelte-leaflet-demo/blob/master/full/src/ma
   :global(.leaflet-control-container) {
     position: static;
   }
+  :global(.leaflet-container) {
+    z-index: 0;
+  }
 </style>

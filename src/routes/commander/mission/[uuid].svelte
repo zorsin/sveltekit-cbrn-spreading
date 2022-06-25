@@ -16,7 +16,7 @@
   import { writable } from 'svelte/store';
 
   export let mission;
-
+  //TODO: reload units from mission
   //#region leaflet
 
   let map;
@@ -96,21 +96,21 @@
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
 
 <PageTitle>{$t('pages.commander-mission.title')}</PageTitle>
-<div class="grid(& cols-12) gap-4">
-  <span class="col-span-2"
+<div class="grid(& cols-12) gap-4 md:gap-8">
+  <span class="col-span(12 md:2)"
     >{$t('pages.commander-mission.labels.code', { values: { code: mission.code } })}</span
   >
   <Switch
-    class="col(start-7 end-10)"
+    class="col(span-12 md:start-7 md:end-10)"
     label={$t('pages.commander-mission.labels.spread')}
     bind:value={toggleSpread}
   />
   <Switch
-    class="col(start-10 end-13)"
+    class="col(span-12 md:start-10 md:end-13)"
     label={$t('pages.commander-mission.labels.update')}
     bind:value={toggleUpdate}
   />
-  <div class="row-start-2 col(start-1 end-10) h-[40rem]">
+  <div class="row-start(4 md:2) col(span-12 md:start-1 md:end-10) h-[20rem] md:h-[37rem]">
     <!-- map -->
     {#if loaded || document.readyState === 'complete'}
       <Leaflet bind:map view={initialView} zoom={14}>
@@ -156,7 +156,7 @@
       </Leaflet>
     {/if}
   </div>
-  <div class="row-start-2 col(start-10 end-13) ">
+  <div class="row-start(5 md:2) col(span-12 md:start-10 md:end-13)">
     <!-- units -->
     <h4 class="text-lg">{$t('pages.commander-mission.labels.units')}</h4>
     <div class="flex flex-col">
@@ -180,7 +180,9 @@
       {/each}
     </div>
   </div>
-  <Button class="col-span-2" on:click={onDelMissionClick}
-    >{$t('pages.commander-mission.labels.delete-mission')}</Button
+  <Button
+    class="col-span(12 md:2)"
+    replace={{ 'w-max': 'w-full md:w-max' }}
+    on:click={onDelMissionClick}>{$t('pages.commander-mission.labels.delete-mission')}</Button
   >
 </div>

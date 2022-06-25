@@ -97,7 +97,6 @@
     }
   };
 
-  $: console.log(coords);
   $: if (coords && coords[0] > 1 && coords[1] > 1) {
     markerLocation = [coords[1], coords[0]];
     initialView = [coords[1], coords[0]];
@@ -108,20 +107,24 @@
 <Geolocation {getPosition} watch={true} bind:coords />
 <PageTitle>{$t('pages.unit-mission.title', { values: { unit: unit?.radio } })}</PageTitle>
 
-<div class="grid(& cols-12) gap-8 mt-8">
-  <Switch class="col-span-2" label="Demo Point" bind:value={checkedDemo} />
-
+<div class="grid(& cols-12) gap-4 md:gap-8 mt-8">
   <Switch
-    class="col(start-8 end-10)"
+    class="col-span-2"
+    classes={(s) => s.replace('inline-flex', 'hidden md:inline-flex')}
+    label="Demo Point"
+    bind:value={checkedDemo}
+  />
+  <Switch
+    class="col(span-6 md:start-8 md:end-10)"
     label={$t('pages.unit-mission.labels.gps')}
     bind:value={getPosition}
   />
   <Switch
-    class="col(start-10 end-13)"
+    class="col(span-6 md:start-10 md:end-13)"
     label={$t('pages.unit-mission.labels.start')}
     bind:value={checked}
   />
-  <div class="row-start-2 col(start-1 end-9)  h-[40rem]">
+  <div class="row-start-2 col(span-12 md:start-1 md:end-9) h-[20rem] md:h-[37rem]">
     {#if loaded || document.readyState === 'complete'}
       <Leaflet bind:map view={initialView} zoom={15} on:click={onMapClick}>
         {#if markerLocation}
@@ -135,7 +138,7 @@
       </Leaflet>
     {/if}
   </div>
-  <div class="row-start-2 col(start-9 end-13) flex flex-col">
+  <div class="row-start-3 md:row-start-2 col(span-12 md:start-9 md:end-13) flex flex-col">
     <h5 class="text-xl">{$t('pages.unit-mission.labels.unit')}</h5>
     <p>{$t('pages.unit-mission.labels.radio', { values: { radio: unit?.radio } })}</p>
     <p>{$t('pages.unit-mission.labels.crew', { values: { crew: unit?.crew } })}</p>

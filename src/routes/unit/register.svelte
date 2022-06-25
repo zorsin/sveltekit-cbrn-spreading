@@ -44,7 +44,7 @@
 
 <PageTitle>{$t('pages.unit-register.title')}</PageTitle>
 <span>{$t('pages.unit-register.descr')}</span>
-<form class="w-1/2 mt-16" use:form>
+<form class="w-full md:w-1/2 mt-16" use:form>
   <TextField
     name="radio"
     label={$t('pages.unit-register.labels.radio')}
@@ -63,5 +63,5 @@
     error={!!$errors.crew}
     hint={$errors.crew}
   />
-  <Button type="submit">{$t('common.register')}</Button>
+  <Button type="submit" replace={{ 'w-max': 'w-full md:w-max' }}>{$t('common.register')}</Button>
 </form>

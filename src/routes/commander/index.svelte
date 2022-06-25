@@ -28,11 +28,15 @@
 
 <PageTitle>{$t('pages.commander.title')}</PageTitle>
 <span>{$t('pages.commander.descr')}</span>
-<div class="flex mt-8 gap-4">
-  <Button href={`/commander/create`}>{$t('pages.commander.btn-create')}</Button>
-  <Button on:click={() => (showDialog = true)}>{$t('pages.commander.btn-view')}</Button>
+<div class="grid(& cols-1) mt-8 gap-4 md:flex">
+  <Button href={`/commander/create`} replace={{ 'w-max': 'w-full md:w-max' }}
+    >{$t('pages.commander.btn-create')}</Button
+  >
+  <Button on:click={() => (showDialog = true)} replace={{ 'w-max': 'w-full md:w-max' }}
+    >{$t('pages.commander.btn-view')}</Button
+  >
 </div>
-<div class="grid(& cols-2) gap-4 mt-16 ">
+<div class="grid(& cols-1 md:cols-2) gap-4 mt-16 ">
   {#if recentSpreads.length > 0}
     <div>
       <h4 class="text-lg mb-4">{$t('pages.commander.recent-spreads')}</h4>

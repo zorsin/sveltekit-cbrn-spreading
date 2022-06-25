@@ -85,7 +85,8 @@ textClasses, iconClasses, fabClasses, smallClasses, disabledClasses, elevationCl
    */
   export let replace: Record<string, string> = {};
 
-  const classesDefault = 'z-10 py-2 px-4 uppercase text-sm font-medium relative overflow-hidden';
+  const classesDefault =
+    'z-10 py-2 px-4 uppercase text-sm font-medium relative overflow-hidden w-max';
   const basicDefault = 'text-white duration-200 ease-in';
 
   const outlinedDefault = 'bg-transparent border border-solid';

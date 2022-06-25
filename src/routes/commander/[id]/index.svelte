@@ -93,7 +93,7 @@
 <PageTitle>{$t('pages.commander-view.title', { values: { id: displayText } })}</PageTitle>
 
 <div class="grid(& cols-12) gap-4">
-  <div class="col-span-12 h-[40rem] z-20">
+  <div class="col-span-12 h-[20rem] md:h-[37rem]">
     {#if (loaded || document.readyState === 'complete') && window}
       <Leaflet bind:map view={initialView} zoom={13}>
         {#each lines as line (line.id)}
@@ -110,11 +110,15 @@
     {/if}
   </div>
 
-  <Button class="col-span-4" on:click={() => (showDelDialog = true)}
-    >{$t('pages.commander-view.delte')}</Button
+  <Button
+    class="col-span-12 md:col-span-2"
+    on:click={() => (showDelDialog = true)}
+    replace={{ 'w-max': 'w-full md:w-max' }}>{$t('pages.commander-view.delte')}</Button
   >
-  <Button class="col-span-4" on:click={() => (showStartDialog = true)}
-    >{$t('pages.commander-view.start')}</Button
+  <Button
+    class="col-span-12  md:col-span-2"
+    on:click={() => (showStartDialog = true)}
+    replace={{ 'w-max': 'w-full md:w-max' }}>{$t('pages.commander-view.start')}</Button
   >
 </div>
 
