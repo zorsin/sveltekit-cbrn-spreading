@@ -8,15 +8,15 @@ services:
       - "3000:3000"
     environment:
       - CBRN_MONGO=db:27017
-      - CBRN_SSL_CERT=/import/data/server.crt
-      - CBRN_SSL_KEY=/import/data/server.key
+      # - CBRN_SSL_CERT=/import/data/cert.pem
+      # - CBRN_SSL_KEY=/import/data/key.pem
       - CBRN_LOG_LEVEL=info
       - CBRN_TIME_LOG=true
       - HOST=localhost
     depends_on:
       - db
-    volumes:
-      - ./config:/import/data
+    # volumes:
+    #   - ./config:/import/data
   db:
     image: "mongo:4.2.21"
     ports:

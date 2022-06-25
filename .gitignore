@@ -8,7 +8,7 @@ node_modules
 .env
 .env.*
 !.env.example
-docker-compose-local.yaml
+docker-compose.*.yaml
 
 .pnp.*
 .yarn/*
