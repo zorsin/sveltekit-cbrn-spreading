@@ -7,7 +7,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - CBRN_MONGO=mongo:27017
+      - CBRN_MONGO=db:27017
       - CBRN_SSL_CERT=/import/data/server.crt
       - CBRN_SSL_KEY=/import/data/server.key
       - CBRN_LOG_LEVEL=info
