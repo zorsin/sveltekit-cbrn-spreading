@@ -47,6 +47,9 @@ export default defineConfig({
         '6/7': '85.7142857%',
       },
     },
+    fontFamily: {
+      sans: 'Roboto, Arial, sans-serif',
+    },
     fontSize: {
       '5xl': '6rem',
       '4xl': '3.75rem',
@@ -92,5 +95,27 @@ export default defineConfig({
         transDark: 'rgba(100, 100, 100, 0.2)',
       },
     },
+  },
+  preflight: {
+    '@font-face': [
+      {
+        fontFamily: 'Roboto',
+        fontWeight: '300',
+        fontDisplay: 'swap',
+        src: `url(/fonts/roboto-v30-latin-300.woff2) format("woff2")`,
+      },
+      {
+        fontFamily: 'Roboto',
+        fontWeight: '400',
+        fontDisplay: 'swap',
+        src: `url(/fonts/roboto-v30-latin-regular.woff2) format("woff2")`,
+      },
+      {
+        fontFamily: 'Roboto',
+        fontWeight: '600',
+        fontDisplay: 'swap',
+        src: `url(/fonts/roboto-v30-latin-600.woff2) format("woff2")`,
+      },
+    ],
   },
 });

@@ -82,5 +82,6 @@ Based on: https://github.com/dimfeld/svelte-leaflet-demo/blob/master/full/src/ma
   }
   :global(.leaflet-container) {
     z-index: 0;
+    font-family: 'Roboto, Arial, sans-serif';
   }
 </style>
