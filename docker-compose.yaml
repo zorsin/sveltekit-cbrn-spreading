@@ -3,7 +3,7 @@ name: cbrn-spread
 services:
   ui:
     build: .
-    image: wirries/cbrn-spread:v0.1.0-alpha2
+    image: wirries/cbrn-spread:v0.1.0-alpha3
     ports:
       - "3000:3000"
     environment:
@@ -21,3 +21,5 @@ services:
     image: "mongo:4.2.21"
     ports:
       - "27017:27017"
+    # volumes:
+    #   - ./config/db:/data/db
