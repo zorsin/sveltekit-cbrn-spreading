@@ -71,8 +71,16 @@
         notifier.success($t('pages.commander-view.start-success'));
         goto('/commander');
       } else {
-        const msgResp = await resp.json();
-        notifier.success($t(msgResp.msg));
+        if (resp.status === 400) {
+          loadingStart = false;
+          $errors.code = [$t('pages.commander-view.errors.code-exists')];
+          notifier.alert(
+            $t('pages.commander-view.notification-exists', { values: { code: code } }),
+          );
+        } else {
+          const msgResp = await resp.json();
+          notifier.error($t(msgResp.msg));
+        }
       }
     },
     validate: (values) => {

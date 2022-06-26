@@ -92,8 +92,10 @@
       "start": "Einsatz generieren",
       "delete-success": "Ausbreitung wurde erfolgreich gelöscht!",
       "start-success": "Einsatz wurde erfolgreich angelegt!",
+      "notification-exists": "Der Code {code} wird bereits verwendet",
       "errors": {
-        "code": "Bitte einen Beitrittscode festlegen (min. 5 Zeichen, keine Sonderzeichen)"
+        "code": "Bitte einen Beitrittscode festlegen (min. 5 Zeichen, keine Sonderzeichen)",
+        "code-exists": "Der Code wird bereits verwendet!"
       },
       "dialog": {
         "title": "Ausbreitung löschen",

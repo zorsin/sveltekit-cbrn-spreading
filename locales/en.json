@@ -92,8 +92,10 @@
       "start": "",
       "delete-success": "",
       "start-success": "",
+      "notification-exists": "",
       "errors": {
-        "code": ""
+        "code": "",
+        "code-exists": ""
       },
       "dialog": {
         "title": "",

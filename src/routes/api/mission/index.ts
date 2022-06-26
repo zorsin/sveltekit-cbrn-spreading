@@ -53,6 +53,18 @@ export const post: RequestHandler = async ({ locals, request }) => {
   const uuid = <string>uuidv4();
   try {
     const collection = await connect('mission');
+
+    // check if code already exists
+    const findResult = await collection.findOne({ code: reqBody.code });
+    if (findResult) {
+      close();
+      logger.timeEnd(TAG, `post(${JSON.stringify(reqBody)})`);
+      logger.warn(TAG, `post(${JSON.stringify(reqBody)})::code-already-exists::${findResult.uuid}`);
+      return {
+        status: 400,
+        body: { msg: 'errors.already-exists' },
+      };
+    }
     const insertResult = await collection.insertOne({
       uuid,
       code: reqBody.code,
@@ -66,6 +78,7 @@ export const post: RequestHandler = async ({ locals, request }) => {
       spreadLight: dataLight,
       units: [],
     });
+    close();
     if (!insertResult?.acknowledged) {
       logger.warn(
         TAG,
@@ -86,7 +99,6 @@ export const post: RequestHandler = async ({ locals, request }) => {
       body: { msg: 'errors.save-not-successful' },
     };
   }
-  close();
   await locals.session.update(() => ({ mission: { uuid, code: reqBody.code } }));
   logger.timeEnd(TAG, `post(${JSON.stringify(reqBody)})`);
   return {
