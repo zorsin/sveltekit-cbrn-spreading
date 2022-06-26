@@ -106,16 +106,28 @@
     >{$t('pages.commander-mission.labels.code', { values: { code: mission.code } })}</span
   >
   <Switch
-    class="col(span-12 md:start-7 md:end-10)"
+    class="col(span-12 md:start-4 md:end-7) order-1"
     label={$t('pages.commander-mission.labels.spread')}
     bind:value={toggleSpread}
   />
+  <Button
+    class="col(span-12 md:start-7 md:end-8) order-(3 md:2)"
+    on:click={updateMap}
+    replace={{ 'w-max': 'w-full md:w-max' }}
+    disabled={toggleUpdate}
+  >
+    <div class="flex justify-center">
+      <SolidRefresh class="h-5 w-5 mr-4" />
+      Karte aktualisieren
+    </div>
+  </Button>
   <Switch
-    class="col(span-12 md:start-10 md:end-13)"
+    class="col(span-12 md:start-10 md:end-13) order-(2 md:3)"
     label={$t('pages.commander-mission.labels.update')}
     bind:value={toggleUpdate}
   />
-  <div class="row-start(4 md:2) col(span-12 md:start-1 md:end-10) h-[20rem] md:h-[37rem]">
+
+  <div class="row-start(5 md:2) col(span-12 md:start-1 md:end-10) h-[20rem] md:h-[37rem] order-4">
     <!-- map -->
     {#if loaded || document.readyState === 'complete'}
       <Leaflet bind:map view={initialView} zoom={14}>
@@ -161,7 +173,7 @@
       </Leaflet>
     {/if}
   </div>
-  <div class="row-start(5 md:2) col(span-12 md:start-10 md:end-13) relative">
+  <div class="row-start(6 md:2) col(span-12 md:start-10 md:end-13) relative order-5">
     <!-- units -->
     <h4 class="text-lg">{$t('pages.commander-mission.labels.units')}</h4>
     <Button class="!absolute top-0 right-0" on:click={onRefreshUnitClick}>
@@ -189,7 +201,7 @@
     </div>
   </div>
   <Button
-    class="col-span(12 md:2)"
+    class="col-span(12 md:2) order-last"
     replace={{ 'w-max': 'w-full md:w-max' }}
     on:click={onDelMissionClick}>{$t('pages.commander-mission.labels.delete-mission')}</Button
   >
