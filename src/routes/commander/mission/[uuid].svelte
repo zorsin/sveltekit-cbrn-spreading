@@ -7,6 +7,7 @@
     SolidTruck,
     Switch,
     SolidLocationMarker,
+    SolidRefresh,
   } from '$lib/smelte';
   import { Leaflet, Marker, Polyline } from '$lib/comps';
   import { goto, invalidate } from '$app/navigation';
@@ -91,6 +92,10 @@
       goto('/commander');
     }
   };
+
+  const onRefreshUnitClick = async () => {
+    await invalidate($page.url.pathname);
+  };
 </script>
 
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
@@ -156,9 +161,12 @@
       </Leaflet>
     {/if}
   </div>
-  <div class="row-start(5 md:2) col(span-12 md:start-10 md:end-13)">
+  <div class="row-start(5 md:2) col(span-12 md:start-10 md:end-13) relative">
     <!-- units -->
     <h4 class="text-lg">{$t('pages.commander-mission.labels.units')}</h4>
+    <Button class="!absolute top-0 right-0" on:click={onRefreshUnitClick}>
+      <SolidRefresh class="h-5 w-5" />
+    </Button>
     <div class="flex flex-col">
       {#each mission.units as unit}
         <div
