@@ -112,9 +112,9 @@ export default defineConfig({
       },
       {
         fontFamily: 'Roboto',
-        fontWeight: '600',
+        fontWeight: '500',
         fontDisplay: 'swap',
-        src: `url(/font/roboto-v30-latin-600.woff2) format("woff2")`,
+        src: `url(/font/roboto-v30-latin-500.woff2) format("woff2")`,
       },
     ],
   },
