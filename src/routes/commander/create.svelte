@@ -118,6 +118,7 @@
 
   let showDialog = false;
   let nameValue = '';
+  let nameError = null;
   let saving = false;
 
   const onBtnSave = async () => {
@@ -142,10 +143,22 @@
       await sleep(20);
       goto('/commander');
     } else {
-      notifier.error($t(resp.msg));
-      showDialog = false;
+      if (result.status === 400) {
+        saving = false;
+        nameError = $t('pages.commander-create.errors.name-exists');
+        notifier.alert(
+          $t('pages.commander-create.notification-exists', { values: { name: nameValue } }),
+        );
+      } else {
+        notifier.error($t(resp.msg));
+        showDialog = false;
+      }
     }
   };
+
+  $: if (nameValue) {
+    nameError = null;
+  }
 
   const closeDialog = () => {
     showDialog = false;
@@ -160,7 +173,12 @@
 <Dialog bind:value={showDialog} persistent loading={saving} progresscolor="white">
   <h5 slot="title">{$t('pages.commander-create.dialog.title')}</h5>
   <div>{$t('pages.commander-create.dialog.descr')}</div>
-  <TextField label={$t('pages.commander-create.dialog.label-name')} bind:value={nameValue} />
+  <TextField
+    label={$t('pages.commander-create.dialog.label-name')}
+    bind:value={nameValue}
+    error={nameError}
+    hint={nameError}
+  />
   <div slot="actions">
     <Button on:click={closeDialog}>{$t('common.back')}</Button>
     <Button on:click={onBtnSave}>{$t('common.save')}</Button>

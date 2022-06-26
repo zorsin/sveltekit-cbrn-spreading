@@ -16,6 +16,7 @@
     "update-not-successful": "Es ist ein Fehler beim Aktualisieren aufgetreten. Bitte versuche es später noch einmal.",
     "find-not-successful": "Mit den angebenen Daten wurde kein Eintrag gefunden. Bitte versuche es mit anderen Daten noch einmal.",
     "no-query": "Fehler beim Abfragen der Daten. Bitte versuche es später noch einmal.",
+    "already-exists": "Es existiert bereits etwas mit diesem Wert. Bitte einen andere Werte angeben.",
     "codes": {
       "404": "Seite wurde nicht gefunden!",
       "500": "Interner Serverfehler",
@@ -59,14 +60,16 @@
         "width": "Die Breite muss eine Nummer sein!",
         "length": "Die Länge muss eine Nummer sein!",
         "angle": "Der Winkel muss eine Nummer sein!",
-        "strength": "Die Stärke muss eine Nummer sein!"
+        "strength": "Die Stärke muss eine Nummer sein!",
+        "name-exists": "Der Name wird bereits verwendet!"
       },
       "dialog": {
         "title": "Ausbreitung speichern",
         "descr": "Bitte gebe zum speichern eine Namen für die Ausbreitung an. Mit dem Namen kannst du deine gespeicherten Ausbreitungen später leicht wieder finden.",
         "label-name": "Name für die Ausbreitung"
       },
-      "notification": "Deine Ausbreitung {name} wurder erfolgreich mit der ID {id} angelegt"
+      "notification": "Deine Ausbreitung {name} wurder erfolgreich mit der ID {id} angelegt",
+      "notification-exists": "Der Name {name} wird bereits verwendet"
     },
     "commander-mission": {
       "title": "Einsatz",

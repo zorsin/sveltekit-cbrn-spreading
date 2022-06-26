@@ -16,6 +16,7 @@
     "update-not-successful": "",
     "find-not-successful": "",
     "no-query": "",
+    "already-exists": "",
     "codes": {
       "404": "",
       "500": "",
@@ -59,14 +60,16 @@
         "width": "",
         "length": "",
         "angle": "",
-        "strength": ""
+        "strength": "",
+        "name-exists": ""
       },
       "dialog": {
         "title": "",
         "descr": "",
         "label-name": ""
       },
-      "notification": ""
+      "notification": "",
+      "notification-exists": ""
     },
     "commander-mission": {
       "title": "",

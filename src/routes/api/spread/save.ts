@@ -12,6 +12,22 @@ export const post: RequestHandler = async ({ request, locals }) => {
   logger.time(TAG, `post(${JSON.stringify(body)})`);
   try {
     const collection = await connect('spread');
+    // check if name already exists
+    const findResult = await collection.findOne({ name: body.name });
+    if (findResult) {
+      close();
+      logger.timeEnd(TAG, `post(${JSON.stringify(body)})`);
+      logger.warn(
+        TAG,
+        `post(${JSON.stringify(body)})::name-already-exists::${JSON.stringify(findResult)}`,
+      );
+
+      return {
+        status: 400,
+        body: { msg: 'errors.already-exists' },
+      };
+    }
+
     const insertResult = await collection.insertOne({
       uuid,
       name: body.name,
@@ -21,7 +37,7 @@ export const post: RequestHandler = async ({ request, locals }) => {
       angle: body.angle,
       strength: body.strength,
     });
-
+    close();
     if (!insertResult?.acknowledged) {
       logger.timeEnd(TAG, `post(${JSON.stringify(body)})`);
       return {
@@ -38,7 +54,6 @@ export const post: RequestHandler = async ({ request, locals }) => {
       body: { msg: 'errors.save-not-successful' },
     };
   }
-  close();
   await locals.session.update(({ recentSpreads }) => {
     const currentSpread = recentSpreads;
     // keep max
