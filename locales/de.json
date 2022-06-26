@@ -76,7 +76,8 @@
       "labels": {
         "code": "Beitrittscode: {code}",
         "units": "Einheiten:",
-        "update": "Karte automatisch aktualisieren",
+        "update-auto": "Karte automatisch aktualisieren",
+        "update-manual": "Karte aktualisieren",
         "spread": "Ausbreitung anzeigen",
         "delete-mission": "Einsatz löschen"
       }

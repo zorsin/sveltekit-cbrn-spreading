@@ -76,7 +76,8 @@
       "labels": {
         "code": "",
         "units": "",
-        "update": "",
+        "update-auto": "",
+        "update-manual": "",
         "spread": "",
         "delete-mission": ""
       }

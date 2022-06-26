@@ -118,12 +118,12 @@
   >
     <div class="flex justify-center">
       <SolidRefresh class="h-5 w-5 mr-4" />
-      Karte aktualisieren
+      {$t('pages.commander-mission.labels.update-manual')}
     </div>
   </Button>
   <Switch
     class="col(span-12 md:start-10 md:end-13) order-(2 md:3)"
-    label={$t('pages.commander-mission.labels.update')}
+    label={$t('pages.commander-mission.labels.update-auto')}
     bind:value={toggleUpdate}
   />
 
