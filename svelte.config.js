@@ -12,13 +12,7 @@ const config = {
   kit: {
     adapter: adapter(),
     vite: {
-      server: {
-        https: {
-          key: fs.readFileSync('./config/server.key'),
-          cert: fs.readFileSync('./config/server.crt'),
-        },
-      },
-      plugins: [precompileIntl('locales')],
+      plugins: [precompileIntl('locales', '$locales')],
     },
   },
 };
