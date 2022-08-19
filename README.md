@@ -1,5 +1,19 @@
 # CBRN Spreading
 
+
+# ToDo
+
+- keep browser active if measure is running (prevent sleep mode)
+- import memplex
+  - get spread form formula from memplex data to calculate the spread
+- admin page
+  - login via env credentials
+  - see all misisons
+  - see all spreads
+  - delete missions
+  - delete spreads
+  - delete measurements
+
 # Page Layout 
 
 Elements:
