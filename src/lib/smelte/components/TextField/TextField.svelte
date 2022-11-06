@@ -19,7 +19,7 @@ Slots: label, append, prepend
   import Underline from './Underline.svelte';
   import type { Colors } from '$types/Colors';
 
-  const inputDefault = 'pb-2 pt-6 px-4 rounded-t text-black dark:text-gray-100 w-full';
+  const inputDefault = 'pb-2 pt-6 px-4 rounded-t text-black dark:text-gray-100 w-full outline-none';
   const classesDefault = 'mt-2 mb-6 relative text-gray-600 dark:text-gray-100';
   const appendDefault = 'absolute right-0 top-0 pb-2 pr-4 pt-4 text-gray-700 z-10';
   const prependDefault = 'absolute left-0 top-0 pb-2 pl-2 pt-4 text-xs text-gray-700 z-10';

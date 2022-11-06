@@ -6,7 +6,11 @@
     "save": "Speichern",
     "delete": "Löschen",
     "start": "Starten",
-    "register": "Registrieren"
+    "register": "Registrieren",
+    "spreadmodes": {
+      "ellipse": "Ellipse",
+      "triangle": "Dreieck"
+    }
   },
   "errors": {
     "title": "Fehler",
@@ -54,7 +58,8 @@
         "width": "Breite",
         "angle": "Winkel (Grad)",
         "strength": "Stärke",
-        "show-strength": "Stärke anzeigen"
+        "show-strength": "Stärke anzeigen",
+        "mode": "Ausbreitungsmodus"
       },
       "errors": {
         "start": "Du muss eine Startkoordinate angeben!",

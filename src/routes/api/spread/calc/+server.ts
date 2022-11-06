@@ -1,8 +1,10 @@
 import * as logger from '$lib/util/logger';
 
+import type { SpreadMode, SpreadRing } from '$lib/model/spread';
+
+import type { PointLatLon } from '$lib/logic/coordinate-utils';
 import type { RequestHandler } from './$types';
 import { Spread } from '$lib/model';
-import type { SpreadRing } from '$lib/model/spread';
 
 const TAG = 'api/spread/calc.ts';
 
@@ -10,7 +12,15 @@ export const POST: RequestHandler = async ({ request }) => {
   const body = await request.json();
   logger.info(TAG, `post(${JSON.stringify(body)})`);
   logger.time(TAG, `post(${JSON.stringify(body)})`);
-  const spread = new Spread(body.start, body.width, body.length, body.angle, body.strength);
+  const spread = new Spread({
+    startCoordinate: body.start as PointLatLon,
+    width: body.width as number,
+    length: body.length as number,
+    angle: body.angle as number,
+    strength: body.strength as number,
+    mode: body.mode as SpreadMode,
+    openingAngle: 45,
+  });
   let lines = [];
   if (body.showStrength) {
     const linesColor: SpreadRing[] = spread.getSpreadStrengthLight();
@@ -19,6 +29,7 @@ export const POST: RequestHandler = async ({ request }) => {
     });
   } else {
     const latLngs = spread.toCoordnates();
+
     lines = [
       {
         id: '0',

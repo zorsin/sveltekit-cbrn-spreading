@@ -2,7 +2,14 @@
 // lat = breite (40-50), north
 // lon = längen (9), east
 
-export const calcBearing = (lat, lon, angle, distance) => {
+export type CoordinateObject = {
+  lat: number;
+  lon: number;
+};
+
+export type PointLatLon = [number, number];
+
+export const calcBearing = (lat: number, lon: number, angle: number, distance: number) => {
   // https://www.cachewiki.de/wiki/Wegpunktprojektion
 
   // north
@@ -22,21 +29,29 @@ export const calcBearing = (lat, lon, angle, distance) => {
   return { lat: newLat, lon: newLon };
 };
 
-export const toLeafletPoint = ({ lat, lon }): [number, number] => {
+export const toLeafletPoint = ({ lat, lon }: { lat: number; lon: number }): PointLatLon => {
   return [lat, lon];
 };
 
-export const toObject = (leafletPoint) => {
+export const toObject = (leafletPoint: PointLatLon): CoordinateObject => {
   return { lat: leafletPoint[0], lon: leafletPoint[1] };
 };
 
-export const calcAngelFromAndjacentOpposite = (andjacent, opposite) => {
+export const calcAngelFromAndjacentOpposite = (andjacent: number, opposite: number) => {
   // alpha gleich ankathete durch gegenkathete
   const angleAlpha = Math.atan(opposite / andjacent);
   return angleAlpha;
 };
 
-export const calcHypotenuseFromAndjacentAlpha = (andjacent, alpha) => {
+export const calcHypotenuseFromAndjacentAlpha = (andjacent: number, alpha: number): number => {
   const hypotenuse = andjacent / Math.cos(alpha);
   return hypotenuse;
+};
+
+export const radianToDegree = (radian: number): number => {
+  return (radian / Math.PI) * 180;
+};
+
+export const degreeToRadian = (degree: number): number => {
+  return (degree / 180) * Math.PI;
 };

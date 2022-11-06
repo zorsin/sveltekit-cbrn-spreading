@@ -17,6 +17,7 @@
   import { page } from '$app/stores';
   import { convertInputToLatLng } from '$lib/util/converter';
   import { writable } from 'svelte/store';
+  import Select from '$lib/smelte/components/Select/Select.svelte';
 
   const regexp = /^\d+$/;
   const regexpPoint = /^(-?\d{1,3}\.\d+)(\,?\s?)(-?\d{1,3}\.\d+)$/;
@@ -34,27 +35,29 @@
     angle: '0',
     strength: '50000',
     showStrength: false,
+    mode: 'ellipse',
   });
 
   $: if ($page.form) {
     markerLocation = $page.form.markerLocation;
     isViewed = $page.form.isViewed;
     lines = $page.form.lines;
-
     initialValues.set({
-      start: $page.form.markerLocation[0] + ', ' + $page.form.markerLocation[1],
+      start: $page.form.start,
       width: $page.form.width,
       length: $page.form.length,
       angle: $page.form.angle,
       strength: $page.form.strength,
       showStrength: $page.form.showStrength,
+      mode: $page.form.mode,
     });
-    setFields('start', `${$page.form.markerLocation[0]}, ${$page.form.markerLocation[1]}`, true);
+    setFields('start', $page.form.start, true);
     setFields('width', $page.form.width, true);
     setFields('length', $page.form.length, true);
     setFields('angle', $page.form.angle, true);
     setFields('strength', $page.form.strength, true);
     setFields('showStrength', $page.form.showStrength, true);
+    setFields('mode', $page.form.mode, true);
     selectStart = false;
   }
   const { form, errors, setFields, data, isValid, interacted } = createForm({
@@ -169,6 +172,17 @@
     showDialog = false;
     nameValue = '';
   };
+
+  const spreadModes = [
+    {
+      value: 'ellipse',
+      text: $t('common.spreadmodes.ellipse'),
+    },
+    {
+      value: 'triangle',
+      text: $t('common.spreadmodes.triangle'),
+    },
+  ];
 </script>
 
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
@@ -222,6 +236,12 @@
       />
       <Switch label={$t('pages.commander-create.labels.select-start')} bind:checked={selectStart} />
     </div>
+    <Select
+      items={spreadModes}
+      name="mode"
+      label={$t('pages.commander-create.labels.mode')}
+      value={$initialValues.mode}
+    />
     <TextField
       name="length"
       label={$t('pages.commander-create.labels.length')}

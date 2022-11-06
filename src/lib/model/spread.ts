@@ -1,55 +1,120 @@
 import * as coordUtils from '../logic/coordinate-utils';
-export default class Spread {
-  points;
-  width;
-  length;
-  startCoordinate = { lat: 0, lon: 0 };
-  coordinates = [];
-  angle;
-  strength;
-  spreadStrength;
 
-  constructor(startCoordinate, width, length, angle = 0, strength = 50000) {
-    this.width = width / 2;
-    this.length = length / 2;
+import type { CoordinateObject, PointLatLon } from '../logic/coordinate-utils';
+
+export default class Spread {
+  points: [number, number][];
+  width: number;
+  length: number;
+  startCoordinate: CoordinateObject = { lat: 0, lon: 0 };
+  coordinates: PointLatLon[] = [];
+  angle: number;
+  strength: number;
+  spreadStrength: SpreadRing[];
+  mode: SpreadMode;
+  openingAngle: number;
+
+  constructor({
+    startCoordinate,
+    width = 0,
+    length = 0,
+    angle = 0,
+    strength = 50000,
+    mode = 'ellipse',
+    openingAngle = 0,
+  }: SpreadConfig) {
+    this.width = width;
+    this.length = length;
     this.startCoordinate = coordUtils.toObject(startCoordinate);
     this.angle = angle;
     this.strength = strength;
-    this.calculateEllipse();
+    this.mode = mode;
+    this.openingAngle = openingAngle;
+
+    if (mode === 'ellipse') {
+      this.calculateEllipse();
+    } else if (mode == 'triangle') {
+      this.calculateTriangele();
+    }
   }
 
   calculateEllipse(): [number, number][] {
-    let x = this.length * -1;
+    const ellipseLength = this.length / 2;
+    const ellipseWidth = this.width / 2;
+    let x = ellipseLength * -1;
     let yPrositiv = 0;
     let yNegativ = 0;
     const pointsPrositiv = [];
     const pointsNegativ = [];
     // right side
     do {
-      yPrositiv = (this.width / this.length) * Math.sqrt(this.length * this.length - x * x);
+      yPrositiv = (ellipseWidth / ellipseLength) * Math.sqrt(ellipseLength * ellipseLength - x * x);
       pointsPrositiv.push([x, yPrositiv]);
       x++;
-    } while (x < this.length);
-    x = this.length;
+    } while (x < ellipseLength);
+    x = ellipseLength;
     // left side
     do {
-      yNegativ = -1 * (this.width / this.length) * Math.sqrt(this.length * this.length - x * x);
+      yNegativ =
+        -1 * (ellipseWidth / ellipseLength) * Math.sqrt(ellipseLength * ellipseLength - x * x);
       pointsNegativ.push([x, yNegativ]);
       x--;
-    } while (x > this.length * -1);
+    } while (x > ellipseLength * -1);
     // add fist point again to close the form
     this.points = [...pointsNegativ, ...pointsPrositiv, pointsNegativ[0]];
     return this.points;
   }
 
-  toCoordnates(): [number, number][] {
-    const coordinates: [number, number][] = [];
-    const direction = (this.angle / 180) * Math.PI;
+  calculateTriangele(): PointLatLon[] {
+    this.points = [];
+    return this.points;
+  }
+
+  toCoordnates(): PointLatLon[] {
+    switch (this.mode) {
+      case 'ellipse':
+        return this.toCoordnatesEllipse();
+      case 'triangle':
+        return this.toCoordnatesTriangle();
+      default:
+        return [];
+    }
+  }
+
+  toCoordnatesTriangle(): PointLatLon[] {
+    const openingAngle = this.openingAngle; //grad
+    const angle = coordUtils.degreeToRadian(openingAngle / 2);
+    const hypotenuse = coordUtils.calcHypotenuseFromAndjacentAlpha(this.length, angle);
+    console.log(hypotenuse, this.length, openingAngle / 2, angle);
+    const pointA = coordUtils.calcBearing(
+      this.startCoordinate.lat,
+      this.startCoordinate.lon,
+      angle,
+      hypotenuse,
+    );
+    const pointB = coordUtils.calcBearing(
+      this.startCoordinate.lat,
+      this.startCoordinate.lon,
+      angle * -1,
+      hypotenuse,
+    );
+    this.coordinates = [
+      coordUtils.toLeafletPoint(this.startCoordinate),
+      coordUtils.toLeafletPoint(pointA),
+      coordUtils.toLeafletPoint(pointB),
+      coordUtils.toLeafletPoint(this.startCoordinate),
+    ];
+    return this.coordinates;
+  }
+
+  toCoordnatesEllipse(): PointLatLon[] {
+    const coordinates: PointLatLon[] = [];
+    const direction = coordUtils.degreeToRadian(this.angle);
     const centerCoordinate = coordUtils.calcBearing(
       this.startCoordinate.lat,
       this.startCoordinate.lon,
       direction,
-      this.length,
+      this.length / 2,
     );
     if (this.points) {
       this.points.forEach((point) => {
@@ -115,21 +180,46 @@ export default class Spread {
     return spreadStrength;
   }
 
+  calcInterValues(spreadDivider, i) {
+    switch (this.mode) {
+      case 'ellipse':
+        return {
+          innerWidth: (this.width / spreadDivider) * i,
+          innerLength: (this.length / spreadDivider) * i,
+          innerOpeningAngle: 0,
+        };
+      case 'triangle':
+        return {
+          innerWidth: 0,
+          innerLength: (this.length / spreadDivider) * i,
+          innerOpeningAngle: (this.openingAngle / spreadDivider) * i,
+        };
+      default:
+        return {
+          innerWidth: this.width,
+          innerLength: this.length,
+          innerOpeningAngle: this.openingAngle,
+        };
+    }
+  }
+
   calcInnerSpread(spreadDivider, i, color, innerSpreadStrength): SpreadRing {
-    const innerWidth = ((this.width * 2) / spreadDivider) * i;
-    const innerLength = ((this.length * 2) / spreadDivider) * i;
-    const innerSpread = new Spread(
-      [this.startCoordinate.lat, this.startCoordinate.lon],
-      innerWidth,
-      innerLength,
-      this.angle,
-    );
+    const { innerWidth, innerLength, innerOpeningAngle } = this.calcInterValues(spreadDivider, i);
+    const innerSpread = new Spread({
+      startCoordinate: [this.startCoordinate.lat, this.startCoordinate.lon],
+      width: innerWidth,
+      length: innerLength,
+      angle: this.angle,
+      mode: this.mode,
+      openingAngle: innerOpeningAngle,
+    });
     return {
       id: i,
       latLngs: innerSpread.toCoordnates(),
       value: innerSpreadStrength,
       width: innerWidth,
       length: innerLength,
+      openingAngle: innerOpeningAngle,
       color,
     };
   }
@@ -162,9 +252,20 @@ export default class Spread {
 export type SpreadColor = string;
 export type SpreadRing = {
   id: number;
-  latLngs: [number, number][];
+  latLngs: PointLatLon[];
   value: number;
-  width: number;
   length: number;
+  width?: number;
+  openingAngle?: number;
   color: SpreadColor;
+};
+export type SpreadMode = 'ellipse' | 'triangle';
+export type SpreadConfig = {
+  startCoordinate: PointLatLon;
+  length: number;
+  angle: number;
+  mode: SpreadMode;
+  strength?: number;
+  width?: number;
+  openingAngle?: number;
 };

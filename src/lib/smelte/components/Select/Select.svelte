@@ -19,8 +19,8 @@ Slots: select, options
   import type { Colors } from '$types/Colors';
 
   const optionsClassesDefault =
-    'absolute left-0 bg-white rounded shadow w-full z-20 dark:bg-dark-500';
-  const classesDefault = 'cursor-pointer relative pb-4';
+    'absolute left-0 bg-white rounded shadow w-full z-20 dark:bg-dark-500  border border-primary-500';
+  const classesDefault = 'cursor-pointer relative pb-2';
 
   const noop = (i: string): string => i;
   /** Array of Items
@@ -127,6 +127,8 @@ Slots: select, options
    */
   export let replace: { [key: string]: string } = {};
 
+  export let name = undefined;
+
   let itemsProcessed = [];
 
   function process(it) {
@@ -184,6 +186,7 @@ Slots: select, options
 </script>
 
 <div class={c} use:hideListAction={onHideListPanel}>
+  <input class="hidden" {value} {name} />
   <slot name="select">
     <TextField
       select
