@@ -1,7 +1,7 @@
 <!-- @component
 Switch Selection Control
 
-Props: value, label, color, disabled, trackClasses
+Props: checked, label, color, disabled, trackClasses
 thumbClasses, labelClasses, classes
  -->
 <script lang="ts">
@@ -15,11 +15,11 @@ thumbClasses, labelClasses, classes
     'relative w-10 h-auto z-0 rounded-full overflow-visible flex items-center justify-center';
   const thumbClassesDefault = 'rounded-full p-2 w-5 h-5 absolute shadow duration-100';
   const labelClassesDefault = 'pl-2 cursor-pointer';
-  /** Input value. Bindable.
+  /** Input checked. Bindable.
    *
    * Default: false
    */
-  export let value = false;
+  export let checked = false;
   /** Input label.
    *
    * Default: empty string
@@ -55,6 +55,7 @@ thumbClasses, labelClasses, classes
    * Default; `inline-flex items-center mb-2 cursor-pointer z-10`
    */
   export let classes: string | ((s: string) => string) = classesDefault;
+  export let name: string = `switch-${Math.random()}`;
 
   const cb = new ClassBuilder(classes, classesDefault);
   const trcb = new ClassBuilder(trackClasses, trackClassesDefault);
@@ -64,15 +65,15 @@ thumbClasses, labelClasses, classes
   $: c = cb.flush().add(classes, true, classesDefault).add($$props.class).get();
   $: tr = trcb
     .flush()
-    .add('bg-gray-700', !value)
-    .add(`bg-${color}-200`, value)
+    .add('bg-gray-700', !checked)
+    .add(`bg-${color}-200`, checked)
     .add(trackClasses, true, trackClassesDefault)
     .get();
   $: th = thcb
     .flush()
     .add(thumbClasses, true, thumbClassesDefault)
-    .add('bg-white left-0', !value)
-    .add(`bg-${color}-400`, value)
+    .add('bg-white left-0', !checked)
+    .add(`bg-${color}-400`, checked)
     .get();
   $: l = lcb
     .flush()
@@ -84,18 +85,16 @@ thumbClasses, labelClasses, classes
   function check() {
     if (disabled) return;
 
-    value = !value;
+    checked = !checked;
   }
-
-  const name = `switch-${Math.random()}`;
 </script>
 
-<div class={c} on:click={check}>
-  <input {name} bind:value class="hidden" type="checkbox" on:change />
+<div class={c} on:click={check} on:keydown={check}>
+  <input {name} class="hidden" type="checkbox" on:change bind:checked />
   <div class={tr}>
     <div class="w-full h-full absolute" />
-    <Ripple color={value && !disabled ? color : 'gray'} noHover>
-      <div class={th} style={value ? 'left: 1.25rem' : ''} />
+    <Ripple color={checked && !disabled ? color : 'gray'} noHover>
+      <div class={th} style={checked ? 'left: 1.25rem' : ''} />
     </Ripple>
   </div>
   <label for={name} aria-hidden="true" class={l}>

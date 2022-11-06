@@ -1,5 +1,6 @@
+import * as toml from 'toml';
+
 import convict from 'convict';
-import toml from 'toml';
 
 convict.addParser({ extension: 'toml', parse: toml.parse });
 convict.addFormat({

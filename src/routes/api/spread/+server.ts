@@ -1,9 +1,10 @@
-import type { RequestHandler } from './__types/index';
+import type { RequestHandler } from './$types';
 import { connect, close } from '$lib/logic/mongo';
 import * as logger from '$lib/util/logger';
+import { error } from '@sveltejs/kit';
 const TAG = 'api/spread/index.ts';
 
-export const del: RequestHandler = async ({ locals, url }) => {
+export const DELETE: RequestHandler = async ({ locals, url }) => {
   const uuid = url.searchParams.get('id');
   logger.info(TAG, `del(${uuid})`);
   logger.time(TAG, `del(${uuid})`);
@@ -15,19 +16,21 @@ export const del: RequestHandler = async ({ locals, url }) => {
     if (!deleteResult?.acknowledged) {
       logger.timeEnd(TAG, `del(${uuid})`);
       logger.warn(TAG, `del(${uuid})::dbresult::${JSON.stringify(deleteResult)}`);
-      return {
-        status: 503,
-        body: { msg: 'errors.delete-not-successful' },
-      };
+      // return {
+      //   status: 503,
+      //   body: { msg: 'errors.delete-not-successful' },
+      // };
+      return new Response(JSON.stringify({ msg: 'errors.delete-not-successful' }));
     }
   } catch (e) {
     logger.timeEnd(TAG, `del(${uuid})`);
     logger.error(TAG, `while deleting::${e}`);
     console.error('while deleting::', e);
-    return {
-      status: 503,
-      body: { msg: 'errors.delete-not-successful' },
-    };
+    // return {
+    //   status: 503,
+    //   body: { msg: 'errors.delete-not-successful' },
+    // };
+    throw error(503, JSON.stringify({ msg: 'errors.delete-not-successful' }));
   }
   close();
 
@@ -44,7 +47,8 @@ export const del: RequestHandler = async ({ locals, url }) => {
   });
   logger.info(TAG, `del(${uuid})::successful`);
   logger.timeEnd(TAG, `del(${uuid})`);
-  return {
-    status: 202,
-  };
+  // return {
+  //   status: 202,
+  // };
+  return new Response('', { status: 202 });
 };

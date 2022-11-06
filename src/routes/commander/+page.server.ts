@@ -1,9 +1,12 @@
-import type { RequestHandler } from './__types/index';
-import { connect, close } from '$lib/logic/mongo';
 import * as logger from '$lib/util/logger';
-const TAG = 'commander/index.ts';
 
-export const get: RequestHandler = async ({ locals }) => {
+import { close, connect } from '$lib/logic/mongo';
+
+import type { PageServerLoad } from './$types';
+const TAG = 'commander/index.ts';
+export const ssr = false;
+
+export const load: PageServerLoad = async ({ locals }) => {
   let recentSpreads = [];
   let mission = null;
   let unit = null;
@@ -47,10 +50,7 @@ export const get: RequestHandler = async ({ locals }) => {
   logger.timeEnd(TAG, `get(${JSON.stringify(locals.session?.data?.recentSpreads)})`);
   logger.info(TAG, `get(${JSON.stringify(locals.session?.data?.recentSpreads)})::successful`);
   return {
-    status: 200,
-    body: {
-      recentSpreads,
-      mission,
-    },
+    recentSpreads,
+    mission,
   };
 };

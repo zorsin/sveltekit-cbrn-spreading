@@ -195,7 +195,7 @@ textClasses, iconClasses, fabClasses, smallClasses, disabledClasses, elevationCl
 </script>
 
 {#if href}
-  <a {href} {...props} sveltekit:prefetch>
+  <a {href} {...props} data-sveltekit-prefetch>
     <button
       use:ripple
       class={classes}

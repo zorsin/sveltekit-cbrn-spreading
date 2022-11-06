@@ -22,7 +22,7 @@ export const calcBearing = (lat, lon, angle, distance) => {
   return { lat: newLat, lon: newLon };
 };
 
-export const toLeafletPoint = ({ lat, lon }) => {
+export const toLeafletPoint = ({ lat, lon }): [number, number] => {
   return [lat, lon];
 };
 

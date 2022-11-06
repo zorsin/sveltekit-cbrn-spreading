@@ -1,9 +1,13 @@
-import type { RequestHandler } from './__types/[unitUuid]';
-import { connect, close } from '$lib/logic/mongo';
 import * as logger from '$lib/util/logger';
-const TAG = 'unit/missionUuid/unitUuid.ts';
 
-export const get: RequestHandler = async ({ params, locals }) => {
+import { close, connect } from '$lib/logic/mongo';
+
+import type { PageServerLoad } from './$types';
+
+const TAG = 'unit/missionUuid/unitUuid.ts';
+export const ssr = false;
+
+export const load: PageServerLoad = async ({ params, locals, url }) => {
   const missionUuid = params.missionUuid;
   const unitUuid = params.unitUuid;
   await locals.session.update(() => ({ unit: { uuid: unitUuid, missionId: missionUuid } }));
@@ -38,11 +42,9 @@ export const get: RequestHandler = async ({ params, locals }) => {
     }
     logger.info(TAG, `get(${missionUuid}, ${unitUuid})::successful::${result.uuid}`);
     return {
-      status: 200,
-      body: {
-        unit,
-        mission: { uuid: result.uuid },
-      },
+      unit,
+      mission: { uuid: result.uuid },
+      notify: url.searchParams.get('notify'),
     };
   } catch (e) {
     console.error(e);

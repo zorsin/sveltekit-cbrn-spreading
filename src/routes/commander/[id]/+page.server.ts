@@ -1,10 +1,14 @@
-import { connect, close } from '$lib/logic/mongo';
-import { Spread } from '$lib/model';
-import type { RequestHandler } from './__types/index';
 import * as logger from '$lib/util/logger';
-const TAG = 'commander/id/index.ts';
 
-export const get: RequestHandler = async ({ params }) => {
+import { close, connect } from '$lib/logic/mongo';
+
+import type { PageServerLoad } from './$types';
+import { Spread } from '$lib/model';
+
+const TAG = 'commander/id/index.ts';
+export const ssr = false;
+
+export const load: PageServerLoad = async ({ params }) => {
   logger.info(TAG, `get(${params.id})`);
   logger.time(TAG, `get(${params.id})`);
   try {
@@ -22,16 +26,16 @@ export const get: RequestHandler = async ({ params }) => {
       dbSpread.strength,
     );
     // NOTE: a colored spread can be > 70MB, this is to much to transmit
+    // const lines = spread.getSpreadStrength();
     const lines = spread.getSpreadStrengthLight();
     logger.timeEnd(TAG, `get(${params.id})`);
     logger.info(TAG, `get(${params.id})::successful::${JSON.stringify(dbSpread)}`);
+
+    delete dbSpread._id;
     return {
-      status: 200,
-      body: {
-        spreadId: params.id,
-        spread: dbSpread,
-        lines,
-      },
+      spreadId: params.id,
+      spread: dbSpread,
+      lines,
     };
   } catch (e) {
     logger.timeEnd(TAG, `get(${params.id})`);

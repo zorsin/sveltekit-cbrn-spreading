@@ -4,10 +4,11 @@
   import { t } from 'svelte-intl-precompile';
   import { goto } from '$app/navigation';
   import { createForm } from 'felte';
+  import type { PageData } from './$types';
 
-  export let spreadId;
-  export let spread;
-  export let lines = [];
+  export let data: PageData;
+  // let lines = [];
+  const { spreadId, spread, lines } = data;
 
   let displayText = spreadId;
   if (spread) {

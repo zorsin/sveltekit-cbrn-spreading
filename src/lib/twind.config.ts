@@ -1,7 +1,7 @@
+import { generate as buildPalette } from '$lib/smelte/utils/color.js';
 import { defineConfig } from 'twind';
 import presetAutoprefix from '@twind/preset-autoprefix';
 import presetTailwind from '@twind/preset-tailwind';
-import { generate as buildPalette } from '$lib/smelte/utils/color.js';
 
 const defaultColors = {
   // primary: '#b027b0',

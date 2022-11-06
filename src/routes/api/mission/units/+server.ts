@@ -1,11 +1,12 @@
-import type { RequestHandler } from './__types/units';
+import type { RequestHandler } from './$types';
+import { error } from '@sveltejs/kit';
 import { connect, close } from '$lib/logic/mongo';
 import { v4 as uuidv4 } from 'uuid';
 import * as logger from '$lib/util/logger';
 const TAG = 'api/mission/units.ts';
 
 // units register them to missions
-export const post: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, locals }) => {
   const { missionUuid, radio, vehicle, crew } = await request.json();
   logger.info(TAG, `post(${missionUuid},${radio},${vehicle},${crew})`);
   logger.time(TAG, `post(${missionUuid},${radio},${vehicle},${crew})`);
@@ -20,7 +21,6 @@ export const post: RequestHandler = async ({ request }) => {
         $push: { units: { radio, vehicle, crew, unitUuid: uuid } },
       },
     );
-    close();
     if (!result?.acknowledged) {
       logger.timeEnd(TAG, `post(${missionUuid},${radio},${vehicle},${crew})`);
       logger.warn(
@@ -29,31 +29,23 @@ export const post: RequestHandler = async ({ request }) => {
           result,
         )}`,
       );
-      return {
-        status: 503,
-        body: { msg: 'errors.register-not-successful' },
-      };
+      throw error(503, JSON.stringify({ msg: 'errors.register-not-successful' }));
     }
   } catch (e) {
     logger.timeEnd(TAG, `post(${missionUuid},${radio},${vehicle},${crew})`);
     logger.error(TAG, `post(${missionUuid},${radio},${vehicle},${crew})::register-unit::${e}`);
     console.error('Error while register an unit to a mission', e);
-    return {
-      status: 503,
-      body: { msg: 'errors.register-not-successful' },
-    };
+    throw error(503, JSON.stringify({ msg: 'errors.register-not-successful' }));
   }
   close();
   logger.timeEnd(TAG, `post(${missionUuid},${radio},${vehicle},${crew})`);
   logger.info(TAG, `post(${missionUuid},${radio},${vehicle},${crew})::successful::${uuid}`);
-  return {
-    status: 201,
-    body: { uuid, missionUuid },
-  };
+  await locals.session.update(() => ({ unit: { uuid, missionId: missionUuid } }));
+  return new Response(JSON.stringify({ uuid, missionUuid }), { status: 201 });
 };
 
 // unregister a unit from a mission
-export const del: RequestHandler = async ({ request }) => {
+export const DELETE: RequestHandler = async ({ request }) => {
   const { missionUuid, unitUuid } = await request.json();
   logger.info(TAG, `del(${missionUuid},${unitUuid})`);
   logger.time(TAG, `del(${missionUuid},${unitUuid})`);
@@ -80,23 +72,15 @@ export const del: RequestHandler = async ({ request }) => {
         TAG,
         `del(${missionUuid},${unitUuid})::deleting-unit-from-mission::${JSON.stringify(result)}`,
       );
-      return {
-        status: 503,
-        body: { msg: 'errors.delete-not-successful' },
-      };
+      throw error(503, JSON.stringify({ msg: 'errors.delete-not-successful' }));
     }
   } catch (e) {
     logger.timeEnd(TAG, `del(${missionUuid},${unitUuid})`);
     logger.error(TAG, `del(${missionUuid},${unitUuid})::deleting-unit-from-mission::${e}`);
     console.error('while deleting an unit from a mission', e);
-    return {
-      status: 503,
-      body: { msg: 'errors.delete-not-successful' },
-    };
+    throw error(503, JSON.stringify({ msg: 'errors.delete-not-successful' }));
   }
   logger.timeEnd(TAG, `del(${missionUuid},${unitUuid})`);
   logger.info(TAG, `del(${missionUuid},${unitUuid})::successful`);
-  return {
-    status: 201,
-  };
+  return new Response('', { status: 201 });
 };

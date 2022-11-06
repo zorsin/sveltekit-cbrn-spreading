@@ -1,26 +1,16 @@
 <script lang="ts">
   import { PageTitle, Button, Dialog, TextField, notifier } from '$lib/smelte';
-  import { navigating, session } from '$app/stores';
+  import { navigating, page } from '$app/stores';
   import { goto, prefetch } from '$app/navigation';
   import { t } from 'svelte-intl-precompile';
   import { createForm } from 'felte';
+  import type { PageData } from './$types';
+  import { enhance } from '$app/forms';
+
+  export let data: PageData;
 
   const { form, errors } = createForm({
-    onSubmit: async ({ radio, vehicle, crew }) => {
-      if (!$session.missionUuid) {
-        notifier.error($t('pages.unit-register.errors.uuid'));
-        goto('/unit');
-      }
-      const res = await fetch('/api/mission/units', {
-        method: 'POST',
-        body: JSON.stringify({ missionUuid: $session.missionUuid, radio, vehicle, crew }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        notifier.success($t('pages.unit-register.register-success'));
-        goto(`/unit/${data.missionUuid}/${data.uuid}`);
-      }
-    },
+    onSubmit: () => {},
     validate: ({ radio, vehicle, crew }) => {
       const errors: Record<string, string[] | boolean> = {
         radio: false,
@@ -44,7 +34,8 @@
 
 <PageTitle>{$t('pages.unit-register.title')}</PageTitle>
 <span>{$t('pages.unit-register.descr')}</span>
-<form class="w-full md:w-1/2 mt-16" use:form>
+<form class="w-full md:w-1/2 mt-16" use:form use:enhance method="POST" action="?/register">
+  <input class="hidden" value={data.missionUuid} name="id" />
   <TextField
     name="radio"
     label={$t('pages.unit-register.labels.radio')}
@@ -63,5 +54,7 @@
     error={!!$errors.crew}
     hint={$errors.crew}
   />
-  <Button type="submit" replace={{ 'w-max': 'w-full md:w-max' }}>{$t('common.register')}</Button>
+  <Button type="submit" replace={{ 'w-max': 'w-full md:w-max' }} add="mt-8"
+    >{$t('common.register')}</Button
+  >
 </form>

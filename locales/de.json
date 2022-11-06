@@ -53,7 +53,8 @@
         "length": "Länge",
         "width": "Breite",
         "angle": "Winkel (Grad)",
-        "strength": "Stärke"
+        "strength": "Stärke",
+        "show-strength": "Stärke anzeigen"
       },
       "errors": {
         "start": "Du muss eine Startkoordinate angeben!",

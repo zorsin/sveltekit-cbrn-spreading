@@ -1,12 +1,13 @@
-import type { RequestHandler } from './__types/index';
+import type { RequestHandler } from './$types';
 import { connect, close } from '$lib/logic/mongo';
 import { Spread } from '$lib/model';
 import { v4 as uuidv4 } from 'uuid';
 import * as logger from '$lib/util/logger';
+import { error } from '@sveltejs/kit';
 const TAG = 'api/mission/index.ts';
 
 // units checks if the token for the mission is correct
-export const get: RequestHandler = async ({ url }) => {
+export const GET: RequestHandler = async ({ url }) => {
   const code = url.searchParams.get('code');
   logger.info(TAG, `get(${code})`);
   logger.time(TAG, `get(${code})`);
@@ -24,20 +25,22 @@ export const get: RequestHandler = async ({ url }) => {
     logger.timeEnd(TAG, `get(${code})`);
     logger.error(TAG, `get(${code})::find-mission::${e}`);
     console.error('while find mission', e);
-    return {
-      status: 503,
-      body: { msg: 'errors.find-not-successful' },
-    };
+    // return {
+    //   status: 503,
+    //   body: { msg: 'errors.find-not-successful' },
+    // };
+    throw error(503, JSON.stringify({ msg: 'errors.find-not-successful' }));
   }
   logger.timeEnd(TAG, `get(${code})`);
-  return {
-    status: 200,
-    body: { mission: result?.[0] },
-  };
+  return new Response(JSON.stringify({ mission: result?.[0] }));
+  // return {
+  //   status: 200,
+  //   body: { mission: result?.[0] },
+  // };
 };
 
 // commander creates new mission
-export const post: RequestHandler = async ({ locals, request }) => {
+export const POST: RequestHandler = async ({ locals, request }) => {
   const reqBody = await request.json();
   logger.info(TAG, `post(${JSON.stringify(reqBody)})`);
   logger.time(TAG, `post(${JSON.stringify(reqBody)})`);
@@ -60,10 +63,11 @@ export const post: RequestHandler = async ({ locals, request }) => {
       close();
       logger.timeEnd(TAG, `post(${JSON.stringify(reqBody)})`);
       logger.warn(TAG, `post(${JSON.stringify(reqBody)})::code-already-exists::${findResult.uuid}`);
-      return {
-        status: 400,
-        body: { msg: 'errors.already-exists' },
-      };
+      // return {
+      //   status: 400,
+      //   body: { msg: 'errors.already-exists' },
+      // };
+      throw error(400, JSON.stringify({ msg: 'errors.already-exists' }));
     }
     const insertResult = await collection.insertOne({
       uuid,
@@ -85,30 +89,33 @@ export const post: RequestHandler = async ({ locals, request }) => {
         `post(${JSON.stringify(reqBody)})::insert-not-successful::${JSON.stringify(insertResult)}`,
       );
       logger.timeEnd(TAG, `post(${JSON.stringify(reqBody)})`);
-      return {
-        status: 503,
-        body: { msg: 'errors.save-not-successful' },
-      };
+      throw error(503, JSON.stringify({ msg: 'errors.save-not-successful' }));
+      // return {
+      //   status: 503,
+      //   body: { msg: 'errors.save-not-successful' },
+      // };
     }
   } catch (e) {
     logger.timeEnd(TAG, `post(${JSON.stringify(reqBody)})`);
     logger.error(TAG, `post(${JSON.stringify(reqBody)})::save-mission::${e}`);
     console.error('while saveing mission', e);
-    return {
-      status: 503,
-      body: { msg: 'errors.save-not-successful' },
-    };
+    throw error(503, JSON.stringify({ msg: 'errors.save-not-successful' }));
+    // return {
+    //   status: 503,
+    //   body: { msg: 'errors.save-not-successful' },
+    // };
   }
   await locals.session.update(() => ({ mission: { uuid, code: reqBody.code } }));
   logger.timeEnd(TAG, `post(${JSON.stringify(reqBody)})`);
-  return {
-    status: 201,
-    body: { uuid, code: reqBody.code },
-  };
+  return new Response(JSON.stringify({ uuid, code: reqBody.code }));
+  // return {
+  //   status: 201,
+  //   body: { uuid, code: reqBody.code },
+  // };
 };
 
 // commander can delete the mission
-export const del: RequestHandler = async ({ request }) => {
+export const DELETE: RequestHandler = async ({ request }) => {
   const { uuid } = await request.json();
   logger.info(TAG, `del(${uuid})`);
   logger.time(TAG, `del(${uuid})`);
@@ -122,13 +129,15 @@ export const del: RequestHandler = async ({ request }) => {
     logger.timeEnd(TAG, `del(${uuid})`);
     logger.error(TAG, `del(${uuid})::delete-mission::${e}`);
     console.error('while delete mission', e);
-    return {
-      status: 503,
-      body: { msg: 'errors.delete-not-successful' },
-    };
+    throw error(503, JSON.stringify({ msg: 'errors.delete-not-successful' }));
+    // return {
+    //   status: 503,
+    //   body: { msg: 'errors.delete-not-successful' },
+    // };
   }
   logger.timeEnd(TAG, `del(${uuid})`);
-  return {
-    status: 200,
-  };
+  return new Response('', { status: 200 });
+  // return {
+  //   status: 200,
+  // };
 };

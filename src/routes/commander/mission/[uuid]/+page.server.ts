@@ -1,9 +1,14 @@
-import type { RequestHandler } from './__types/[uuid]';
-import { connect, close } from '$lib/logic/mongo';
 import * as logger from '$lib/util/logger';
+
+import { close, connect } from '$lib/logic/mongo';
+
+import type { PageServerLoad } from './$types';
+
 const TAG = 'mission/uuid.ts';
+export const ssr = false;
 // units checks if the token for the mission is correct
-export const get: RequestHandler = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, depends }) => {
+  depends('commander:mission');
   const uuid = params.uuid;
   logger.info(TAG, `get(${uuid})`);
   logger.time(TAG, `get(${uuid})`);
@@ -22,11 +27,10 @@ export const get: RequestHandler = async ({ params }) => {
       };
     }
     logger.timeEnd(TAG, `get(${uuid})`);
+
+    delete findResult._id;
     return {
-      status: 200,
-      body: {
-        mission: findResult,
-      },
+      mission: findResult,
     };
   } catch (e) {
     logger.timeEnd(TAG, `get(${uuid})`);

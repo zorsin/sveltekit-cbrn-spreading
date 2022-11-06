@@ -1,4 +1,10 @@
 <script lang="ts">
+  // throw new Error("@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)");
+  // Suggestion (check code before using, and possibly convert to data.X access later):
+  // import type { PageData } from './$types';
+  // export let data: PageData;
+  // $: ({ mission } = data);
+
   import {
     PageTitle,
     Checkbox,
@@ -15,9 +21,13 @@
   import Button from '$lib/smelte/components/Button/Button.svelte';
   import { t } from 'svelte-intl-precompile';
   import { writable } from 'svelte/store';
+  import type { PageData } from './$types';
+  import { onDestroy } from 'svelte';
 
-  export let mission;
-  //TODO: reload units from mission
+  export let data: PageData;
+  const pageData = writable<PageData>();
+  $: pageData.set(data);
+
   //#region leaflet
 
   let map;
@@ -33,17 +43,17 @@
   }
   //#endregion leaflet
 
-  if (mission.spreadLight) {
-    lines = mission.spreadLight;
+  if ($pageData?.mission?.spreadLight) {
+    lines = $pageData?.mission?.spreadLight;
   }
 
-  if (mission?.spread?.start) {
-    markerLocation = mission.spread.start;
+  if ($pageData?.mission?.spread?.start) {
+    markerLocation = $pageData?.mission?.spread.start;
     initialView = markerLocation;
   }
 
   const startFilter = {};
-  mission.units.forEach((element) => {
+  $pageData?.mission?.units.forEach((element) => {
     startFilter[element.unitUuid] = true;
   });
   const unitFilter = writable(startFilter);
@@ -56,11 +66,11 @@
   const onDelUnitClick = async (unitUuid: string) => {
     const res = await fetch(`/api/mission/units`, {
       method: 'delete',
-      body: JSON.stringify({ missionUuid: mission.uuid, unitUuid }),
+      body: JSON.stringify({ missionUuid: $pageData?.mission?.uuid, unitUuid }),
     });
     if (res.ok) {
       notifier.success($t('pages.commander-mission.delete-unit-success'));
-      await invalidate($page.url.pathname);
+      await invalidate('commander:mission');
     }
   };
 
@@ -69,7 +79,7 @@
     for (const [key, value] of Object.entries($unitFilter)) {
       if (value) filter += `&filter=${key}`;
     }
-    const res = await fetch(`/api/mission/measure?mission=${mission.uuid}${filter}`);
+    const res = await fetch(`/api/mission/measure?mission=${$pageData?.mission?.uuid}${filter}`);
     if (res.ok) {
       const data = await res.json();
       unitMeasures = data.measures;
@@ -82,10 +92,14 @@
     clearInterval(intervall);
   }
 
+  onDestroy(() => {
+    clearInterval(intervall);
+  });
+
   const onDelMissionClick = async () => {
     const res = await fetch(`/api/mission`, {
       method: 'delete',
-      body: JSON.stringify({ uuid: mission.uuid }),
+      body: JSON.stringify({ uuid: $pageData?.mission?.uuid }),
     });
     if (res.ok) {
       notifier.success($t('pages.commander-mission.delete-mission-success'));
@@ -94,7 +108,7 @@
   };
 
   const onRefreshUnitClick = async () => {
-    await invalidate($page.url.pathname);
+    await invalidate('commander:mission');
   };
 </script>
 
@@ -103,12 +117,14 @@
 <PageTitle>{$t('pages.commander-mission.title')}</PageTitle>
 <div class="grid(& cols-12) gap-4 md:gap-8">
   <span class="col-span(12 md:2)"
-    >{$t('pages.commander-mission.labels.code', { values: { code: mission.code } })}</span
+    >{$t('pages.commander-mission.labels.code', {
+      values: { code: $pageData?.mission?.code },
+    })}</span
   >
   <Switch
     class="col(span-12 md:start-4 md:end-7) order-1"
     label={$t('pages.commander-mission.labels.spread')}
-    bind:value={toggleSpread}
+    bind:checked={toggleSpread}
   />
   <Button
     class="col(span-12 md:start-7 md:end-8) order-(3 md:2)"
@@ -124,7 +140,7 @@
   <Switch
     class="col(span-12 md:start-10 md:end-13) order-(2 md:3)"
     label={$t('pages.commander-mission.labels.update-auto')}
-    bind:value={toggleUpdate}
+    bind:checked={toggleUpdate}
   />
 
   <div class="row-start(5 md:2) col(span-12 md:start-1 md:end-10) h-[20rem] md:h-[37rem] order-4">
@@ -162,7 +178,8 @@
               <SolidTruck class="w-full h-full relative -top-[14px]" />
               <small
                 class="w-max h-full relative -top-[14px] block bg-white p-0.5 rounded border border-primary-500"
-                >{mission.units.find((unit) => unit.unitUuid == measure.unitUuid).radio}</small
+                >{$pageData?.mission?.units.find((unit) => unit.unitUuid == measure.unitUuid)
+                  .radio}</small
               >
             </Marker>
           {/if}
@@ -180,24 +197,26 @@
       <SolidRefresh class="h-5 w-5" />
     </Button>
     <div class="flex flex-col">
-      {#each mission.units as unit}
-        <div
-          class="bg-dark-500 mt-4 grid(& cols-5) gap-2 items-center border(& 2 primary-700) rounded py-2"
-        >
-          <div>
-            <Checkbox bind:checked={$unitFilter[unit.unitUuid]} />
+      {#key $pageData?.mission?.units}
+        {#each $pageData?.mission?.units as unit}
+          <div
+            class="bg-dark-500 mt-4 grid(& cols-5) gap-2 items-center border(& 2 primary-700) rounded py-2"
+          >
+            <div>
+              <Checkbox bind:checked={$unitFilter[unit.unitUuid]} />
+            </div>
+            <div class="col-span-3">
+              <h6 class="text-base mb-2">{unit.radio} - {unit.vehicle}</h6>
+              <p class="text-sm">{unit.crew}</p>
+            </div>
+            <div>
+              <Button on:click={() => onDelUnitClick(unit.unitUuid)}>
+                <SolidTrash class="h-5 w-5" />
+              </Button>
+            </div>
           </div>
-          <div class="col-span-3">
-            <h6 class="text-base mb-2">{unit.radio} - {unit.vehicle}</h6>
-            <p class="text-sm">{unit.crew}</p>
-          </div>
-          <div>
-            <Button on:click={() => onDelUnitClick(unit.unitUuid)}>
-              <SolidTrash class="h-5 w-5" />
-            </Button>
-          </div>
-        </div>
-      {/each}
+        {/each}
+      {/key}
     </div>
   </div>
   <Button

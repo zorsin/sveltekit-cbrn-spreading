@@ -1,14 +1,23 @@
 <script lang="ts">
-  import { PageTitle, Button, TextField, Switch, SolidTruck, notifier } from '$lib/smelte';
+  // throw new Error(
+  //   '@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)',
+  // );
+  // Suggestion (check code before using, and possibly convert to data.X access later):
+  // import type { PageData } from './$types';
+  // export let data: PageData;
+  // $: ({ unit, mission } = data);
+
+  import { PageTitle, Switch, SolidTruck, notifier } from '$lib/smelte';
   import { Leaflet, Marker, Polyline } from '$lib/comps';
-  import { session } from '$app/stores';
+  // import { session } from '$app/stores';
   import Geolocation from 'svelte-geolocation';
   import type { GeolocationCoords } from 'svelte-geolocation/types/Geolocation.svelte';
-
   import { t } from 'svelte-intl-precompile';
-
-  export let unit;
-  export let mission;
+  import type { PageData } from './$types';
+  import { goto } from '$app/navigation';
+  import { page } from '$app/stores';
+  export let data: PageData;
+  const { unit, mission, notify } = data;
 
   let checked = false;
   let checkedDemo = false;
@@ -44,6 +53,11 @@
   $: if (checked && messureUuid && markerLocation?.length == 2) updateLocation();
   $: if (checked) {
     setupMeasure();
+  }
+
+  if (notify) {
+    notifier.success($t(notify));
+    goto($page.url.pathname);
   }
 
   const setupMeasure = async () => {
@@ -112,17 +126,17 @@
     class="col-span-2"
     classes={(s) => s.replace('inline-flex', 'hidden md:inline-flex')}
     label="Demo Point"
-    bind:value={checkedDemo}
+    bind:checked={checkedDemo}
   />
   <Switch
     class="col(span-6 md:start-8 md:end-10)"
     label={$t('pages.unit-mission.labels.gps')}
-    bind:value={getPosition}
+    bind:checked={getPosition}
   />
   <Switch
     class="col(span-6 md:start-10 md:end-13)"
     label={$t('pages.unit-mission.labels.start')}
-    bind:value={checked}
+    bind:checked
   />
   <div class="row-start-2 col(span-12 md:start-1 md:end-9) h-[20rem] md:h-[37rem]">
     {#if loaded || document.readyState === 'complete'}

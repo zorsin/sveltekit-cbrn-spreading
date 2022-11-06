@@ -13,35 +13,51 @@
   import { Leaflet, Polyline, Marker } from '$lib/comps';
   import { goto } from '$app/navigation';
   import { sleep } from '$lib/logic/util';
+  import { enhance } from '$app/forms';
+  import { page } from '$app/stores';
+  import { convertInputToLatLng } from '$lib/util/converter';
+  import { writable } from 'svelte/store';
 
   const regexp = /^\d+$/;
   const regexpPoint = /^(-?\d{1,3}\.\d+)(\,?\s?)(-?\d{1,3}\.\d+)$/;
-  const initialValues = {
+  let map;
+  let loaded = false;
+  let isViewed = false;
+  let lines = [];
+  let selectStart = false;
+  let markerLocation;
+
+  const initialValues = writable({
     start: '',
     width: '200',
     length: '1000',
     angle: '0',
     strength: '50000',
-  };
+    showStrength: false,
+  });
+
+  $: if ($page.form) {
+    markerLocation = $page.form.markerLocation;
+    isViewed = $page.form.isViewed;
+    lines = $page.form.lines;
+
+    initialValues.set({
+      start: $page.form.markerLocation[0] + ', ' + $page.form.markerLocation[1],
+      width: $page.form.width,
+      length: $page.form.length,
+      angle: $page.form.angle,
+      strength: $page.form.strength,
+      showStrength: $page.form.showStrength,
+    });
+    setFields('start', `${$page.form.markerLocation[0]}, ${$page.form.markerLocation[1]}`, true);
+    setFields('width', $page.form.width, true);
+    setFields('length', $page.form.length, true);
+    setFields('angle', $page.form.angle, true);
+    setFields('strength', $page.form.strength, true);
+    setFields('showStrength', $page.form.showStrength, true);
+    selectStart = false;
+  }
   const { form, errors, setFields, data, isValid, interacted } = createForm({
-    onSubmit: async ({ start, width, length, angle, strength }) => {
-      lines = [];
-      markerLocation = null;
-      const result = await fetch('/api/spread/calc', {
-        method: 'POST',
-        body: JSON.stringify({
-          start: convertInputToLatLng(start),
-          width: parseInt(width),
-          length: parseInt(length),
-          angle: parseInt(angle),
-          strength: parseInt(strength),
-        }),
-      });
-      const data = await result.json();
-      lines = data.lines;
-      isViewed = true;
-      markerLocation = convertInputToLatLng(start);
-    },
     validate: (values) => {
       const errors: Record<string, string[] | boolean> = {
         width: false,
@@ -71,12 +87,7 @@
   });
 
   //#region Leaflet
-  let map;
-  let loaded = false;
-  let isViewed = false;
-  let lines = [];
-  let selectStart = false;
-  let markerLocation;
+
   const initialView = [49.1273755, 9.2176877];
 
   function resizeMap() {
@@ -89,13 +100,6 @@
     map.setView(initialView, 13);
   }
 
-  const convertInputToLatLng = (input) => {
-    if (input && typeof input === 'string') {
-      const stringLatLon = input.split(',');
-      return [parseFloat(stringLatLon[0]), parseFloat(stringLatLon[1])];
-    }
-  };
-
   const onMapClick = () => {
     selectStart = false;
     markerLocation = convertInputToLatLng($data.start);
@@ -103,7 +107,7 @@
   const onMapMouseMove = (event) => {
     if (selectStart) {
       setFields('start', `${event.detail.latlng.lat}, ${event.detail.latlng.lng}`, true);
-      initialValues.start = `${event.detail.latlng.lat}, ${event.detail.latlng.lng}`;
+      $initialValues.start = `${event.detail.latlng.lat}, ${event.detail.latlng.lng}`;
     }
   };
 
@@ -120,6 +124,7 @@
   let nameValue = '';
   let nameError = null;
   let saving = false;
+  // let showStrength = false;
 
   const onBtnSave = async () => {
     saving = true;
@@ -206,44 +211,49 @@
       </Leaflet>
     {/if}
   </div>
-  <form class="col-span(4 md:1)" use:form>
+  <form class="col-span(4 md:1)" use:form use:enhance action="?/show" method="POST">
     <div>
       <TextField
         name="start"
         label={$t('pages.commander-create.labels.start')}
         error={!!$errors.start}
         hint={$errors.start?.[0]}
-        bind:value={initialValues.start}
+        value={$initialValues.start}
       />
-      <Switch label={$t('pages.commander-create.labels.select-start')} bind:value={selectStart} />
+      <Switch label={$t('pages.commander-create.labels.select-start')} bind:checked={selectStart} />
     </div>
     <TextField
       name="length"
       label={$t('pages.commander-create.labels.length')}
       error={!!$errors.length}
       hint={$errors.length?.[0]}
-      bind:value={initialValues.length}
+      bind:value={$initialValues.length}
     />
     <TextField
       name="width"
       label={$t('pages.commander-create.labels.width')}
       error={!!$errors.width}
       hint={$errors.width?.[0]}
-      bind:value={initialValues.width}
+      bind:value={$initialValues.width}
     />
     <TextField
       name="angle"
       label={$t('pages.commander-create.labels.angle')}
       error={!!$errors.angle}
       hint={$errors.angle?.[0]}
-      bind:value={initialValues.angle}
+      bind:value={$initialValues.angle}
     />
     <TextField
       name="strength"
       label={$t('pages.commander-create.labels.strength')}
       error={!!$errors.strength}
       hint={$errors.strength?.[0]}
-      bind:value={initialValues.strength}
+      bind:value={$initialValues.strength}
+    />
+    <Switch
+      label={$t('pages.commander-create.labels.show-strength')}
+      bind:checked={$initialValues.showStrength}
+      name="showStrength"
     />
     <div class="flex(& col md:row) gap-4 md:gap-6">
       <Button type="submit" disabled={!$isValid} replace={{ 'w-max': 'w-full md:w-max' }}

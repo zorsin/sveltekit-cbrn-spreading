@@ -175,7 +175,7 @@ Slots: label, append, prepend
   }
 
   $: showHint = error || (persistentHint ? hint : focused && hint);
-  $: labelOnTop = placeholder || focused || value || value === '0';
+  $: labelOnTop = placeholder || focused || !!value || String(value) === '0';
 
   $: iClasses = cb
     .flush()

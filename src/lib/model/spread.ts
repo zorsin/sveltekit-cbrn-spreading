@@ -18,7 +18,7 @@ export default class Spread {
     this.calculateEllipse();
   }
 
-  calculateEllipse() {
+  calculateEllipse(): [number, number][] {
     let x = this.length * -1;
     let yPrositiv = 0;
     let yNegativ = 0;
@@ -42,8 +42,8 @@ export default class Spread {
     return this.points;
   }
 
-  toCoordnates() {
-    const coordinates = [];
+  toCoordnates(): [number, number][] {
+    const coordinates: [number, number][] = [];
     const direction = (this.angle / 180) * Math.PI;
     const centerCoordinate = coordUtils.calcBearing(
       this.startCoordinate.lat,
@@ -69,12 +69,12 @@ export default class Spread {
     return coordinates;
   }
 
-  getSpreadStrength() {
+  getSpreadStrength(): SpreadRing[] {
     if (this.spreadStrength) return this.spreadStrength;
     // replace to diffrent ellips with custom values
     const spreadDivider = 500;
     const outerStrength = this.strength / spreadDivider;
-    const spreadStrength = [];
+    const spreadStrength: SpreadRing[] = [];
     for (let i = 1; i < spreadDivider + 1; i++) {
       const innerSpreadStrength = this.strength - outerStrength * (i - 1);
       const nextColor = this.calcSpreadColor(innerSpreadStrength);
@@ -94,12 +94,12 @@ export default class Spread {
     // ];
   }
 
-  getSpreadStrengthLight() {
+  getSpreadStrengthLight(): SpreadRing[] {
     if (this.spreadStrength) return this.spreadStrength;
     // replace to diffrent ellips with custom values
     const spreadDivider = 500;
     const outerStrength = this.strength / spreadDivider;
-    const spreadStrength = [];
+    const spreadStrength: SpreadRing[] = [];
 
     let lastColor = '-';
     for (let i = spreadDivider + 1; i > 0; i--) {
@@ -115,7 +115,7 @@ export default class Spread {
     return spreadStrength;
   }
 
-  calcInnerSpread(spreadDivider, i, color, innerSpreadStrength) {
+  calcInnerSpread(spreadDivider, i, color, innerSpreadStrength): SpreadRing {
     const innerWidth = ((this.width * 2) / spreadDivider) * i;
     const innerLength = ((this.length * 2) / spreadDivider) * i;
     const innerSpread = new Spread(
@@ -134,7 +134,7 @@ export default class Spread {
     };
   }
 
-  calcSpreadColor(strength) {
+  calcSpreadColor(strength): SpreadColor {
     // values in nSv
     if (strength < 300) {
       return '#FFF'; // white
@@ -158,3 +158,13 @@ export default class Spread {
     }
   }
 }
+
+export type SpreadColor = string;
+export type SpreadRing = {
+  id: number;
+  latLngs: [number, number][];
+  value: number;
+  width: number;
+  length: number;
+  color: SpreadColor;
+};

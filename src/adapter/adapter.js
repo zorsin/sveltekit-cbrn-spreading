@@ -1,6 +1,7 @@
-import { writeFile, readFile } from 'fs/promises';
-import { readPackageUp } from 'read-pkg-up';
+import { readFile, writeFile } from 'fs/promises';
+
 import node from '@sveltejs/adapter-node';
+import { readPackageUp } from 'read-pkg-up';
 
 export default function () {
   const adapter = node({

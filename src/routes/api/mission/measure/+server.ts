@@ -1,13 +1,14 @@
-import type { RequestHandler } from './__types/measure';
+import type { RequestHandler } from './$types';
+import { error } from '@sveltejs/kit';
 import { connect, close } from '$lib/logic/mongo';
 import { Spread } from '$lib/model';
 import * as turf from '@turf/turf';
 import { v4 as uuidv4 } from 'uuid';
 import * as logger from '$lib/util/logger';
-const TAG = ' api/mission/measure.ts';
+const TAG = 'api/mission/measure.ts';
 
 // get all messures as commander
-export const get: RequestHandler = async ({ url }) => {
+export const GET: RequestHandler = async ({ url }) => {
   const missionUuid = url.searchParams.get('mission');
   const filter = url.searchParams.getAll('filter');
   logger.info(TAG, `get(${missionUuid},${JSON.stringify(filter)})`);
@@ -26,32 +27,34 @@ export const get: RequestHandler = async ({ url }) => {
       })
       .toArray();
     close();
-
     logger.timeEnd(TAG, `get(${missionUuid},${JSON.stringify(filter)})`);
     logger.info(
       TAG,
       `get(${missionUuid},${JSON.stringify(filter)})::successful::${JSON.stringify(findResult)}`,
     );
-    return {
-      status: 200,
-      body: {
-        measures: findResult,
-      },
-    };
+    return new Response(JSON.stringify({ measures: findResult }));
+    // return {
+    //   status: 200,
+    //   body: {
+    //     measures: findResult,
+    //   },
+    // };
   } catch (e) {
     logger.error(
       TAG,
       `get(${missionUuid},${JSON.stringify(filter)})::find-mission-measurement::${e}`,
     );
   }
+  close();
   logger.timeEnd(TAG, `get(${missionUuid},${JSON.stringify(filter)})`);
-  return {
-    status: 500,
-  };
+  throw error(500);
+  // return {
+  //   status: 500,
+  // };
 };
 
 // creates measure to store point per unit
-export const post: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request }) => {
   const { missionUuid, unitUuid } = await request.json();
   logger.info(TAG, `post(${missionUuid},${unitUuid})`);
   logger.time(TAG, `post(${missionUuid},${unitUuid})`);
@@ -84,10 +87,12 @@ export const post: RequestHandler = async ({ request }) => {
           TAG,
           `post(${missionUuid},${unitUuid})::insert-failed::${JSON.stringify(result)}`,
         );
-        return {
-          status: 503,
-          body: { msg: 'errors.save-not-successful' },
-        };
+        close();
+        throw error(503, JSON.stringify({ msg: 'errors.save-not-successful' }));
+        // return {
+        //   status: 503,
+        //   body: { msg: 'errors.save-not-successful' },
+        // };
       }
     }
 
@@ -97,21 +102,24 @@ export const post: RequestHandler = async ({ request }) => {
       TAG,
       `post(${missionUuid},${unitUuid})::successful::${uuid},length:${lines.length}`,
     );
-    return {
-      status: 200,
-      body: { uuid, lines },
-    };
+    return new Response(JSON.stringify({ uuid, lines }));
+    // return {
+    //   status: 200,
+    //   body: { uuid, lines },
+    // };
   } catch (e) {
     logger.error(TAG, `post(${missionUuid},${unitUuid})::find-or-create-measure::${e}`);
     console.error('while insert or finde measure', e);
   }
+  close();
   logger.timeEnd(TAG, `post(${missionUuid},${unitUuid})`);
-  return {
-    status: 404,
-  };
+  throw error(404);
+  // return {
+  //   status: 404,
+  // };
 };
 
-export const patch: RequestHandler = async ({ request }) => {
+export const PATCH: RequestHandler = async ({ request }) => {
   const { missionUuid, unitUuid, latLng, lastLatLng, id } = await request.json();
   logger.info(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
   logger.time(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
@@ -178,10 +186,11 @@ export const patch: RequestHandler = async ({ request }) => {
           result,
         )}`,
       );
-      return {
-        status: 503,
-        body: { msg: 'errors.update-not-successful' },
-      };
+      throw error(503, JSON.stringify({ msg: 'errors.update-not-successful' }));
+      // return {
+      //   status: 503,
+      //   body: { msg: 'errors.update-not-successful' },
+      // };
     }
 
     logger.timeEnd(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
@@ -189,13 +198,19 @@ export const patch: RequestHandler = async ({ request }) => {
       TAG,
       `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::successful::${resColor},${resValue}`,
     );
-    return {
-      status: 200,
-      body: {
+    return new Response(
+      JSON.stringify({
         color: resColor,
         value: resValue,
-      },
-    };
+      }),
+    );
+    // return {
+    //   status: 200,
+    //   body: {
+    //     color: resColor,
+    //     value: resValue,
+    //   },
+    // };
   } catch (e) {
     logger.error(
       TAG,
@@ -204,7 +219,8 @@ export const patch: RequestHandler = async ({ request }) => {
     console.error('while updating measure', e);
   }
   logger.timeEnd(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
-  return {
-    status: 404,
-  };
+  throw error(404);
+  // return {
+  //   status: 404,
+  // };
 };

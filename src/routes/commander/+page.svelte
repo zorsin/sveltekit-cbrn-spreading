@@ -1,11 +1,12 @@
 <script lang="ts">
   import { PageTitle, Button, Dialog, TextField } from '$lib/smelte';
   import { navigating } from '$app/stores';
-  import { goto, prefetch } from '$app/navigation';
   import { t } from 'svelte-intl-precompile';
+  import type { PageData } from './$types';
 
-  export let recentSpreads;
-  export let mission;
+  export let data: PageData;
+
+  const { recentSpreads, mission } = data;
 
   let showDialog = false;
   let inputValue = '';
@@ -13,13 +14,6 @@
   const closeDialog = () => {
     showDialog = false;
     inputValue = '';
-  };
-
-  const prefetchSpread = () => {
-    prefetch(`/commander/${inputValue}`);
-  };
-  const gotoSpread = async () => {
-    goto(`/commander/${inputValue}`);
   };
 
   let loading = false;
@@ -43,7 +37,7 @@
       <ul>
         {#each recentSpreads as spread}
           <li>
-            <a class="text-base" href="/commander/{spread.id}" sveltekit:prefetch>
+            <a class="text-base" href="/commander/{spread.id}" data-sveltekit-prefetch>
               {spread.name}
               <small class="text-sm text-gray-500">({spread.id})</small>
             </a>
@@ -55,7 +49,7 @@
   {#if mission}
     <div>
       <h4 class="text-lg mb-4">{$t('pages.commander.mission')}</h4>
-      <a class="text-base" href="/commander/mission/{mission.uuid}" sveltekit:prefetch>
+      <a class="text-base" href="/commander/mission/{mission.uuid}" data-sveltekit-prefetch>
         {mission.code}
         <small class="text-sm text-gray-500">({mission.uuid})</small>
       </a>
@@ -69,6 +63,6 @@
   <TextField label={$t('pages.commander.dialog.label-input')} bind:value={inputValue} />
   <div slot="actions">
     <Button on:click={closeDialog}>{$t('common.back')}</Button>
-    <Button on:click={() => gotoSpread()} on:mouseover={prefetchSpread}>{$t('common.next')}</Button>
+    <Button href="/commander/{inputValue}">{$t('common.next')}</Button>
   </div>
 </Dialog>

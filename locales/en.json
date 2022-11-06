@@ -53,7 +53,8 @@
         "length": "",
         "width": "",
         "angle": "",
-        "strength": ""
+        "strength": "",
+        "show-strength": ""
       },
       "errors": {
         "start": "",
