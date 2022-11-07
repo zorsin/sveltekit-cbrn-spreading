@@ -82,20 +82,20 @@ export default class Spread {
   }
 
   toCoordnatesTriangle(): PointLatLon[] {
-    const openingAngle = this.openingAngle; //grad
+    const openingAngle = this.openingAngle; //degree
     const angle = coordUtils.degreeToRadian(openingAngle / 2);
+    const directionAngle = coordUtils.degreeToRadian(this.angle);
     const hypotenuse = coordUtils.calcHypotenuseFromAndjacentAlpha(this.length, angle);
-    console.log(hypotenuse, this.length, openingAngle / 2, angle);
     const pointA = coordUtils.calcBearing(
       this.startCoordinate.lat,
       this.startCoordinate.lon,
-      angle,
+      angle + directionAngle,
       hypotenuse,
     );
     const pointB = coordUtils.calcBearing(
       this.startCoordinate.lat,
       this.startCoordinate.lon,
-      angle * -1,
+      angle * -1 + directionAngle,
       hypotenuse,
     );
     this.coordinates = [
