@@ -10,6 +10,24 @@
     "spreadmodes": {
       "ellipse": "Ellipse",
       "triangle": "Dreieck"
+    },
+    "directions": {
+      "n": "Norden (N): {angle}°",
+      "nno": "NordNordOst (NNO): {angle}°",
+      "no": "NordOsten (NO): {angle}°",
+      "ono": "OstNordOst (ONO): {angle}°",
+      "o": "Osten (O): {angle}°",
+      "oso": "OstSüdOst (OSO): {angle}°",
+      "so": "SüdOsten (SO): {angle}°",
+      "sso": "SüdSüdOsten (SSO): {angle}°",
+      "s": "Süden (S): {angle}°",
+      "ssw": "SüdSüdWesten (SSW): {angle}°",
+      "sw": "SüdWesten (SW): {angle}°",
+      "wsw": "WestSüdWesten (WSW): {angle}°",
+      "w": "Westen (W): {angle}°",
+      "wnw": "WestNordWesten (WNW): {angle}°",
+      "nw": "NordWesten (NW): {angle}°",
+      "nnw": "NordNordWesten (NNW): {angle}°"
     }
   },
   "errors": {
@@ -56,10 +74,12 @@
         "select-start": "Startkoordinate auswählen",
         "length": "Länge",
         "width": "Breite",
-        "angle": "Winkel (Grad)",
+        "angle": "Windzugrichtung (Grad)",
+        "openingAngle": "Öffnungswinkel (Grad)",
         "strength": "Stärke",
         "show-strength": "Stärke anzeigen",
-        "mode": "Ausbreitungsmodus"
+        "mode": "Ausbreitungsmodus",
+        "winddirections": "Windrichrungen:"
       },
       "errors": {
         "start": "Du muss eine Startkoordinate angeben!",

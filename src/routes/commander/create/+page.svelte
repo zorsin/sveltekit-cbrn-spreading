@@ -36,6 +36,7 @@
     strength: '50000',
     showStrength: false,
     mode: 'ellipse',
+    openingAngle: '45',
   });
 
   $: if ($page.form) {
@@ -50,6 +51,7 @@
       strength: $page.form.strength,
       showStrength: $page.form.showStrength,
       mode: $page.form.mode,
+      openingAngle: $page.form.openingAngle,
     });
     setFields('start', $page.form.start, true);
     setFields('width', $page.form.width, true);
@@ -58,6 +60,7 @@
     setFields('strength', $page.form.strength, true);
     setFields('showStrength', $page.form.showStrength, true);
     setFields('mode', $page.form.mode, true);
+    setFields('openingAngle', $page.form.openingAngle, true);
     selectStart = false;
   }
   const { form, errors, setFields, data, isValid, interacted } = createForm({
@@ -67,12 +70,12 @@
         length: false,
         angle: false,
         strength: false,
+        openingAngle: false,
       };
-
       if (!regexpPoint.test(<string>values.start)) {
         errors.start = [$t('pages.commander-create.errors.start')];
       }
-      if (!regexp.test('' + values.width)) {
+      if (values.width && !regexp.test('' + values.width)) {
         errors.width = [$t('pages.commander-create.errors.width')];
       }
       if (!regexp.test('' + values.length)) {
@@ -80,6 +83,9 @@
       }
       if (!regexp.test('' + values.angle)) {
         errors.angle = [$t('pages.commander-create.errors.angle')];
+      }
+      if (values.openingAngle && !regexp.test('' + values.openingAngle)) {
+        errors.openingAngle = [$t('pages.commander-create.errors.openingAngle')];
       }
       if (!regexp.test('' + values.strength)) {
         errors.strength = [$t('pages.commander-create.errors.strength')];
@@ -240,7 +246,7 @@
       items={spreadModes}
       name="mode"
       label={$t('pages.commander-create.labels.mode')}
-      value={$initialValues.mode}
+      bind:value={$initialValues.mode}
     />
     <TextField
       name="length"
@@ -249,13 +255,23 @@
       hint={$errors.length?.[0]}
       bind:value={$initialValues.length}
     />
-    <TextField
-      name="width"
-      label={$t('pages.commander-create.labels.width')}
-      error={!!$errors.width}
-      hint={$errors.width?.[0]}
-      bind:value={$initialValues.width}
-    />
+    {#if $initialValues.mode == 'ellipse'}
+      <TextField
+        name="width"
+        label={$t('pages.commander-create.labels.width')}
+        error={!!$errors.width}
+        hint={$errors.width?.[0]}
+        bind:value={$initialValues.width}
+      />
+    {:else if $initialValues.mode == 'triangle'}
+      <TextField
+        name="openingAngle"
+        label={$t('pages.commander-create.labels.openingAngle')}
+        error={!!$errors.openingAngle}
+        hint={$errors.openingAngle?.[0]}
+        bind:value={$initialValues.openingAngle}
+      />
+    {/if}
     <TextField
       name="angle"
       label={$t('pages.commander-create.labels.angle')}
@@ -288,4 +304,23 @@
       {/if}
     </div>
   </form>
+</div>
+<h4 class="mt-4 text-xl">{$t('pages.commander-create.labels.winddirections')}</h4>
+<div class="grid(& sm:cols-2 md:cols-2 cols-1 lg:cols-4) gap-y-4 gap-x-2 mt-4">
+  <span>{$t('common.directions.n', { values: { angle: 0 } })}</span>
+  <span>{$t('common.directions.nno', { values: { angle: 22.5 } })}</span>
+  <span>{$t('common.directions.no', { values: { angle: 45 } })}</span>
+  <span>{$t('common.directions.ono', { values: { angle: 67.5 } })}</span>
+  <span>{$t('common.directions.o', { values: { angle: 90 } })}</span>
+  <span>{$t('common.directions.oso', { values: { angle: 112.5 } })}</span>
+  <span>{$t('common.directions.so', { values: { angle: 135 } })}</span>
+  <span>{$t('common.directions.sso', { values: { angle: 157.5 } })}</span>
+  <span>{$t('common.directions.s', { values: { angle: 180 } })}</span>
+  <span>{$t('common.directions.ssw', { values: { angle: 202.5 } })}</span>
+  <span>{$t('common.directions.sw', { values: { angle: 225 } })}</span>
+  <span>{$t('common.directions.wsw', { values: { angle: 247.5 } })}</span>
+  <span>{$t('common.directions.w', { values: { angle: 270 } })}</span>
+  <span>{$t('common.directions.wnw', { values: { angle: 292.5 } })}</span>
+  <span>{$t('common.directions.nw', { values: { angle: 315 } })}</span>
+  <span>{$t('common.directions.nnw', { values: { angle: 337.5 } })}</span>
 </div>

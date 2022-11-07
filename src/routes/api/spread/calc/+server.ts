@@ -19,7 +19,7 @@ export const POST: RequestHandler = async ({ request }) => {
     angle: body.angle as number,
     strength: body.strength as number,
     mode: body.mode as SpreadMode,
-    openingAngle: 45,
+    openingAngle: body.openingAngle as number,
   });
   let lines = [];
   if (body.showStrength) {

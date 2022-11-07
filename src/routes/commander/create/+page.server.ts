@@ -18,6 +18,7 @@ export const actions: Actions = {
     const strength = requestBody.get('strength') as string;
     const showStrength = requestBody.get('showStrength') as string;
     const mode = requestBody.get('mode') as string;
+    const openingAngle = requestBody.get('openingAngle') as string;
     let lines = [];
     const markerLocation = convertInputToLatLng(start);
 
@@ -29,6 +30,7 @@ export const actions: Actions = {
       strength: parseInt(strength),
       showStrength: !!showStrength,
       mode,
+      openingAngle: parseInt(openingAngle),
     };
 
     const result = await fetch('/api/spread/calc', {
