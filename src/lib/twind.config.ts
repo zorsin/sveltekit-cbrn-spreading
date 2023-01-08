@@ -1,5 +1,5 @@
 import { generate as buildPalette } from '$lib/smelte/utils/color.js';
-import { defineConfig } from 'twind';
+import { defineConfig } from '@twind/core';
 import presetAutoprefix from '@twind/preset-autoprefix';
 import presetTailwind from '@twind/preset-tailwind';
 
