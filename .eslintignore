@@ -1,0 +1,17 @@
+.DS_Store
+node_modules
+build
+.svelte-kit
+package
+hars
+.env
+.env.*
+!.env.example
+.storybook
+
+pnpm-lock.yaml
+.vscode
+
+dist
+storybook-static
+_ignore_

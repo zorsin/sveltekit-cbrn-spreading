@@ -1,7 +1,7 @@
 <script lang="ts">
   import { PageTitle, Button, Dialog, TextField, notifier } from '$lib/smelte';
   import { navigating, page } from '$app/stores';
-  import { goto, prefetch } from '$app/navigation';
+  import { goto } from '$app/navigation';
   import { t } from 'svelte-intl-precompile';
   import { createForm } from 'felte';
   import type { PageData } from './$types';
@@ -36,25 +36,8 @@
 <span>{$t('pages.unit-register.descr')}</span>
 <form class="w-full md:w-1/2 mt-16" use:form use:enhance method="POST" action="?/register">
   <input class="hidden" value={data.missionUuid} name="id" />
-  <TextField
-    name="radio"
-    label={$t('pages.unit-register.labels.radio')}
-    error={!!$errors.radio}
-    hint={$errors.radio}
-  />
-  <TextField
-    name="vehicle"
-    label={$t('pages.unit-register.labels.vehicle')}
-    error={!!$errors.vehicle}
-    hint={$errors.vehicle}
-  />
-  <TextField
-    name="crew"
-    label={$t('pages.unit-register.labels.crew')}
-    error={!!$errors.crew}
-    hint={$errors.crew}
-  />
-  <Button type="submit" replace={{ 'w-max': 'w-full md:w-max' }} add="mt-8"
-    >{$t('common.register')}</Button
-  >
+  <TextField name="radio" label={$t('pages.unit-register.labels.radio')} error={!!$errors.radio} hint={$errors.radio} />
+  <TextField name="vehicle" label={$t('pages.unit-register.labels.vehicle')} error={!!$errors.vehicle} hint={$errors.vehicle} />
+  <TextField name="crew" label={$t('pages.unit-register.labels.crew')} error={!!$errors.crew} hint={$errors.crew} />
+  <Button type="submit" replace={{ 'w-max': 'w-full md:w-max' }} add="mt-8">{$t('common.register')}</Button>
 </form>

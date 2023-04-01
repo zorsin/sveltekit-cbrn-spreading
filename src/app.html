@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <title>CBRN Spread</title>
     <meta charset="utf-8" />
@@ -13,7 +13,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     %sveltekit.head%
   </head>
-  <body id="svelte" class="w-full bg-gray-100 dark:bg-dark-500 dark:text-gray-100 text-sans">
-    %sveltekit.body%
+  <body
+    data-sveltekit-preload-data="hover"
+    class="w-full bg-gray-100 dark:bg-dark-500 dark:text-gray-100 text-sans"
+  >
+    <div style="display: contents">%sveltekit.body%</div>
   </body>
 </html>
