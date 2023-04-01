@@ -1,4 +1,3 @@
-import handleTwind from '@twind/with-sveltekit/hooks';
 import { handleSession } from 'svelte-kit-cookie-session';
 import { sequence } from '@sveltejs/kit/hooks';
 
@@ -17,6 +16,5 @@ export const handle = sequence(
     key: 'cbrn.spread',
     secret: 'tQFvVrst4gUcaWXkLwZ45hzJtRtNKSbX7RkkRQETnkFSxXMTuXJrJYKpysqz',
   }),
-  handleTwind(),
   customHandle,
 );

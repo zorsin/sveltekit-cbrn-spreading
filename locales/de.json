@@ -52,6 +52,7 @@
   "pages": {
     "landing": {
       "title": "CBRN Ausbreitung",
+      "navTitle": "Start",
       "descr": "Mit 'CBRN Ausbreitung' können Gefahrstoffausbreitungen für Übungsmessfahrten simuliert werden. Der Einsatzleiter legt eine Ausbreitung mit verschiedensten Parametern an. Die Einheiten können sich dann mit dem Registrigungscode des Einsatzleiters an der Ausbreitung anmelden und eine simulierte Messfahrt durchführen."
     },
     "commander": {
