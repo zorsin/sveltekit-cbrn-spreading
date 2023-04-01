@@ -1,68 +1,67 @@
 <script lang="ts">
-  import { PageTitle, Button, Dialog, TextField } from '$lib/smelte';
   import { navigating } from '$app/stores';
   import { t } from 'svelte-intl-precompile';
   import type { PageData } from './$types';
+  import ContentGrid from '$lib/skeleton/ContentGrid.svelte';
+  import { modalStore } from '@skeletonlabs/skeleton';
+  import { goto } from '$app/navigation';
 
   export let data: PageData;
 
   const { recentSpreads, mission } = data;
 
-  let showDialog = false;
-  let inputValue = '';
-
-  const closeDialog = () => {
-    showDialog = false;
-    inputValue = '';
-  };
-
   let loading = false;
   $: loading = !!$navigating;
+
+  const openModal = () => {
+    modalStore.clear();
+    modalStore.trigger({
+      type: 'prompt',
+      title: $t('pages.commander.dialog.title'),
+      body: $t('pages.commander.dialog.descr'),
+      valueAttr: { type: 'text', minlength: 3, maxlength: 10, required: true },
+      response: (inputValue) => {
+        goto(`/commander/${inputValue}`);
+      },
+      buttonTextSubmit: $t('common.next'),
+      buttonTextCancel: $t('common.back'),
+    });
+  };
 </script>
 
-<PageTitle>{$t('pages.commander.title')}</PageTitle>
-<span>{$t('pages.commander.descr')}</span>
-<div class="grid(& cols-1) mt-8 gap-4 md:flex">
-  <Button href={`/commander/create`} replace={{ 'w-max': 'w-full md:w-max' }}
-    >{$t('pages.commander.btn-create')}</Button
-  >
-  <Button on:click={() => (showDialog = true)} replace={{ 'w-max': 'w-full md:w-max' }}
-    >{$t('pages.commander.btn-view')}</Button
-  >
-</div>
-<div class="grid(& cols-1 md:cols-2) gap-4 mt-16 ">
-  {#if recentSpreads.length > 0}
-    <div>
-      <h4 class="text-lg mb-4">{$t('pages.commander.recent-spreads')}</h4>
-      <ul>
-        {#each recentSpreads as spread}
-          <li>
-            <a class="text-base" href="/commander/{spread.id}" data-sveltekit-prefetch>
-              {spread.name}
-              <small class="text-sm text-gray-500">({spread.id})</small>
-            </a>
-          </li>
-        {/each}
-      </ul>
-    </div>
-  {/if}
-  {#if mission}
-    <div>
-      <h4 class="text-lg mb-4">{$t('pages.commander.mission')}</h4>
-      <a class="text-base" href="/commander/mission/{mission.uuid}" data-sveltekit-prefetch>
-        {mission.code}
-        <small class="text-sm text-gray-500">({mission.uuid})</small>
-      </a>
-    </div>
-  {/if}
-</div>
+<ContentGrid>
+  <h1 class="col-span-12 mb-8">{$t('pages.commander.title')}</h1>
+  <p class="col-span-12 mb-4">{$t('pages.commander.descr')}</p>
 
-<Dialog bind:value={showDialog} persistent progresscolor="white" {loading}>
-  <h5 slot="title">{$t('pages.commander.dialog.title')}</h5>
-  <div>{$t('pages.commander.dialog.descr')}</div>
-  <TextField label={$t('pages.commander.dialog.label-input')} bind:value={inputValue} />
-  <div slot="actions">
-    <Button on:click={closeDialog}>{$t('common.back')}</Button>
-    <Button href="/commander/{inputValue}">{$t('common.next')}</Button>
+  <div class="col-span-12 grid grid-cols-1 gap-2 md:flex">
+    <a href="/commander/create" class="btn variant-filled" data-sveltekit-preload-data="hover">{$t('pages.commander.btn-create')}</a>
+    <button type="button" class="btn variant-filled" on:click={() => openModal()}>{$t('pages.commander.btn-view')}</button>
   </div>
-</Dialog>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+    {#if recentSpreads.length > 0}
+      <div>
+        <h4 class="mb-1">{$t('pages.commander.recent-spreads')}</h4>
+        <ul>
+          {#each recentSpreads as spread}
+            <li>
+              <a class="text-base" href="/commander/{spread.id}" data-sveltekit-preload-data>
+                {spread.name}
+                <small class="text-sm">({spread.id})</small>
+              </a>
+            </li>
+          {/each}
+        </ul>
+      </div>
+    {/if}
+    {#if mission}
+      <div>
+        <h4 class=" mb-1">{$t('pages.commander.mission')}</h4>
+        <a class="text-base" href="/commander/mission/{mission.uuid}" data-sveltekit-preload-data>
+          {mission.code}
+          <small class="text-sm">({mission.uuid})</small>
+        </a>
+      </div>
+    {/if}
+  </div>
+</ContentGrid>

@@ -86,8 +86,15 @@
         "start": "Du muss eine Startkoordinate angeben!",
         "width": "Die Breite muss eine Nummer sein!",
         "length": "Die Länge muss eine Nummer sein!",
+        "minLength": "Die Länge muss größer 0 sein!",
+        "maxLength": "Die Länge muss kleiner 10000 sein!",
+        "minAngle": "Der Winkel muss 0° oder größer sein!",
+        "maxAngle": "Der Winkel muss kleiner 360° sein!",
+        "minOpeningAngle": "Der Öffnungswinkel muss größer 1° sein!",
+        "maxOpeningAngle": "Der Öffnungswinkel muss kleiner 180° sein!",
         "angle": "Der Winkel muss eine Nummer sein!",
         "strength": "Die Stärke muss eine Nummer sein!",
+        "minStrength": "Die Stärke muss größer 0 sein!",
         "name-exists": "Der Name wird bereits verwendet!"
       },
       "dialog": {

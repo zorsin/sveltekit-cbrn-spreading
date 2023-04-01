@@ -30,19 +30,11 @@ module.exports = {
             position: 'before',
           },
           {
-            pattern: '@siam/**',
-            group: 'internal',
-          },
-          {
             pattern: '$lib/**',
             group: 'builtin',
           },
-          {
-            pattern: '$locale',
-            group: 'builtin',
-          },
         ],
-        pathGroupsExcludedImportTypes: ['@siam/**', '($lib/**|$locale)'],
+        pathGroupsExcludedImportTypes: ['$lib/**'],
         distinctGroup: false,
       },
     ],

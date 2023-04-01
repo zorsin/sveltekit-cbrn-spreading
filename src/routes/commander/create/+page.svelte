@@ -1,24 +1,17 @@
 <script lang="ts">
-  import {
-    PageTitle,
-    Button,
-    TextField,
-    Switch,
-    SolidLocationMarker,
-    Dialog,
-    notifier,
-  } from '$lib/smelte';
-  import { createForm } from 'felte';
   import { t } from 'svelte-intl-precompile';
   import { Leaflet, Polyline, Marker } from '$lib/comps';
   import { goto } from '$app/navigation';
   import { sleep } from '$lib/logic/util';
-  import { enhance } from '$app/forms';
-  import { page } from '$app/stores';
+  import { superForm } from 'sveltekit-superforms/client';
   import { convertInputToLatLng } from '$lib/util/converter';
-  import { writable } from 'svelte/store';
-  import Select from '$lib/smelte/components/Select/Select.svelte';
+  import { Button, ContentGrid, PageTitle, Switch, TextField } from '$lib/skeleton';
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+  import NumberField from '$lib/skeleton/NumberField.svelte';
+  import Select from '$lib/skeleton/Select.svelte';
+  import { SpreadModes } from './spread-schema';
 
+  export let data;
   const regexp = /^\d+$/;
   const regexpPoint = /^(-?\d{1,3}\.\d+)(\,?\s?)(-?\d{1,3}\.\d+)$/;
   let map;
@@ -27,73 +20,6 @@
   let lines = [];
   let selectStart = false;
   let markerLocation;
-
-  const initialValues = writable({
-    start: '',
-    width: '200',
-    length: '1000',
-    angle: '0',
-    strength: '50000',
-    showStrength: false,
-    mode: 'ellipse',
-    openingAngle: '45',
-  });
-
-  $: if ($page.form) {
-    markerLocation = $page.form.markerLocation;
-    isViewed = $page.form.isViewed;
-    lines = $page.form.lines;
-    initialValues.set({
-      start: $page.form.start,
-      width: $page.form.width,
-      length: $page.form.length,
-      angle: $page.form.angle,
-      strength: $page.form.strength,
-      showStrength: $page.form.showStrength,
-      mode: $page.form.mode,
-      openingAngle: $page.form.openingAngle,
-    });
-    setFields('start', $page.form.start, true);
-    setFields('width', $page.form.width, true);
-    setFields('length', $page.form.length, true);
-    setFields('angle', $page.form.angle, true);
-    setFields('strength', $page.form.strength, true);
-    setFields('showStrength', $page.form.showStrength, true);
-    setFields('mode', $page.form.mode, true);
-    setFields('openingAngle', $page.form.openingAngle, true);
-    selectStart = false;
-  }
-  const { form, errors, setFields, data, isValid, interacted } = createForm({
-    validate: (values) => {
-      const errors: Record<string, string[] | boolean> = {
-        width: false,
-        length: false,
-        angle: false,
-        strength: false,
-        openingAngle: false,
-      };
-      if (!regexpPoint.test(<string>values.start)) {
-        errors.start = [$t('pages.commander-create.errors.start')];
-      }
-      if (values.width && !regexp.test('' + values.width)) {
-        errors.width = [$t('pages.commander-create.errors.width')];
-      }
-      if (!regexp.test('' + values.length)) {
-        errors.length = [$t('pages.commander-create.errors.length')];
-      }
-      if (!regexp.test('' + values.angle)) {
-        errors.angle = [$t('pages.commander-create.errors.angle')];
-      }
-      if (values.openingAngle && !regexp.test('' + values.openingAngle)) {
-        errors.openingAngle = [$t('pages.commander-create.errors.openingAngle')];
-      }
-      if (!regexp.test('' + values.strength)) {
-        errors.strength = [$t('pages.commander-create.errors.strength')];
-      }
-
-      return errors;
-    },
-  });
 
   //#region Leaflet
 
@@ -111,12 +37,11 @@
 
   const onMapClick = () => {
     selectStart = false;
-    markerLocation = convertInputToLatLng($data.start);
+    // markerLocation = convertInputToLatLng($data.start);
   };
   const onMapMouseMove = (event) => {
     if (selectStart) {
-      setFields('start', `${event.detail.latlng.lat}, ${event.detail.latlng.lng}`, true);
-      $initialValues.start = `${event.detail.latlng.lat}, ${event.detail.latlng.lng}`;
+      // $initialValues.start = `${event.detail.latlng.lat}, ${event.detail.latlng.lng}`;
     }
   };
 
@@ -141,18 +66,18 @@
       method: 'POST',
       body: JSON.stringify({
         name: nameValue,
-        start: convertInputToLatLng($data.start),
-        width: parseInt($data.width),
-        length: parseInt($data.length),
-        angle: parseInt($data.angle),
-        strength: parseInt($data.strength),
+        // start: convertInputToLatLng($data.start),
+        // width: parseInt($data.width),
+        // length: parseInt($data.length),
+        // angle: parseInt($data.angle),
+        // strength: parseInt($data.strength),
       }),
     });
     const resp = await result.json();
     if (result.ok) {
-      notifier.success(
-        $t('pages.commander-create.notification', { values: { name: resp.name, id: resp.id } }),
-      );
+      // notifier.success(
+      //   $t('pages.commander-create.notification', { values: { name: resp.name, id: resp.id } }),
+      // );
       // showDialog = false;
       await sleep(20);
       goto('/commander');
@@ -160,23 +85,24 @@
       if (result.status === 400) {
         saving = false;
         nameError = $t('pages.commander-create.errors.name-exists');
-        notifier.alert(
-          $t('pages.commander-create.notification-exists', { values: { name: nameValue } }),
-        );
+        // notifier.alert(
+        //   $t('pages.commander-create.notification-exists', { values: { name: nameValue } }),
+        // );
       } else {
-        notifier.error($t(resp.msg));
+        // notifier.error($t(resp.msg));
         showDialog = false;
       }
     }
   };
 
-  $: if (nameValue) {
-    nameError = null;
-  }
+  const { form, errors, enhance } = superForm(data.form);
+  $: console.log('err', $errors);
 
-  const closeDialog = () => {
-    showDialog = false;
-    nameValue = '';
+  const handelError = (errors: string[] | undefined): string | undefined => {
+    if (errors && errors.length > 0) {
+      return $t(`pages.commander-create.${errors[0]}`);
+    }
+    return undefined;
   };
 
   const spreadModes = [
@@ -191,136 +117,71 @@
   ];
 </script>
 
-<svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
-
-<PageTitle>{$t('pages.commander-create.title')}</PageTitle>
-
-<Dialog bind:value={showDialog} persistent loading={saving} progresscolor="white">
-  <h5 slot="title">{$t('pages.commander-create.dialog.title')}</h5>
-  <div>{$t('pages.commander-create.dialog.descr')}</div>
-  <TextField
-    label={$t('pages.commander-create.dialog.label-name')}
-    bind:value={nameValue}
-    error={nameError}
-    hint={nameError}
-  />
-  <div slot="actions">
-    <Button on:click={closeDialog}>{$t('common.back')}</Button>
-    <Button on:click={onBtnSave}>{$t('common.save')}</Button>
+<SuperDebug data={$form} />
+<ContentGrid>
+  <PageTitle>{$t('pages.commander-create.title')}</PageTitle>
+  <div class="col-span-6">
+    <!-- MAP -->
   </div>
-</Dialog>
-<div class="grid(& cols-4) gap-4">
-  <div class="col-span(4 md:3) h-[20rem] md:h-[37rem] bg-error-500 z-20">
-    {#if loaded || document.readyState === 'complete'}
-      <Leaflet
-        bind:map
-        view={initialView}
-        zoom={13}
-        on:click={onMapClick}
-        on:mousemove={onMapMouseMove}
-        on:layeradd={onLayerAdd}
-      >
-        {#each lines as line (line.id)}
-          <Polyline latLngs={line.latLngs} color={line.color} />
-        {/each}
-        {#if markerLocation}
-          <Marker latLng={markerLocation} width={40} height={40} class="text-primary-500">
-            <SolidLocationMarker class="w-full h-full relative -top-[19px]" />
-          </Marker>
-        {/if}
-      </Leaflet>
-    {/if}
-  </div>
-  <form class="col-span(4 md:1)" use:form use:enhance action="?/show" method="POST">
-    <div>
+  <form class="col-span-6 grid grid-cols-1 gap-2" method="POST" action="?/view" use:enhance>
+    <!-- controles -->
+    <div class="flex gap-2 flex-col">
       <TextField
-        name="start"
         label={$t('pages.commander-create.labels.start')}
-        error={!!$errors.start}
-        hint={$errors.start?.[0]}
-        value={$initialValues.start}
-      />
-      <Switch label={$t('pages.commander-create.labels.select-start')} bind:checked={selectStart} />
+        bind:value={$form.start}
+        name="start"
+        error={handelError($errors.start)} />
+      <Switch name="select-point">{$t('pages.commander-create.labels.select-start')}</Switch>
     </div>
-    <Select
-      items={spreadModes}
-      name="mode"
-      label={$t('pages.commander-create.labels.mode')}
-      bind:value={$initialValues.mode}
-    />
-    <TextField
-      name="length"
+    <Select label={$t('pages.commander-create.labels.mode')} name="mode" options={spreadModes} bind:value={$form.mode} />
+    <NumberField
       label={$t('pages.commander-create.labels.length')}
-      error={!!$errors.length}
-      hint={$errors.length?.[0]}
-      bind:value={$initialValues.length}
-    />
-    {#if $initialValues.mode == 'ellipse'}
-      <TextField
-        name="width"
+      bind:value={$form.length}
+      name="length"
+      error={handelError($errors.length)} />
+    {#if $form.mode === SpreadModes.ellipse}
+      <NumberField
         label={$t('pages.commander-create.labels.width')}
-        error={!!$errors.width}
-        hint={$errors.width?.[0]}
-        bind:value={$initialValues.width}
-      />
-    {:else if $initialValues.mode == 'triangle'}
-      <TextField
-        name="openingAngle"
+        bind:value={$form.width}
+        name="width"
+        error={handelError($errors.width)} />
+    {:else if $form.mode === SpreadModes.triangle}
+      <NumberField
         label={$t('pages.commander-create.labels.openingAngle')}
-        error={!!$errors.openingAngle}
-        hint={$errors.openingAngle?.[0]}
-        bind:value={$initialValues.openingAngle}
-      />
+        bind:value={$form.openingAngle}
+        name="openingAngle"
+        error={handelError($errors.openingAngle)} />
     {/if}
-    <TextField
-      name="angle"
+    <NumberField
       label={$t('pages.commander-create.labels.angle')}
-      error={!!$errors.angle}
-      hint={$errors.angle?.[0]}
-      bind:value={$initialValues.angle}
-    />
-    <TextField
-      name="strength"
+      bind:value={$form.angle}
+      name="angle"
+      error={handelError($errors.angle)} />
+    <NumberField
       label={$t('pages.commander-create.labels.strength')}
-      error={!!$errors.strength}
-      hint={$errors.strength?.[0]}
-      bind:value={$initialValues.strength}
-    />
-    <Switch
-      label={$t('pages.commander-create.labels.show-strength')}
-      bind:checked={$initialValues.showStrength}
-      name="showStrength"
-    />
-    <div class="flex(& col md:row) gap-4 md:gap-6">
-      <Button type="submit" disabled={!$isValid} replace={{ 'w-max': 'w-full md:w-max' }}
-        >{$t('common.view')}</Button
-      >
-      {#if isViewed && $interacted === null}
-        <Button
-          disabled={!$isValid}
-          on:click={() => (showDialog = true)}
-          replace={{ 'w-max': 'w-full md:w-max' }}>{$t('common.save')}</Button
-        >
-      {/if}
-    </div>
+      bind:value={$form.strength}
+      name="strength"
+      error={handelError($errors.strength)} />
+    <Switch name="showStrength" bind:checked={$form.showStrength}>{$t('pages.commander-create.labels.show-strength')}</Switch>
+    <Button type="submit">{$t('common.view')}</Button>
   </form>
-</div>
-<h4 class="mt-4 text-xl">{$t('pages.commander-create.labels.winddirections')}</h4>
-<div class="grid(& sm:cols-2 md:cols-2 cols-1 lg:cols-4) gap-y-4 gap-x-2 mt-4">
-  <span>{$t('common.directions.n', { values: { angle: 0 } })}</span>
-  <span>{$t('common.directions.nno', { values: { angle: 22.5 } })}</span>
-  <span>{$t('common.directions.no', { values: { angle: 45 } })}</span>
-  <span>{$t('common.directions.ono', { values: { angle: 67.5 } })}</span>
-  <span>{$t('common.directions.o', { values: { angle: 90 } })}</span>
-  <span>{$t('common.directions.oso', { values: { angle: 112.5 } })}</span>
-  <span>{$t('common.directions.so', { values: { angle: 135 } })}</span>
-  <span>{$t('common.directions.sso', { values: { angle: 157.5 } })}</span>
-  <span>{$t('common.directions.s', { values: { angle: 180 } })}</span>
-  <span>{$t('common.directions.ssw', { values: { angle: 202.5 } })}</span>
-  <span>{$t('common.directions.sw', { values: { angle: 225 } })}</span>
-  <span>{$t('common.directions.wsw', { values: { angle: 247.5 } })}</span>
-  <span>{$t('common.directions.w', { values: { angle: 270 } })}</span>
-  <span>{$t('common.directions.wnw', { values: { angle: 292.5 } })}</span>
-  <span>{$t('common.directions.nw', { values: { angle: 315 } })}</span>
-  <span>{$t('common.directions.nnw', { values: { angle: 337.5 } })}</span>
-</div>
+  <h3 class="col-span-12 mt-4">{$t('pages.commander-create.labels.winddirections')}</h3>
+  <div class="hidden col-span-12 grid cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4) gap-y-4 gap-x-2 mt-4">
+    <span>{$t('common.directions.n', { values: { angle: 0 } })}</span>
+    <span>{$t('common.directions.nno', { values: { angle: 22.5 } })}</span>
+    <span>{$t('common.directions.no', { values: { angle: 45 } })}</span>
+    <span>{$t('common.directions.ono', { values: { angle: 67.5 } })}</span>
+    <span>{$t('common.directions.o', { values: { angle: 90 } })}</span>
+    <span>{$t('common.directions.oso', { values: { angle: 112.5 } })}</span>
+    <span>{$t('common.directions.so', { values: { angle: 135 } })}</span>
+    <span>{$t('common.directions.sso', { values: { angle: 157.5 } })}</span>
+    <span>{$t('common.directions.s', { values: { angle: 180 } })}</span>
+    <span>{$t('common.directions.ssw', { values: { angle: 202.5 } })}</span>
+    <span>{$t('common.directions.sw', { values: { angle: 225 } })}</span>
+    <span>{$t('common.directions.wsw', { values: { angle: 247.5 } })}</span>
+    <span>{$t('common.directions.w', { values: { angle: 270 } })}</span>
+    <span>{$t('common.directions.wnw', { values: { angle: 292.5 } })}</span>
+    <span>{$t('common.directions.nw', { values: { angle: 315 } })}</span>
+    <span>{$t('common.directions.nnw', { values: { angle: 337.5 } })}</span>
+  </div>
+</ContentGrid>
