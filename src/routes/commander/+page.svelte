@@ -38,7 +38,7 @@
     <button type="button" class="btn variant-filled" on:click={() => openModal()}>{$t('pages.commander.btn-view')}</button>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-4">
+  <div class="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-2 mt-8">
     {#if recentSpreads.length > 0}
       <div>
         <h4 class="mb-1">{$t('pages.commander.recent-spreads')}</h4>
@@ -55,7 +55,7 @@
       </div>
     {/if}
     {#if mission}
-      <div>
+      <div class="col-span-6">
         <h4 class=" mb-1">{$t('pages.commander.mission')}</h4>
         <a class="text-base" href="/commander/mission/{mission.uuid}" data-sveltekit-preload-data>
           {mission.code}

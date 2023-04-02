@@ -5,25 +5,56 @@
   import { sleep } from '$lib/logic/util';
   import { superForm } from 'sveltekit-superforms/client';
   import { convertInputToLatLng } from '$lib/util/converter';
-  import { Button, ContentGrid, PageTitle, Switch, TextField } from '$lib/skeleton';
-  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
-  import NumberField from '$lib/skeleton/NumberField.svelte';
-  import Select from '$lib/skeleton/Select.svelte';
+  import { Button, ContentGrid, PageTitle, Switch, TextField, NumberField, Select, ModalSaveSpread } from '$lib/skeleton';
+
   import { SpreadModes } from './spread-schema';
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+  import type { Snapshot } from './$types';
+  import { SolidLocationMarker } from '$lib/heroicons';
+  import { modalStore, toastStore, type ModalComponent, type ModalSettings, type ToastSettings } from '@skeletonlabs/skeleton';
+  import { onDestroy } from 'svelte';
 
   export let data;
-  const regexp = /^\d+$/;
-  const regexpPoint = /^(-?\d{1,3}\.\d+)(\,?\s?)(-?\d{1,3}\.\d+)$/;
+  let formData;
+  export { formData as form };
+  const { form, errors, enhance, capture, restore, tainted } = superForm(data.form);
+  const { form: saveForm, errors: saveErrors, enhance: saveEnhance, tainted: saveTainted } = superForm(data.saveForm);
+  export const snapshot: Snapshot = {
+    capture,
+    restore,
+  };
+
   let map;
   let loaded = false;
   let isViewed = false;
   let lines = [];
   let selectStart = false;
   let markerLocation;
+  $: console.log('formData PAGE', formData);
+  $: if (formData?.view && formData.view.success) {
+    isViewed = true;
+    lines = formData.view.lines;
+    markerLocation = formData.view.markerLocation;
+  } else {
+    isViewed = false;
+    lines = [];
+    markerLocation = undefined;
+  }
+
+  $: if (formData?.saveForm && formData.saveForm.valid && formData?.save && formData.save.success) {
+    modalStore.close();
+    formData.save.name;
+    const toast: ToastSettings = {
+      message: $t('pages.commander-create.notification', { values: { name: formData.save.name, id: formData.save.id } }),
+      timeout: 5000,
+    };
+    toastStore.trigger(toast);
+    goto('/commander');
+  }
 
   //#region Leaflet
 
-  const initialView = [49.1273755, 9.2176877];
+  const initialView = !$errors.start && convertInputToLatLng($form.start);
 
   function resizeMap() {
     if (map) {
@@ -37,11 +68,12 @@
 
   const onMapClick = () => {
     selectStart = false;
-    // markerLocation = convertInputToLatLng($data.start);
+    markerLocation = convertInputToLatLng($form.start);
   };
   const onMapMouseMove = (event) => {
     if (selectStart) {
-      // $initialValues.start = `${event.detail.latlng.lat}, ${event.detail.latlng.lng}`;
+      markerLocation = event.detail.latlng;
+      $form.start = `${event.detail.latlng.lat}, ${event.detail.latlng.lng}`;
     }
   };
 
@@ -54,56 +86,25 @@
 
   //#endregion Leaflet
 
-  let showDialog = false;
-  let nameValue = '';
-  let nameError = null;
-  let saving = false;
-  // let showStrength = false;
-
-  const onBtnSave = async () => {
-    saving = true;
-    const result = await fetch('/api/spread/save', {
-      method: 'POST',
-      body: JSON.stringify({
-        name: nameValue,
-        // start: convertInputToLatLng($data.start),
-        // width: parseInt($data.width),
-        // length: parseInt($data.length),
-        // angle: parseInt($data.angle),
-        // strength: parseInt($data.strength),
-      }),
-    });
-    const resp = await result.json();
-    if (result.ok) {
-      // notifier.success(
-      //   $t('pages.commander-create.notification', { values: { name: resp.name, id: resp.id } }),
-      // );
-      // showDialog = false;
-      await sleep(20);
-      goto('/commander');
-    } else {
-      if (result.status === 400) {
-        saving = false;
-        nameError = $t('pages.commander-create.errors.name-exists');
-        // notifier.alert(
-        //   $t('pages.commander-create.notification-exists', { values: { name: nameValue } }),
-        // );
-      } else {
-        // notifier.error($t(resp.msg));
-        showDialog = false;
-      }
-    }
-  };
-
-  const { form, errors, enhance } = superForm(data.form);
-  $: console.log('err', $errors);
-
   const handelError = (errors: string[] | undefined): string | undefined => {
     if (errors && errors.length > 0) {
       return $t(`pages.commander-create.${errors[0]}`);
     }
     return undefined;
   };
+
+  $: disableSave = (function () {
+    if (Object.keys($errors).length > 0) {
+      return true;
+    }
+    if ($tainted) {
+      return true;
+    }
+    if (isViewed === false) {
+      return true;
+    }
+    return false;
+  })();
 
   const spreadModes = [
     {
@@ -115,15 +116,53 @@
       text: $t('common.spreadmodes.triangle'),
     },
   ];
+
+  const showSaveModal = () => {
+    const modalComponent: ModalComponent = {
+      // Pass a reference to your custom component
+      ref: ModalSaveSpread,
+      // Add the component properties as key/value pairs
+      props: { form: saveForm, errors: saveErrors, enhance: saveEnhance, tainted: saveTainted },
+    };
+    const d: ModalSettings = {
+      type: 'component',
+      component: modalComponent,
+      title: $t('pages.commander-create.dialog.title'),
+      body: $t('pages.commander-create.dialog.descr'),
+    };
+    modalStore.trigger(d);
+  };
+
+  const unsubFrom = form.subscribe((value) => {
+    $saveForm = {
+      ...$saveForm,
+      ...value,
+    };
+  });
+  onDestroy(() => {
+    unsubFrom();
+  });
 </script>
 
-<SuperDebug data={$form} />
+<svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
+
 <ContentGrid>
   <PageTitle>{$t('pages.commander-create.title')}</PageTitle>
-  <div class="col-span-6">
-    <!-- MAP -->
+  <div class="col-span-9 z-20 pr-4">
+    {#if loaded || document.readyState === 'complete'}
+      <Leaflet bind:map view={initialView} zoom={13} on:click={onMapClick} on:mousemove={onMapMouseMove} on:layeradd={onLayerAdd}>
+        {#each lines as line (line.id)}
+          <Polyline latLngs={line.latLngs} color={line.color} />
+        {/each}
+        {#if markerLocation}
+          <Marker latLng={markerLocation} width={40} height={40} class="text-primary-500">
+            <SolidLocationMarker class="w-full h-full relative -top-[19px]" />
+          </Marker>
+        {/if}
+      </Leaflet>
+    {/if}
   </div>
-  <form class="col-span-6 grid grid-cols-1 gap-2" method="POST" action="?/view" use:enhance>
+  <form class="col-span-3 grid grid-cols-1 gap-2" method="POST" action="?/view" use:enhance>
     <!-- controles -->
     <div class="flex gap-2 flex-col">
       <TextField
@@ -131,7 +170,7 @@
         bind:value={$form.start}
         name="start"
         error={handelError($errors.start)} />
-      <Switch name="select-point">{$t('pages.commander-create.labels.select-start')}</Switch>
+      <Switch name="select-point" bind:checked={selectStart}>{$t('pages.commander-create.labels.select-start')}</Switch>
     </div>
     <Select label={$t('pages.commander-create.labels.mode')} name="mode" options={spreadModes} bind:value={$form.mode} />
     <NumberField
@@ -163,10 +202,14 @@
       name="strength"
       error={handelError($errors.strength)} />
     <Switch name="showStrength" bind:checked={$form.showStrength}>{$t('pages.commander-create.labels.show-strength')}</Switch>
-    <Button type="submit">{$t('common.view')}</Button>
+    <div class="flex flex-col lg:flex-row gap-4">
+      <Button class="flex-1 variant-filled" type="submit">{$t('common.view')}</Button>
+      <Button class="flex-1 variant-filled" on:click={() => showSaveModal()} disabled={disableSave} type="button"
+        >{$t('common.save')}</Button>
+    </div>
   </form>
   <h3 class="col-span-12 mt-4">{$t('pages.commander-create.labels.winddirections')}</h3>
-  <div class="hidden col-span-12 grid cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4) gap-y-4 gap-x-2 mt-4">
+  <div class="hidden col-span-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-y-1.5 mt-4">
     <span>{$t('common.directions.n', { values: { angle: 0 } })}</span>
     <span>{$t('common.directions.nno', { values: { angle: 22.5 } })}</span>
     <span>{$t('common.directions.no', { values: { angle: 45 } })}</span>
@@ -185,3 +228,4 @@
     <span>{$t('common.directions.nnw', { values: { angle: 337.5 } })}</span>
   </div>
 </ContentGrid>
+<SuperDebug data={{ $form, $saveForm }} />

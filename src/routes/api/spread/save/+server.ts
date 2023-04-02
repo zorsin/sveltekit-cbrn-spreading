@@ -1,8 +1,10 @@
-import { connect, close } from '$lib/logic/mongo';
 import { v4 as uuidv4 } from 'uuid';
-import type { RequestHandler } from './$types';
 import { error } from '@sveltejs/kit';
+
+import { connect, close } from '$lib/logic/mongo';
 import * as logger from '$lib/util/logger';
+
+import type { RequestHandler } from './$types';
 const TAG = 'api/spread/save.ts';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
@@ -17,10 +19,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     if (findResult) {
       close();
       logger.timeEnd(TAG, `post(${JSON.stringify(body)})`);
-      logger.warn(
-        TAG,
-        `post(${JSON.stringify(body)})::name-already-exists::${JSON.stringify(findResult)}`,
-      );
+      logger.warn(TAG, `post(${JSON.stringify(body)})::name-already-exists::${JSON.stringify(findResult)}`);
 
       // return {
       //   status: 400,
@@ -50,7 +49,10 @@ export const POST: RequestHandler = async ({ request, locals }) => {
   } catch (e) {
     logger.timeEnd(TAG, `post(${JSON.stringify(body)})`);
     logger.error(TAG, `while saving. ${e}`);
-    console.error('while saving', e);
+
+    if (e.status && e.body) {
+      throw error(e.status, e.body);
+    }
     // return {
     //   status: 503,
     //   body: { msg: 'errors.save-not-successful' },

@@ -6,3 +6,4 @@ export { default as Button } from './Button.svelte';
 export { default as Switch } from './Switch.svelte';
 export { default as Select } from './Select.svelte';
 export * from './types';
+export * from './modals';

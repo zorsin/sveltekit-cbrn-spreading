@@ -95,7 +95,8 @@
         "angle": "Der Winkel muss eine Nummer sein!",
         "strength": "Die Stärke muss eine Nummer sein!",
         "minStrength": "Die Stärke muss größer 0 sein!",
-        "name-exists": "Der Name wird bereits verwendet!"
+        "nameExists": "Der Name wird bereits verwendet!",
+        "minName": "Der Name muss mindestens 3 Zeichen lang sein!"
       },
       "dialog": {
         "title": "Ausbreitung speichern",

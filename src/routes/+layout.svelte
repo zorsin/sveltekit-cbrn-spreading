@@ -5,7 +5,7 @@
 
   import { page } from '$app/stores';
   import { t } from 'svelte-intl-precompile';
-  import { AppShell, AppBar, AppRail, AppRailTile, Modal } from '@skeletonlabs/skeleton';
+  import { AppShell, AppBar, AppRail, AppRailTile, Modal, Toast } from '@skeletonlabs/skeleton';
   import { writable, type Writable } from 'svelte/store';
 
   const topMenu = [
@@ -21,6 +21,7 @@
   <title>{$t('title')}</title>
 </svelte:head>
 <Modal />
+<Toast />
 <AppShell>
   <AppRail slot="sidebarLeft" {selected}>
     <AppRailTile label={$t('pages.landing.navTitle')} tag="a" href="/" value="/">
