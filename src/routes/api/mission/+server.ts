@@ -1,9 +1,11 @@
-import type { RequestHandler } from './$types';
+import { v4 as uuidv4 } from 'uuid';
+import { error } from '@sveltejs/kit';
+
 import { connect, close } from '$lib/logic/mongo';
 import { Spread } from '$lib/model';
-import { v4 as uuidv4 } from 'uuid';
 import * as logger from '$lib/util/logger';
-import { error } from '@sveltejs/kit';
+
+import type { RequestHandler } from './$types';
 const TAG = 'api/mission/index.ts';
 
 // units checks if the token for the mission is correct
@@ -44,13 +46,14 @@ export const POST: RequestHandler = async ({ locals, request }) => {
   const reqBody = await request.json();
   logger.info(TAG, `post(${JSON.stringify(reqBody)})`);
   logger.time(TAG, `post(${JSON.stringify(reqBody)})`);
-  const spread = new Spread(
-    reqBody.start,
-    reqBody.width,
-    reqBody.length,
-    reqBody.angle,
-    reqBody.strength,
-  );
+  const spread = new Spread({
+    startCoordinate: reqBody.start,
+    width: reqBody.width,
+    length: reqBody.length,
+    angle: reqBody.angle,
+    strength: reqBody.strength,
+    mode: 'ellipse',
+  });
   spread.toCoordnates();
   const dataLight = spread.getSpreadStrengthLight();
   const uuid = <string>uuidv4();
@@ -84,10 +87,7 @@ export const POST: RequestHandler = async ({ locals, request }) => {
     });
     close();
     if (!insertResult?.acknowledged) {
-      logger.warn(
-        TAG,
-        `post(${JSON.stringify(reqBody)})::insert-not-successful::${JSON.stringify(insertResult)}`,
-      );
+      logger.warn(TAG, `post(${JSON.stringify(reqBody)})::insert-not-successful::${JSON.stringify(insertResult)}`);
       logger.timeEnd(TAG, `post(${JSON.stringify(reqBody)})`);
       throw error(503, JSON.stringify({ msg: 'errors.save-not-successful' }));
       // return {

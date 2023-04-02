@@ -1,14 +1,18 @@
+import { superValidate } from 'sveltekit-superforms/server';
+import { fail } from '@sveltejs/kit';
+
 import * as logger from '$lib/util/logger';
-
 import { close, connect } from '$lib/logic/mongo';
-
-import type { PageServerLoad } from './$types';
 import { Spread } from '$lib/model';
+
+import type { Actions, PageServerLoad } from './$types';
+import { startSchema } from './start-schema';
 
 const TAG = 'commander/id/index.ts';
 export const ssr = false;
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async (event) => {
+  const { params } = event;
   logger.info(TAG, `get(${params.id})`);
   logger.time(TAG, `get(${params.id})`);
   try {
@@ -18,32 +22,68 @@ export const load: PageServerLoad = async ({ params }) => {
     });
     close();
 
-    const spread = new Spread(
-      dbSpread.start,
-      dbSpread.width,
-      dbSpread.length,
-      dbSpread.angle,
-      dbSpread.strength,
-    );
+    const spread = new Spread({
+      startCoordinate: dbSpread.start,
+      width: dbSpread.width,
+      length: dbSpread.length,
+      angle: dbSpread.angle,
+      strength: dbSpread.strength,
+      mode: 'ellipse',
+    });
     // NOTE: a colored spread can be > 70MB, this is to much to transmit
     // const lines = spread.getSpreadStrength();
     const lines = spread.getSpreadStrengthLight();
     logger.timeEnd(TAG, `get(${params.id})`);
     logger.info(TAG, `get(${params.id})::successful::${JSON.stringify(dbSpread)}`);
-
+    const form = await superValidate(event, startSchema);
     delete dbSpread._id;
     return {
       spreadId: params.id,
       spread: dbSpread,
       lines,
+      form,
     };
   } catch (e) {
     logger.timeEnd(TAG, `get(${params.id})`);
-    logger.error(TAG, `while saving. ${e}`);
-    console.error('while getting a spread', e);
+    logger.error(TAG, `while querying. ${e}`);
+
     return {
       status: 503,
       body: { msg: 'errors.no-query' },
     };
   }
+};
+
+export const actions: Actions = {
+  start: async (event) => {
+    const form = await superValidate(event, startSchema);
+
+    if (!form.valid) {
+      return fail(400, { form });
+    }
+    const resp = await event.fetch(`/api/mission`, {
+      method: 'post',
+      body: JSON.stringify({
+        code: form.data.code,
+        angle: form.data.angle,
+        length: form.data.length,
+        name: form.data.name,
+        start: form.data.start,
+        strength: form.data.strength,
+        uuid: form.data.uuid,
+        width: form.data.width,
+        mode: form.data.mode,
+      }),
+    });
+
+    if (resp.ok) {
+      // TODO: handle success
+      return { form };
+    } else {
+      console.log('error', resp);
+      // $errors.code = [$t('pages.commander-view.errors.code-exists')];
+      // notifier.alert($t('pages.commander-view.notification-exists', { values: { code: code } }));
+    }
+    return { form };
+  },
 };

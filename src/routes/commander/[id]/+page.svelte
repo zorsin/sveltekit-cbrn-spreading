@@ -1,18 +1,22 @@
 <script lang="ts">
-  import { PageTitle, SolidLocationMarker, notifier, Button, Dialog, TextField } from '$lib/smelte';
   import { Leaflet, Polyline, Marker } from '$lib/comps';
   import { t } from 'svelte-intl-precompile';
   import { goto } from '$app/navigation';
-  import { createForm } from 'felte';
   import type { PageData } from './$types';
+  import { Button, PageTitle, ContentGrid } from '$lib/skeleton';
+  import { SolidLocationMarker } from '$lib/heroicons';
+  import { modalStore, toastStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
+  import { superForm } from 'sveltekit-superforms/client';
+  import ModalStartSpread from '$lib/skeleton/modals/ModalStartSpread.svelte';
 
   export let data: PageData;
-  // let lines = [];
+  const { form, errors, enhance, tainted } = superForm(data.form);
   const { spreadId, spread, lines } = data;
 
   let displayText = spreadId;
   if (spread) {
     displayText = spread.name;
+    $form = { ...(spread as any), start: `${spread.start[0]},${spread.start[1]}` };
   }
 
   //#region leaflet
@@ -30,78 +34,59 @@
   function resetMapView() {
     map.setView(initialView, 13);
   }
-
-  // const onLayerAdd = (event) => {
-  //   const newLayer = event.detail.layer;
-  //   if (newLayer.getBounds) {
-  //     map && map.fitBounds(newLayer.getBounds());
-  //   }
-  // };
   //#endregion leaflet
 
-  let showDelDialog = false;
-  let showStartDialog = false;
-  let loadingDel = false;
-  let loadingStart = false;
-  const onDeleteClick = async () => {
-    const resp = await fetch(`/api/spread?id=${spread.uuid}`, {
-      method: 'delete',
+  const showDelModal = () => {
+    modalStore.trigger({
+      type: 'confirm',
+      title: $t('pages.commander-view.dialog.title'),
+      body: $t('pages.commander-view.dialog.descr'),
+      response: async (r: boolean) => {
+        console.log('del', r);
+        if (r) {
+          const resp = await fetch(`/api/spread?id=${spread.uuid}`, {
+            method: 'delete',
+          });
+          if (resp.ok) {
+            toastStore.trigger({
+              background: 'variant-filled-success',
+              message: $t('pages.commander-view.delete-success'),
+              timeout: 2000,
+            });
+            goto('/commander');
+          } else {
+            const msgResp = await resp.json();
+            toastStore.trigger({
+              background: 'variant-filled-error',
+              message: $t(msgResp.msg),
+            });
+          }
+        }
+      },
+      buttonTextConfirm: $t('common.delete'),
+      buttonTextCancel: $t('common.back'),
     });
-
-    if (resp.ok) {
-      notifier.success($t('pages.commander-view.delete-success'));
-      goto('/commander');
-    } else {
-      const msgResp = await resp.json();
-      notifier.success($t(msgResp.msg));
-    }
   };
 
-  const { form, errors } = createForm({
-    onSubmit: async ({ code }) => {
-      loadingStart = true;
-      const resp = await fetch(`/api/mission`, {
-        method: 'post',
-        body: JSON.stringify({
-          ...spread,
-          code,
-        }),
-      });
-
-      if (resp.ok) {
-        notifier.success($t('pages.commander-view.start-success'));
-        goto('/commander');
-      } else {
-        if (resp.status === 400) {
-          loadingStart = false;
-          $errors.code = [$t('pages.commander-view.errors.code-exists')];
-          notifier.alert(
-            $t('pages.commander-view.notification-exists', { values: { code: code } }),
-          );
-        } else {
-          const msgResp = await resp.json();
-          notifier.error($t(msgResp.msg));
-        }
-      }
-    },
-    validate: (values) => {
-      const errors: Record<string, string[] | boolean> = {
-        code: false,
-      };
-
-      if (!/^[a-zA-Z0-9]{5,}$/.test(<string>values.code)) {
-        errors.code = [$t('pages.commander-view.errors.code')];
-      }
-      return errors;
-    },
-  });
+  const showStartModal = () => {
+    const modalComponent: ModalComponent = {
+      ref: ModalStartSpread,
+      props: { form, errors, enhance, tainted },
+    };
+    const d: ModalSettings = {
+      type: 'component',
+      component: modalComponent,
+      title: $t('pages.commander-view.dialog.start-title'),
+      body: $t('pages.commander-view.dialog.start-descr'),
+    };
+    modalStore.trigger(d);
+  };
 </script>
 
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
 
-<PageTitle>{$t('pages.commander-view.title', { values: { id: displayText } })}</PageTitle>
-
-<div class="grid(& cols-12) gap-4">
+<ContentGrid>
+  <PageTitle>{$t('pages.commander-view.title', { values: { id: displayText } })}</PageTitle>
   <div class="col-span-12 h-[20rem] md:h-[37rem]">
     {#if (loaded || document.readyState === 'complete') && window}
       <Leaflet bind:map view={initialView} zoom={13}>
@@ -118,40 +103,7 @@
       <span>{$t('pages.commander-view.not-found')}</span>
     {/if}
   </div>
-
-  <Button
-    class="col-span-12 md:col-span-2"
-    on:click={() => (showDelDialog = true)}
-    replace={{ 'w-max': 'w-full md:w-max' }}>{$t('pages.commander-view.delte')}</Button
-  >
-  <Button
-    class="col-span-12  md:col-span-2"
-    on:click={() => (showStartDialog = true)}
-    replace={{ 'w-max': 'w-full md:w-max' }}>{$t('pages.commander-view.start')}</Button
-  >
-</div>
-
-<Dialog bind:value={showDelDialog} persistent progresscolor="white" loading={loadingDel}>
-  <h5 slot="title">{$t('pages.commander-view.dialog.title')}</h5>
-  <div>{@html $t('pages.commander-view.dialog.descr')}</div>
-  <div slot="actions">
-    <Button on:click={() => (showDelDialog = false)}>{$t('common.back')}</Button>
-    <Button on:click={onDeleteClick}>{$t('common.delete')}</Button>
-  </div>
-</Dialog>
-<Dialog bind:value={showStartDialog} persistent progresscolor="white" loading={loadingStart}>
-  <h5 slot="title">{$t('pages.commander-view.dialog.start-title')}</h5>
-  <div>{@html $t('pages.commander-view.dialog.start-descr')}</div>
-  <form use:form>
-    <TextField
-      name="code"
-      label={$t('pages.commander-view.dialog.label-code')}
-      error={$errors.code}
-      hint={$errors.code?.[0]}
-    />
-    <div class="flex w-full justify-end pt-4 px-4 gap-4">
-      <Button on:click={() => (showStartDialog = false)}>{$t('common.back')}</Button>
-      <Button type="submit">{$t('common.start')}</Button>
-    </div>
-  </form>
-</Dialog>
+  <Button class="col-span-12 md:col-span-2 variant-filled-error" on:click={() => showDelModal()}>{$t('pages.commander-view.delte')}</Button>
+  <Button class="col-span-12  md:col-span-2 variant-filled-primary" on:click={() => showStartModal()}
+    >{$t('pages.commander-view.start')}</Button>
+</ContentGrid>

@@ -129,7 +129,8 @@
       "start-success": "Einsatz wurde erfolgreich angelegt!",
       "notification-exists": "Der Code {code} wird bereits verwendet",
       "errors": {
-        "code": "Bitte einen Beitrittscode festlegen (min. 5 Zeichen, keine Sonderzeichen)",
+        "code": "Der Beitrittscode darf keine Sonderzeichen enthalten!",
+        "minCode": "Der Beitrittscode muss min. 5 Zeichen lang sein!",
         "code-exists": "Der Code wird bereits verwendet!"
       },
       "dialog": {

@@ -30,7 +30,7 @@
   let lines = [];
   let selectStart = false;
   let markerLocation;
-  $: console.log('formData PAGE', formData);
+
   $: if (formData?.view && formData.view.success) {
     isViewed = true;
     lines = formData.view.lines;
@@ -46,7 +46,8 @@
     formData.save.name;
     const toast: ToastSettings = {
       message: $t('pages.commander-create.notification', { values: { name: formData.save.name, id: formData.save.id } }),
-      timeout: 5000,
+      timeout: 2000,
+      background: 'variant-filled-success',
     };
     toastStore.trigger(toast);
     goto('/commander');
