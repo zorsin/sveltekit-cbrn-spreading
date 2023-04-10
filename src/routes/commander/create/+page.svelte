@@ -41,7 +41,7 @@
 
   $: if (formData?.saveForm && formData.saveForm.valid && formData?.save && formData.save.success) {
     modalStore.close();
-    formData.save.name;
+
     const toast: ToastSettings = {
       message: $t('pages.commander-create.notification', { values: { name: formData.save.name, id: formData.save.id } }),
       timeout: 2000,

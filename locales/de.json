@@ -131,7 +131,7 @@
       "errors": {
         "code": "Der Beitrittscode darf keine Sonderzeichen enthalten!",
         "minCode": "Der Beitrittscode muss min. 5 Zeichen lang sein!",
-        "code-exists": "Der Code wird bereits verwendet!"
+        "codeExists": "Der Code wird bereits verwendet!"
       },
       "dialog": {
         "title": "Ausbreitung löschen",

@@ -5,11 +5,13 @@
   import type { PageData } from './$types';
   import { Button, PageTitle, ContentGrid } from '$lib/skeleton';
   import { SolidLocationMarker } from '$lib/heroicons';
-  import { modalStore, toastStore, type ModalComponent, type ModalSettings } from '@skeletonlabs/skeleton';
+  import { modalStore, toastStore, type ModalComponent, type ModalSettings, type ToastSettings } from '@skeletonlabs/skeleton';
   import { superForm } from 'sveltekit-superforms/client';
   import ModalStartSpread from '$lib/skeleton/modals/ModalStartSpread.svelte';
 
   export let data: PageData;
+  let formData;
+  export { formData as form };
   const { form, errors, enhance, tainted } = superForm(data.form);
   const { spreadId, spread, lines } = data;
 
@@ -36,13 +38,24 @@
   }
   //#endregion leaflet
 
+  $: if (formData?.start && formData?.form?.valid && formData.start?.success) {
+    modalStore.close();
+
+    const toast: ToastSettings = {
+      message: $t('pages.commander-view.start-success'),
+      timeout: 2000,
+      background: 'variant-filled-success',
+    };
+    toastStore.trigger(toast);
+    goto('/commander');
+  }
+
   const showDelModal = () => {
     modalStore.trigger({
       type: 'confirm',
       title: $t('pages.commander-view.dialog.title'),
       body: $t('pages.commander-view.dialog.descr'),
       response: async (r: boolean) => {
-        console.log('del', r);
         if (r) {
           const resp = await fetch(`/api/spread?id=${spread.uuid}`, {
             method: 'delete',

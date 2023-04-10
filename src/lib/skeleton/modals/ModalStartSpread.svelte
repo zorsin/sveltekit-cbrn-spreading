@@ -21,6 +21,10 @@
     }
     return undefined;
   };
+
+  const onClose = () => {
+    modalStore.close();
+  };
 </script>
 
 <div class="modal-example-form {cBase}">
@@ -39,7 +43,7 @@
     <input value={$form.start} name="start" type="text" hidden />
   </form>
   <footer class="modal-footer {parent.regionFooter}">
-    <Button class={parent.buttonNeutral} on:click={parent.onClose}>{$t('common.back')}</Button>
+    <Button class={parent.buttonNeutral} on:click={onClose}>{$t('common.back')}</Button>
     <Button class={parent.buttonPositive} type="submit" form="modal-save">{$t('common.start')}</Button>
   </footer>
 </div>

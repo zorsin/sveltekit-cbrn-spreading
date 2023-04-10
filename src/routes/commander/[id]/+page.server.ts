@@ -60,7 +60,7 @@ export const actions: Actions = {
     const form = await superValidate(event, startSchema);
 
     if (!form.valid) {
-      return fail(400, { form });
+      return fail(400, { form, start: { success: false, error: 'errors.invalidForm' } });
     }
     const resp = await event.fetch(`/api/mission`, {
       method: 'post',
@@ -79,12 +79,10 @@ export const actions: Actions = {
     });
 
     if (resp.ok) {
-      // TODO: handle success
-      return { form };
+      return { form, start: { success: true } };
     } else {
-      console.log('error', resp);
-      // $errors.code = [$t('pages.commander-view.errors.code-exists')];
-      // notifier.alert($t('pages.commander-view.notification-exists', { values: { code: code } }));
+      form.errors = { ...form.errors, code: ['errors.codeExists'] };
+      return fail(400, { form, start: { success: false, error: 'errors.codeExists' } });
     }
     return { form };
   },
