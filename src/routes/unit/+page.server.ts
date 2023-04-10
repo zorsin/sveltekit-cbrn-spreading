@@ -1,9 +1,9 @@
-import * as logger from '$lib/util/logger';
+import { redirect } from '@sveltejs/kit';
 
-import type { Actions, PageServerLoad } from './$types';
+import * as logger from '$lib/util/logger';
 import { close, connect } from '$lib/logic/mongo';
 
-import { redirect } from '@sveltejs/kit';
+import type { Actions, PageServerLoad } from './$types';
 
 const TAG = 'unit/index.ts';
 export const ssr = false;
@@ -47,12 +47,11 @@ export const actions: Actions = {
   register: async ({ request, fetch, locals }) => {
     const formData = await request.formData();
     const code = formData.get('code');
-    console.log(code);
 
     const res = await fetch(`/api/mission?code=${code}`);
     if (res.ok) {
       const data = await res.json();
-      console.log(data);
+      // console.log(data);
       if (data?.mission?.uuid) {
         // TODO: remove only redirect with the code
         const sessionData = locals.session.data;
