@@ -1,4 +1,4 @@
-import { superValidate } from 'sveltekit-superforms/server';
+import { noErrors, superValidate } from 'sveltekit-superforms/server';
 import { fail } from '@sveltejs/kit';
 
 import * as logger from '$lib/util/logger';
@@ -36,13 +36,28 @@ export const load: PageServerLoad = async (event) => {
     const lines = spread.getSpreadStrengthLight();
     logger.timeEnd(TAG, `get(${params.id})`);
     logger.info(TAG, `get(${params.id})::successful::${JSON.stringify(dbSpread)}`);
-    const form = await superValidate(event, startSchema);
+    const form = await superValidate(
+      {
+        uuid: dbSpread.uuid,
+        name: dbSpread.name,
+        code: dbSpread.code,
+        start: dbSpread.start,
+        width: dbSpread.width,
+        length: dbSpread.length,
+        angle: dbSpread.angle,
+        strength: dbSpread.strength,
+        mode: dbSpread.mode,
+        openingAngle: dbSpread.openingAngle,
+      },
+      startSchema,
+    );
     delete dbSpread._id;
+
     return {
       spreadId: params.id,
       spread: dbSpread,
       lines,
-      form,
+      form: noErrors(form),
     };
   } catch (e) {
     logger.timeEnd(TAG, `get(${params.id})`);
@@ -62,6 +77,7 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form, start: { success: false, error: 'errors.invalidForm' } });
     }
+
     const resp = await event.fetch(`/api/mission`, {
       method: 'post',
       body: JSON.stringify({

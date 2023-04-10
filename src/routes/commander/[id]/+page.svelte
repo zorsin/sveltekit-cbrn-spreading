@@ -18,7 +18,6 @@
   let displayText = spreadId;
   if (spread) {
     displayText = spread.name;
-    $form = { ...(spread as any), start: `${spread.start[0]},${spread.start[1]}` };
   }
 
   //#region leaflet

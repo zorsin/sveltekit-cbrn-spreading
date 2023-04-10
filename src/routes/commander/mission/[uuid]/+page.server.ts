@@ -1,5 +1,4 @@
 import * as logger from '$lib/util/logger';
-
 import { close, connect } from '$lib/logic/mongo';
 
 import type { PageServerLoad } from './$types';

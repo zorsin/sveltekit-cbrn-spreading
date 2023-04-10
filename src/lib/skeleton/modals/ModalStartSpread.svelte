@@ -41,6 +41,7 @@
     <input value={$form.uuid} name="uuid" type="text" hidden />
     <input value={$form.mode} name="mode" type="text" hidden />
     <input value={$form.start} name="start" type="text" hidden />
+    <input value={$form.openingAngle} name="openingAngle" type="number" hidden />
   </form>
   <footer class="modal-footer {parent.regionFooter}">
     <Button class={parent.buttonNeutral} on:click={onClose}>{$t('common.back')}</Button>
