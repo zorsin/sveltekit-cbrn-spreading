@@ -2,13 +2,11 @@
   import { t } from 'svelte-intl-precompile';
   import { Leaflet, Polyline, Marker } from '$lib/comps';
   import { goto } from '$app/navigation';
-  import { sleep } from '$lib/logic/util';
   import { superForm } from 'sveltekit-superforms/client';
   import { convertInputToLatLng } from '$lib/util/converter';
   import { Button, ContentGrid, PageTitle, Switch, TextField, NumberField, Select, ModalSaveSpread } from '$lib/skeleton';
 
   import { SpreadModes } from './spread-schema';
-  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
   import type { Snapshot } from './$types';
   import { SolidLocationMarker } from '$lib/heroicons';
   import { modalStore, toastStore, type ModalComponent, type ModalSettings, type ToastSettings } from '@skeletonlabs/skeleton';
@@ -210,7 +208,7 @@
     </div>
   </form>
   <h3 class="col-span-12 mt-4">{$t('pages.commander-create.labels.winddirections')}</h3>
-  <div class="hidden col-span-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-y-1.5 mt-4">
+  <div class="col-span-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-y-1.5 mt-4">
     <span>{$t('common.directions.n', { values: { angle: 0 } })}</span>
     <span>{$t('common.directions.nno', { values: { angle: 22.5 } })}</span>
     <span>{$t('common.directions.no', { values: { angle: 45 } })}</span>
@@ -229,4 +227,3 @@
     <span>{$t('common.directions.nnw', { values: { angle: 337.5 } })}</span>
   </div>
 </ContentGrid>
-<SuperDebug data={{ $form, $saveForm }} />
