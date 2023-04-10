@@ -16,4 +16,5 @@ export const startSchema = z.object({
   uuid: z.string(),
   width: z.number(),
   mode: z.string(),
+  openingAngle: z.number(),
 });

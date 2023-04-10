@@ -1,5 +1,4 @@
 import * as coordUtils from '../logic/coordinate-utils';
-
 import type { CoordinateObject, PointLatLon } from '../logic/coordinate-utils';
 
 export default class Spread {
@@ -14,15 +13,7 @@ export default class Spread {
   mode: SpreadMode;
   openingAngle: number;
 
-  constructor({
-    startCoordinate,
-    width = 0,
-    length = 0,
-    angle = 0,
-    strength = 50000,
-    mode = 'ellipse',
-    openingAngle = 0,
-  }: SpreadConfig) {
+  constructor({ startCoordinate, width = 0, length = 0, angle = 0, strength = 50000, mode = 'ellipse', openingAngle = 0 }: SpreadConfig) {
     this.width = width;
     this.length = length;
     this.startCoordinate = coordUtils.toObject(startCoordinate);
@@ -55,8 +46,7 @@ export default class Spread {
     x = ellipseLength;
     // left side
     do {
-      yNegativ =
-        -1 * (ellipseWidth / ellipseLength) * Math.sqrt(ellipseLength * ellipseLength - x * x);
+      yNegativ = -1 * (ellipseWidth / ellipseLength) * Math.sqrt(ellipseLength * ellipseLength - x * x);
       pointsNegativ.push([x, yNegativ]);
       x--;
     } while (x > ellipseLength * -1);
@@ -86,18 +76,8 @@ export default class Spread {
     const angle = coordUtils.degreeToRadian(openingAngle / 2);
     const directionAngle = coordUtils.degreeToRadian(this.angle);
     const hypotenuse = coordUtils.calcHypotenuseFromAndjacentAlpha(this.length, angle);
-    const pointA = coordUtils.calcBearing(
-      this.startCoordinate.lat,
-      this.startCoordinate.lon,
-      angle + directionAngle,
-      hypotenuse,
-    );
-    const pointB = coordUtils.calcBearing(
-      this.startCoordinate.lat,
-      this.startCoordinate.lon,
-      angle * -1 + directionAngle,
-      hypotenuse,
-    );
+    const pointA = coordUtils.calcBearing(this.startCoordinate.lat, this.startCoordinate.lon, angle + directionAngle, hypotenuse);
+    const pointB = coordUtils.calcBearing(this.startCoordinate.lat, this.startCoordinate.lon, angle * -1 + directionAngle, hypotenuse);
     this.coordinates = [
       coordUtils.toLeafletPoint(this.startCoordinate),
       coordUtils.toLeafletPoint(pointA),
@@ -110,12 +90,7 @@ export default class Spread {
   toCoordnatesEllipse(): PointLatLon[] {
     const coordinates: PointLatLon[] = [];
     const direction = coordUtils.degreeToRadian(this.angle);
-    const centerCoordinate = coordUtils.calcBearing(
-      this.startCoordinate.lat,
-      this.startCoordinate.lon,
-      direction,
-      this.length / 2,
-    );
+    const centerCoordinate = coordUtils.calcBearing(this.startCoordinate.lat, this.startCoordinate.lon, direction, this.length / 2);
     if (this.points) {
       this.points.forEach((point) => {
         const angle = coordUtils.calcAngelFromAndjacentOpposite(point[0], point[1]);

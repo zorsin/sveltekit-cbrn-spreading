@@ -1,7 +1,9 @@
-import type { RequestHandler } from './$types';
+import { error } from '@sveltejs/kit';
+
 import { connect, close } from '$lib/logic/mongo';
 import * as logger from '$lib/util/logger';
-import { error } from '@sveltejs/kit';
+
+import type { RequestHandler } from './$types';
 const TAG = 'api/spread/index.ts';
 
 export const DELETE: RequestHandler = async ({ locals, url }) => {
@@ -16,20 +18,11 @@ export const DELETE: RequestHandler = async ({ locals, url }) => {
     if (!deleteResult?.acknowledged) {
       logger.timeEnd(TAG, `del(${uuid})`);
       logger.warn(TAG, `del(${uuid})::dbresult::${JSON.stringify(deleteResult)}`);
-      // return {
-      //   status: 503,
-      //   body: { msg: 'errors.delete-not-successful' },
-      // };
       return new Response(JSON.stringify({ msg: 'errors.delete-not-successful' }));
     }
   } catch (e) {
     logger.timeEnd(TAG, `del(${uuid})`);
     logger.error(TAG, `while deleting::${e}`);
-    console.error('while deleting::', e);
-    // return {
-    //   status: 503,
-    //   body: { msg: 'errors.delete-not-successful' },
-    // };
     throw error(503, JSON.stringify({ msg: 'errors.delete-not-successful' }));
   }
   close();
@@ -47,8 +40,6 @@ export const DELETE: RequestHandler = async ({ locals, url }) => {
   });
   logger.info(TAG, `del(${uuid})::successful`);
   logger.timeEnd(TAG, `del(${uuid})`);
-  // return {
-  //   status: 202,
-  // };
+
   return new Response('', { status: 202 });
 };

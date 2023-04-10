@@ -21,10 +21,6 @@ export const POST: RequestHandler = async ({ request, locals }) => {
       logger.timeEnd(TAG, `post(${JSON.stringify(body)})`);
       logger.warn(TAG, `post(${JSON.stringify(body)})::name-already-exists::${JSON.stringify(findResult)}`);
 
-      // return {
-      //   status: 400,
-      //   body: { msg: 'errors.already-exists' },
-      // };
       throw error(400, JSON.stringify({ msg: 'errors.already-exists' }));
     }
 
@@ -36,14 +32,13 @@ export const POST: RequestHandler = async ({ request, locals }) => {
       length: body.length,
       angle: body.angle,
       strength: body.strength,
+      mode: body.mode,
+      openingAngle: body.openingAngle,
     });
     close();
     if (!insertResult?.acknowledged) {
       logger.timeEnd(TAG, `post(${JSON.stringify(body)})`);
-      // return {
-      //   status: 503,
-      //   body: { msg: 'errors.save-not-successful' },
-      // };
+
       throw error(503, JSON.stringify({ msg: 'errors.save-not-successful' }));
     }
   } catch (e) {
@@ -53,10 +48,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     if (e.status && e.body) {
       throw error(e.status, e.body);
     }
-    // return {
-    //   status: 503,
-    //   body: { msg: 'errors.save-not-successful' },
-    // };
+
     throw error(503, JSON.stringify({ msg: 'errors.save-not-successful' }));
   }
   await locals.session.update(({ recentSpreads }) => {
@@ -76,13 +68,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     };
   });
   logger.timeEnd(TAG, `post(${JSON.stringify(body)})`);
-  // return {
-  //   status: 201,
-  //   body: {
-  //     name: body.name,
-  //     id: uuid,
-  //   },
-  // };
+
   return new Response(
     JSON.stringify({
       name: body.name,

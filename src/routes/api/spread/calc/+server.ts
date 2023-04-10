@@ -1,10 +1,9 @@
 import * as logger from '$lib/util/logger';
-
 import type { SpreadMode, SpreadRing } from '$lib/model/spread';
-
 import type { PointLatLon } from '$lib/logic/coordinate-utils';
-import type { RequestHandler } from './$types';
 import { Spread } from '$lib/model';
+
+import type { RequestHandler } from './$types';
 
 const TAG = 'api/spread/calc.ts';
 

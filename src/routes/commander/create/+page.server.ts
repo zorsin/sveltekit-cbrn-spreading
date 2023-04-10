@@ -60,6 +60,8 @@ export const actions: Actions = {
         length: saveForm.data.length,
         angle: saveForm.data.angle,
         strength: saveForm.data.strength,
+        mode: saveForm.data.mode,
+        openingAngle: saveForm.data.openingAngle,
       }),
     });
     const resp = await result.json();

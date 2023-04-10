@@ -28,7 +28,8 @@ export const load: PageServerLoad = async (event) => {
       length: dbSpread.length,
       angle: dbSpread.angle,
       strength: dbSpread.strength,
-      mode: 'ellipse',
+      mode: dbSpread.mode,
+      openingAngle: dbSpread.openingAngle,
     });
     // NOTE: a colored spread can be > 70MB, this is to much to transmit
     // const lines = spread.getSpreadStrength();
@@ -73,6 +74,7 @@ export const actions: Actions = {
         uuid: form.data.uuid,
         width: form.data.width,
         mode: form.data.mode,
+        openingAngle: form.data.openingAngle,
       }),
     });
 
