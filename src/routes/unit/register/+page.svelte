@@ -1,43 +1,41 @@
 <script lang="ts">
-  import { PageTitle, Button, Dialog, TextField, notifier } from '$lib/smelte';
-  import { navigating, page } from '$app/stores';
-  import { goto } from '$app/navigation';
   import { t } from 'svelte-intl-precompile';
-  import { createForm } from 'felte';
-  import type { PageData } from './$types';
-  import { enhance } from '$app/forms';
+
+  import type { PageData, Snapshot } from './$types';
+
+  import { superForm } from 'sveltekit-superforms/client';
+  import SuperDebug from 'sveltekit-superforms/client/SuperDebug.svelte';
+
+  import { Button, PageTitle, TextField, ContentGrid } from '$lib/skeleton';
 
   export let data: PageData;
-
-  const { form, errors } = createForm({
-    onSubmit: () => {},
-    validate: ({ radio, vehicle, crew }) => {
-      const errors: Record<string, string[] | boolean> = {
-        radio: false,
-        vehicle: false,
-        crew: false,
-      };
-      if (!radio) {
-        errors.radio = [$t('pages.unit-register.errors.radio')];
-      }
-      if (!vehicle) {
-        errors.vehicle = [$t('pages.unit-register.errors.vehicle')];
-      }
-      if (!crew) {
-        errors.crew = [$t('pages.unit-register.errors.crew')];
-      }
-
-      return errors;
-    },
-  });
+  const { form, enhance, errors, capture, restore } = superForm(data.form);
+  export const snapshot: Snapshot = {
+    capture,
+    restore,
+  };
+  const handelError = (errors: string[] | undefined): string | undefined => {
+    if (errors && errors.length > 0) {
+      return $t(`pages.unit-register.${errors[0]}`);
+    }
+    return undefined;
+  };
 </script>
 
-<PageTitle>{$t('pages.unit-register.title')}</PageTitle>
-<span>{$t('pages.unit-register.descr')}</span>
-<form class="w-full md:w-1/2 mt-16" use:form use:enhance method="POST" action="?/register">
-  <input class="hidden" value={data.missionUuid} name="id" />
-  <TextField name="radio" label={$t('pages.unit-register.labels.radio')} error={!!$errors.radio} hint={$errors.radio} />
-  <TextField name="vehicle" label={$t('pages.unit-register.labels.vehicle')} error={!!$errors.vehicle} hint={$errors.vehicle} />
-  <TextField name="crew" label={$t('pages.unit-register.labels.crew')} error={!!$errors.crew} hint={$errors.crew} />
-  <Button type="submit" replace={{ 'w-max': 'w-full md:w-max' }} add="mt-8">{$t('common.register')}</Button>
-</form>
+<ContentGrid>
+  <PageTitle>{$t('pages.unit-register.title')}</PageTitle>
+  <span class="col-span-12">{$t('pages.unit-register.descr')}</span>
+
+  <form class="col-span-12 md:col-span-6 mt-4" use:enhance method="POST" action="?/register">
+    <input class="hidden" bind:value={$form.missionUuid} name="missionUuid" />
+    <TextField name="radio" label={$t('pages.unit-register.labels.radio')} bind:value={$form.radio} error={handelError($errors.radio)} />
+    <TextField
+      name="vehicle"
+      label={$t('pages.unit-register.labels.vehicle')}
+      bind:value={$form.vehicle}
+      error={handelError($errors.vehicle)} />
+    <TextField name="crew" label={$t('pages.unit-register.labels.crew')} bind:value={$form.crew} error={handelError($errors.crew)} />
+    <Button type="submit" class="variant-filled mt-4">{$t('common.register')}</Button>
+  </form>
+</ContentGrid>
+<SuperDebug data={$form} />

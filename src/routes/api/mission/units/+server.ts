@@ -1,8 +1,10 @@
-import type { RequestHandler } from './$types';
 import { error } from '@sveltejs/kit';
-import { connect, close } from '$lib/logic/mongo';
 import { v4 as uuidv4 } from 'uuid';
+
+import { connect, close } from '$lib/logic/mongo';
 import * as logger from '$lib/util/logger';
+
+import type { RequestHandler } from './$types';
 const TAG = 'api/mission/units.ts';
 
 // units register them to missions
@@ -23,18 +25,13 @@ export const POST: RequestHandler = async ({ request, locals }) => {
     );
     if (!result?.acknowledged) {
       logger.timeEnd(TAG, `post(${missionUuid},${radio},${vehicle},${crew})`);
-      logger.warn(
-        TAG,
-        `post(${missionUuid},${radio},${vehicle},${crew})::register-unit::${JSON.stringify(
-          result,
-        )}`,
-      );
+      logger.warn(TAG, `post(${missionUuid},${radio},${vehicle},${crew})::register-unit::${JSON.stringify(result)}`);
       throw error(503, JSON.stringify({ msg: 'errors.register-not-successful' }));
     }
   } catch (e) {
     logger.timeEnd(TAG, `post(${missionUuid},${radio},${vehicle},${crew})`);
     logger.error(TAG, `post(${missionUuid},${radio},${vehicle},${crew})::register-unit::${e}`);
-    console.error('Error while register an unit to a mission', e);
+    // console.error('Error while register an unit to a mission', e);
     throw error(503, JSON.stringify({ msg: 'errors.register-not-successful' }));
   }
   close();
@@ -68,16 +65,13 @@ export const DELETE: RequestHandler = async ({ request }) => {
     close();
     if (!result?.acknowledged) {
       logger.timeEnd(TAG, `del(${missionUuid},${unitUuid})`);
-      logger.warn(
-        TAG,
-        `del(${missionUuid},${unitUuid})::deleting-unit-from-mission::${JSON.stringify(result)}`,
-      );
+      logger.warn(TAG, `del(${missionUuid},${unitUuid})::deleting-unit-from-mission::${JSON.stringify(result)}`);
       throw error(503, JSON.stringify({ msg: 'errors.delete-not-successful' }));
     }
   } catch (e) {
     logger.timeEnd(TAG, `del(${missionUuid},${unitUuid})`);
     logger.error(TAG, `del(${missionUuid},${unitUuid})::deleting-unit-from-mission::${e}`);
-    console.error('while deleting an unit from a mission', e);
+    // console.error('while deleting an unit from a mission', e);
     throw error(503, JSON.stringify({ msg: 'errors.delete-not-successful' }));
   }
   logger.timeEnd(TAG, `del(${missionUuid},${unitUuid})`);

@@ -1,34 +1,45 @@
-import type { Actions, PageServerLoad } from './$types';
-import { invalid, redirect } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
+import { noErrors, superValidate } from 'sveltekit-superforms/server';
 
-export const load: PageServerLoad = async ({ locals, url }) => {
+import type { Actions, PageServerLoad } from './$types';
+import { registerUnitSchema } from './register-unit-schema';
+
+export const load: PageServerLoad = async (event) => {
+  const { locals, url } = event;
+  const missionUuid = locals.session.data.missionUuid || url.searchParams.get('id');
+
+  const form = await superValidate(
+    {
+      missionUuid,
+    },
+    registerUnitSchema,
+  );
+
   // TODO: validate ID
-  return { missionUuid: locals.session.data.missionUuid, id: url.searchParams.get('id') };
+  return { form: noErrors(form) };
 };
 
 export const actions: Actions = {
-  register: async ({ request, fetch }) => {
-    const data = await request.formData();
-    const radio = data.get('radio');
-    const vehicle = data.get('vehicle');
-    const crew = data.get('crew');
-    const missionUuid = data.get('id');
+  register: async (event) => {
+    const { fetch } = event;
+    const form = await superValidate(event, registerUnitSchema);
 
-    if (!missionUuid) {
-      throw redirect(301, `/unit?notify=pages.unit-register.errors.uuid`);
+    if (!form.valid) {
+      return fail(400, { form });
     }
     const res = await fetch('/api/mission/units', {
       method: 'POST',
-      body: JSON.stringify({ missionUuid, radio, vehicle, crew }),
+      body: JSON.stringify({
+        missionUuid: form.data.missionUuid,
+        radio: form.data.radio,
+        vehicle: form.data.vehicle,
+        crew: form.data.crew,
+      }),
     });
     if (res.ok) {
       const dataRes = await res.json();
-      throw redirect(
-        301,
-        `/unit/${dataRes.missionUuid}/${dataRes.uuid}?notify=pages.unit-register.register-success`,
-      );
+      throw redirect(301, `/unit/${dataRes.missionUuid}/${dataRes.uuid}`);
     }
-
-    return invalid(400, { radio, incorrect: true });
+    return { form };
   },
 };
