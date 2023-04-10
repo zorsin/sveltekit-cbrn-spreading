@@ -166,13 +166,16 @@
     <div class="flex flex-col">
       {#key $pageData?.mission?.units}
         {#each $pageData?.mission?.units as unit}
-          <div class="bg-dark-500 mt-4 grid(& cols-5) gap-2 items-center border(& 2 primary-700) rounded py-2">
+          <div class="mt-4 grid grid-cols-5 gap-2 items-center border-2 border-tertiary-500 rounded py-2 px-2">
             <div>
               <Checkbox bind:checked={$unitFilter[unit.unitUuid]} />
             </div>
             <div class="col-span-3">
-              <h6 class="text-base mb-2">{unit.radio} - {unit.vehicle}</h6>
-              <p class="text-sm">{unit.crew}</p>
+              <h3>
+                {unit.radio}
+              </h3>
+              <h6>{unit.vehicle}</h6>
+              <small>{unit.crew}</small>
             </div>
             <div>
               <Button on:click={() => onDelUnitClick(unit.unitUuid)}>
