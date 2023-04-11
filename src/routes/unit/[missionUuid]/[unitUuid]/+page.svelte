@@ -7,7 +7,7 @@
   // export let data: PageData;
   // $: ({ unit, mission } = data);
 
-  import { PageTitle, Switch, SolidTruck, notifier } from '$lib/smelte';
+  // import { PageTitle, Switch, SolidTruck, notifier } from '$lib/smelte';
   import { Leaflet, Marker, Polyline } from '$lib/comps';
   // import { session } from '$app/stores';
   import Geolocation from 'svelte-geolocation';
@@ -16,6 +16,9 @@
   import type { PageData } from './$types';
   import { goto } from '$app/navigation';
   import { page } from '$app/stores';
+  import ContentGrid from '$lib/skeleton/ContentGrid.svelte';
+  import { PageTitle, Switch } from '$lib/skeleton';
+  import { SolidTruck } from '$lib/heroicons';
   export let data: PageData;
   const { unit, mission, notify } = data;
 
@@ -56,7 +59,7 @@
   }
 
   if (notify) {
-    notifier.success($t(notify));
+    // notifier.success($t(notify));
     goto($page.url.pathname);
   }
 
@@ -73,7 +76,7 @@
       messureUuid = uuid;
       if (dblines) lines = dblines;
     } else {
-      notifier.error($t('pages.unit-mission.errors.start-measure'));
+      // notifier.error($t('pages.unit-mission.errors.start-measure'));
       checked = false;
     }
   };
@@ -107,7 +110,7 @@
       lastPoint = markerLocation;
       lines = [...lines, point];
     } else {
-      notifier.error($t('pages.unit-mission.errors.update-point'));
+      // notifier.error($t('pages.unit-mission.errors.update-point'));
     }
   };
 
@@ -119,26 +122,16 @@
 
 <svelte:window on:resize={resizeMap} on:load={() => (loaded = true)} />
 <Geolocation {getPosition} watch={true} bind:coords />
-<PageTitle>{$t('pages.unit-mission.title', { values: { unit: unit?.radio } })}</PageTitle>
 
-<div class="grid(& cols-12) gap-4 md:gap-8 mt-8">
-  <Switch
-    class="col-span-2"
-    classes={(s) => s.replace('inline-flex', 'hidden md:inline-flex')}
-    label="Demo Point"
-    bind:checked={checkedDemo}
-  />
-  <Switch
-    class="col(span-6 md:start-8 md:end-10)"
-    label={$t('pages.unit-mission.labels.gps')}
-    bind:checked={getPosition}
-  />
-  <Switch
-    class="col(span-6 md:start-10 md:end-13)"
-    label={$t('pages.unit-mission.labels.start')}
-    bind:checked
-  />
-  <div class="row-start-2 col(span-12 md:start-1 md:end-9) h-[20rem] md:h-[37rem]">
+<ContentGrid>
+  <PageTitle>{$t('pages.unit-mission.title', { values: { unit: unit?.radio } })}</PageTitle>
+  <Switch name="demo" class="col-span-2" bind:checked={checkedDemo}>Demo Point</Switch>
+  <Switch class="col-span-6 md:col-start-8 md:col-end-10" name="enableGPS" bind:checked={getPosition}
+    >{$t('pages.unit-mission.labels.gps')}
+  </Switch>
+  <Switch class="col-span-6 md:col-start-10 md:col-end-13" name="enableMeasure" bind:checked
+    >{$t('pages.unit-mission.labels.start')}</Switch>
+  <div class="row-start-3 col-span-12 md:col-start-1 md:col-end-9 h-[20rem] md:h-[37rem]">
     {#if loaded || document.readyState === 'complete'}
       <Leaflet bind:map view={initialView} zoom={15} on:click={onMapClick}>
         {#if markerLocation}
@@ -152,7 +145,7 @@
       </Leaflet>
     {/if}
   </div>
-  <div class="row-start-3 md:row-start-2 col(span-12 md:start-9 md:end-13) flex flex-col">
+  <div class="row-start-4 md:row-start-3 col-span-12 md:col-start-9 md:col-end-13 flex flex-col">
     <h5 class="text-xl">{$t('pages.unit-mission.labels.unit')}</h5>
     <p>{$t('pages.unit-mission.labels.radio', { values: { radio: unit?.radio } })}</p>
     <p>{$t('pages.unit-mission.labels.crew', { values: { crew: unit?.crew } })}</p>
@@ -161,4 +154,4 @@
     <p>{$t('pages.unit-mission.labels.value', { values: { value: measureValue / 1000 } })}</p>
     <div class="w-full h-5" style="background-color: {lastColor};" />
   </div>
-</div>
+</ContentGrid>
