@@ -1,9 +1,8 @@
 <script lang="ts">
-  // import { PageTitle, Button, TextField, notifier } from '$lib/smelte';
   import { t } from 'svelte-intl-precompile';
   import type { PageData } from './$types';
   import { enhance } from '$app/forms';
-  import { goto, invalidate } from '$app/navigation';
+  import { goto } from '$app/navigation';
   import { Button, PageTitle, TextField } from '$lib/skeleton';
   import ContentGrid from '$lib/skeleton/ContentGrid.svelte';
 
@@ -11,7 +10,6 @@
   const { unitUuid, missionUuid, notify } = data;
 
   if (notify) {
-    // notifier.error($t(notify));
     goto('/unit');
   }
 </script>

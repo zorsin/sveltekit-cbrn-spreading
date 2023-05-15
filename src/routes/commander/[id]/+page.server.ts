@@ -1,4 +1,4 @@
-import { noErrors, superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms/server';
 import { fail } from '@sveltejs/kit';
 
 import * as logger from '$lib/util/logger';
@@ -50,6 +50,7 @@ export const load: PageServerLoad = async (event) => {
         openingAngle: dbSpread.openingAngle,
       },
       startSchema,
+      { errors: false },
     );
     delete dbSpread._id;
 
@@ -57,7 +58,7 @@ export const load: PageServerLoad = async (event) => {
       spreadId: params.id,
       spread: dbSpread,
       lines,
-      form: noErrors(form),
+      form: form,
     };
   } catch (e) {
     logger.timeEnd(TAG, `get(${params.id})`);

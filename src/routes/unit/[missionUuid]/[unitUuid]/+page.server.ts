@@ -1,5 +1,4 @@
 import * as logger from '$lib/util/logger';
-
 import { close, connect } from '$lib/logic/mongo';
 
 import type { PageServerLoad } from './$types';
@@ -32,10 +31,7 @@ export const load: PageServerLoad = async ({ params, locals, url }) => {
     const unit = result?.units?.filter((entry) => entry.unitUuid == unitUuid)?.[0];
     logger.timeEnd(TAG, `get(${missionUuid}, ${unitUuid})`);
     if (!result || !unit) {
-      logger.warn(
-        TAG,
-        `get(${missionUuid}, ${unitUuid})::unit-not-found::result::${JSON.stringify(result)}`,
-      );
+      logger.warn(TAG, `get(${missionUuid}, ${unitUuid})::unit-not-found::result::${JSON.stringify(result)}`);
       return {
         status: 404,
       };
@@ -47,6 +43,7 @@ export const load: PageServerLoad = async ({ params, locals, url }) => {
       notify: url.searchParams.get('notify'),
     };
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
   }
 };

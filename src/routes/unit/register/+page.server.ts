@@ -1,5 +1,5 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { noErrors, superValidate } from 'sveltekit-superforms/server';
+import { superValidate } from 'sveltekit-superforms/server';
 
 import type { Actions, PageServerLoad } from './$types';
 import { registerUnitSchema } from './register-unit-schema';
@@ -13,10 +13,11 @@ export const load: PageServerLoad = async (event) => {
       missionUuid,
     },
     registerUnitSchema,
+    { errors: false },
   );
 
   // TODO: validate ID
-  return { form: noErrors(form) };
+  return { form: form };
 };
 
 export const actions: Actions = {

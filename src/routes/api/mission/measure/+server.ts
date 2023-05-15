@@ -1,10 +1,13 @@
-import type { RequestHandler } from './$types';
+/* eslint-disable no-console */
 import { error } from '@sveltejs/kit';
-import { connect, close } from '$lib/logic/mongo';
-import { Spread } from '$lib/model';
 import * as turf from '@turf/turf';
 import { v4 as uuidv4 } from 'uuid';
+
+import { connect, close } from '$lib/logic/mongo';
+import { Spread } from '$lib/model';
 import * as logger from '$lib/util/logger';
+
+import type { RequestHandler } from './$types';
 const TAG = 'api/mission/measure.ts';
 
 // get all messures as commander
@@ -28,10 +31,7 @@ export const GET: RequestHandler = async ({ url }) => {
       .toArray();
     close();
     logger.timeEnd(TAG, `get(${missionUuid},${JSON.stringify(filter)})`);
-    logger.info(
-      TAG,
-      `get(${missionUuid},${JSON.stringify(filter)})::successful::${JSON.stringify(findResult)}`,
-    );
+    logger.info(TAG, `get(${missionUuid},${JSON.stringify(filter)})::successful::${JSON.stringify(findResult)}`);
     return new Response(JSON.stringify({ measures: findResult }));
     // return {
     //   status: 200,
@@ -40,10 +40,7 @@ export const GET: RequestHandler = async ({ url }) => {
     //   },
     // };
   } catch (e) {
-    logger.error(
-      TAG,
-      `get(${missionUuid},${JSON.stringify(filter)})::find-mission-measurement::${e}`,
-    );
+    logger.error(TAG, `get(${missionUuid},${JSON.stringify(filter)})::find-mission-measurement::${e}`);
   }
   close();
   logger.timeEnd(TAG, `get(${missionUuid},${JSON.stringify(filter)})`);
@@ -83,10 +80,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
       if (!result.acknowledged || !result.insertedId) {
         logger.timeEnd(TAG, `post(${missionUuid},${unitUuid})`);
-        logger.warn(
-          TAG,
-          `post(${missionUuid},${unitUuid})::insert-failed::${JSON.stringify(result)}`,
-        );
+        logger.warn(TAG, `post(${missionUuid},${unitUuid})::insert-failed::${JSON.stringify(result)}`);
         close();
         throw error(503, JSON.stringify({ msg: 'errors.save-not-successful' }));
         // return {
@@ -98,10 +92,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     close();
     logger.timeEnd(TAG, `post(${missionUuid},${unitUuid})`);
-    logger.info(
-      TAG,
-      `post(${missionUuid},${unitUuid})::successful::${uuid},length:${lines.length}`,
-    );
+    logger.info(TAG, `post(${missionUuid},${unitUuid})::successful::${uuid},length:${lines.length}`);
     return new Response(JSON.stringify({ uuid, lines }));
     // return {
     //   status: 200,
@@ -138,13 +129,15 @@ export const PATCH: RequestHandler = async ({ request }) => {
     );
     close();
 
-    const spread = new Spread(
-      dbSpread.start,
-      dbSpread.width,
-      dbSpread.length,
-      dbSpread.angle,
-      dbSpread.strength,
-    );
+    const spread = new Spread({
+      mode: dbSpread.mode,
+      startCoordinate: dbSpread.start,
+      width: dbSpread.width,
+      length: dbSpread.length,
+      angle: dbSpread.angle,
+      strength: dbSpread.strength,
+      openingAngle: dbSpread.openingAngle,
+    });
 
     spread.toCoordnates();
     const curerntPosition = turf.points([latLng]);
@@ -180,12 +173,7 @@ export const PATCH: RequestHandler = async ({ request }) => {
     close();
     if (!result?.acknowledged || result.modifiedCount === 0) {
       logger.timeEnd(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
-      logger.warn(
-        TAG,
-        `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::update-measure::${JSON.stringify(
-          result,
-        )}`,
-      );
+      logger.warn(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::update-measure::${JSON.stringify(result)}`);
       throw error(503, JSON.stringify({ msg: 'errors.update-not-successful' }));
       // return {
       //   status: 503,
@@ -194,10 +182,7 @@ export const PATCH: RequestHandler = async ({ request }) => {
     }
 
     logger.timeEnd(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);
-    logger.info(
-      TAG,
-      `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::successful::${resColor},${resValue}`,
-    );
+    logger.info(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::successful::${resColor},${resValue}`);
     return new Response(
       JSON.stringify({
         color: resColor,
@@ -212,10 +197,7 @@ export const PATCH: RequestHandler = async ({ request }) => {
     //   },
     // };
   } catch (e) {
-    logger.error(
-      TAG,
-      `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::update-measure::${e}`,
-    );
+    logger.error(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})::update-measure::${e}`);
     console.error('while updating measure', e);
   }
   logger.timeEnd(TAG, `patch(${missionUuid},${unitUuid},${latLng},${lastLatLng},${id})`);

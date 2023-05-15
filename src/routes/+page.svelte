@@ -1,6 +1,5 @@
 <script lang="ts">
   import ContentGrid from '$lib/skeleton/ContentGrid.svelte';
-  import { PageTitle } from '$lib/smelte';
   import { t } from 'svelte-intl-precompile';
 </script>
 

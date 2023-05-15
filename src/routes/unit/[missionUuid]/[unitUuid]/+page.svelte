@@ -1,15 +1,5 @@
 <script lang="ts">
-  // throw new Error(
-  //   '@migration task: Add data prop (https://github.com/sveltejs/kit/discussions/5774#discussioncomment-3292707)',
-  // );
-  // Suggestion (check code before using, and possibly convert to data.X access later):
-  // import type { PageData } from './$types';
-  // export let data: PageData;
-  // $: ({ unit, mission } = data);
-
-  // import { PageTitle, Switch, SolidTruck, notifier } from '$lib/smelte';
   import { Leaflet, Marker, Polyline } from '$lib/comps';
-  // import { session } from '$app/stores';
   import Geolocation from 'svelte-geolocation';
   import type { GeolocationCoords } from 'svelte-geolocation/types/Geolocation.svelte';
   import { t } from 'svelte-intl-precompile';
