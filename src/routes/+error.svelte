@@ -1,11 +1,12 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { PageTitle } from '$lib/skeleton';
+  import { ContentGrid, PageTitle } from '$lib/skeleton';
 
   import { t } from 'svelte-intl-precompile';
 </script>
 
-<PageTitle>{$t('errors.title')}</PageTitle>
-<p>{$t(`errors.codes.${$page.status}`)}</p>
-
-<p>{$page.error.message}</p>
+<ContentGrid>
+  <PageTitle>{$t('errors.title')}</PageTitle>
+  <p class="col-span-12">{$t(`errors.codes.${$page.status}`)}</p>
+  <p class="col-span-12">{$page.error.message}</p>
+</ContentGrid>
