@@ -24,7 +24,9 @@ export const load: PageServerLoad = async ({ locals, url }) => {
     const collMission = await connect('mission');
     const resMission = await collMission.findOne({ uuid: cookieMission });
     close();
-    if (resMission) {
+    const unit = resMission?.units?.filter((entry) => entry.unitUuid == unitUuid)?.[0];
+
+    if (resMission && unit) {
       missionUuid = cookieMission;
     } else {
       unitUuid = null;

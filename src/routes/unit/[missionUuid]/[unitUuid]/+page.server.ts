@@ -1,3 +1,5 @@
+import { redirect } from '@sveltejs/kit';
+
 import * as logger from '$lib/util/logger';
 import { close, connect } from '$lib/logic/mongo';
 
@@ -32,9 +34,7 @@ export const load: PageServerLoad = async ({ params, locals, url }) => {
     logger.timeEnd(TAG, `get(${missionUuid}, ${unitUuid})`);
     if (!result || !unit) {
       logger.warn(TAG, `get(${missionUuid}, ${unitUuid})::unit-not-found::result::${JSON.stringify(result)}`);
-      return {
-        status: 404,
-      };
+      throw redirect(300, `/unit`);
     }
     logger.info(TAG, `get(${missionUuid}, ${unitUuid})::successful::${result.uuid}`);
     return {
@@ -43,6 +43,12 @@ export const load: PageServerLoad = async ({ params, locals, url }) => {
       notify: url.searchParams.get('notify'),
     };
   } catch (e) {
+    logger.error(TAG, `get(${missionUuid}, ${unitUuid})::error::${typeof e === 'object' ? JSON.stringify(e) : e}`);
+    if (e?.status && e?.body) {
+      throw e;
+    } else if (e?.status && e?.location) {
+      throw e;
+    }
     // eslint-disable-next-line no-console
     console.error(e);
   }
