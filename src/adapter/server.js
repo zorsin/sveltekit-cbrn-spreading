@@ -1,8 +1,10 @@
-import { handler } from './handler.js';
 import express from 'express';
+
 import https from 'node:https';
 import http from 'node:http';
 import fs from 'fs';
+
+import { handler } from './handler.js';
 
 let ssl = false;
 const keyPath = process.env.CBRN_SSL_KEY;

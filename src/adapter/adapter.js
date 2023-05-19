@@ -1,7 +1,7 @@
-import { readFile, writeFile } from 'fs/promises';
-
 import node from '@sveltejs/adapter-node';
 import { readPackageUp } from 'read-pkg-up';
+
+import { readFile, writeFile } from 'fs/promises';
 
 export default function () {
   const adapter = node({
@@ -14,9 +14,7 @@ export default function () {
     async adapt(builder) {
       builder.rimraf('build');
       const { log } = builder;
-      const {
-        packageJson: manifest = { name: 'cbrn-spread', version: '0.0.0', dependencies: {} },
-      } = (await readPackageUp()) || {};
+      const { packageJson: manifest = { name: 'cbrn-spread', version: '0.0.0', dependencies: {} } } = (await readPackageUp()) || {};
 
       await adapter.adapt(builder);
 
@@ -27,9 +25,7 @@ export default function () {
         'build/package.json',
         JSON.stringify(
           {
-            name: [manifest.name.split('/').pop(), manifest.version.replace(/\./g, '-')]
-              .filter(Boolean)
-              .join('_'),
+            name: [manifest.name.split('/').pop(), manifest.version.replace(/\./g, '-')].filter(Boolean).join('_'),
             version: manifest.version,
             type: 'module',
             files: [],
