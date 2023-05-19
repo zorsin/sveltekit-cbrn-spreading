@@ -134,18 +134,18 @@
             <Polyline latLngs={line.latLngs} color={line.color} />
           {/each}
           {#if markerLocation}
-            <Marker latLng={markerLocation} width={40} height={40} class="text-primary-500 flex items-center flex-col">
+            <Marker latLng={markerLocation} width={40} height={40} class="text-secondary-700 flex items-center flex-col">
               <SolidLocationMarker class="w-full h-full relative -top-[19px]" />
-              <small class="w-max h-full relative -top-[19px] block bg-white p-0.5 rounded border border-primary-500">Start</small>
+              <small class="w-max h-full relative -top-[19px] block bg-white p-0.5 rounded border border-secondary-700">Start</small>
             </Marker>
           {/if}
         {/if}
         {#each unitMeasures as measure}
           {@const lastVehicle = measure.lines[measure.lines.length - 1]?.latLngs[1]}
           {#if lastVehicle}
-            <Marker latLng={lastVehicle} height={30} width={30} class="text-primary-500 flex items-center flex-col">
+            <Marker latLng={lastVehicle} height={30} width={30} class="text-primary-800 flex items-center flex-col">
               <SolidTruck class="w-full h-full relative -top-[14px]" />
-              <small class="w-max h-full relative -top-[14px] block bg-white p-0.5 rounded border border-primary-500"
+              <small class="w-max h-full relative -top-[14px] block bg-white p-0.5 rounded border border-primary-800"
                 >{$pageData?.mission?.units.find((unit) => unit.unitUuid == measure.unitUuid).radio}</small>
             </Marker>
           {/if}

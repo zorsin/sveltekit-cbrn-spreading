@@ -164,7 +164,8 @@
         "start": "Messung starten",
         "gps": "GPS aktivieren",
         "measurement": "Messung:",
-        "value": "Messwert: {value} µSv"
+        "value": "Messwert: {value} µSv",
+        "settings": "Einstellungen"
       }
     },
     "unit-register": {

@@ -8,7 +8,10 @@ import type { PageServerLoad } from './$types';
 const TAG = 'unit/missionUuid/unitUuid.ts';
 export const ssr = false;
 
-export const load: PageServerLoad = async ({ params, locals, url }) => {
+export const load: PageServerLoad = async ({ params, locals, url, cookies }) => {
+  // enable demo mode value: 1
+  const demoMode = cookies.get('demo-mode');
+
   const missionUuid = params.missionUuid;
   const unitUuid = params.unitUuid;
   await locals.session.update(() => ({ unit: { uuid: unitUuid, missionId: missionUuid } }));
@@ -41,6 +44,7 @@ export const load: PageServerLoad = async ({ params, locals, url }) => {
       unit,
       mission: { uuid: result.uuid },
       notify: url.searchParams.get('notify'),
+      demoMode: Number(demoMode) === 1 ? true : false,
     };
   } catch (e) {
     logger.error(TAG, `get(${missionUuid}, ${unitUuid})::error::${typeof e === 'object' ? JSON.stringify(e) : e}`);

@@ -129,7 +129,8 @@
         "start": "",
         "gps": "",
         "measurement": "",
-        "value": ""
+        "value": "",
+        "settings": ""
       }
     },
     "unit-register": {
