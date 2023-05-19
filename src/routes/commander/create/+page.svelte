@@ -207,7 +207,7 @@
         >{$t('common.save')}</Button>
     </div>
   </form>
-  <h3 class="col-span-12 mt-4">{$t('pages.commander-create.labels.winddirections')}</h3>
+  <h3 class="col-span-12 mt-4 h3">{$t('pages.commander-create.labels.winddirections')}</h3>
   <div class="col-span-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-y-1.5 mt-4">
     <span>{$t('common.directions.n', { values: { angle: 0 } })}</span>
     <span>{$t('common.directions.nno', { values: { angle: 22.5 } })}</span>

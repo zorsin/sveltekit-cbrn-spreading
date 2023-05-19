@@ -1,9 +1,10 @@
 <script lang="ts">
   import ContentGrid from '$lib/skeleton/ContentGrid.svelte';
+  import PageTitle from '$lib/skeleton/PageTitle.svelte';
   import { t } from 'svelte-intl-precompile';
 </script>
 
 <ContentGrid>
-  <h1 class="col-span-12 mb-8">{$t('pages.landing.title')}</h1>
+  <PageTitle>{$t('pages.landing.title')}</PageTitle>
   <span class="col-span-12">{$t('pages.landing.descr')}</span>
 </ContentGrid>

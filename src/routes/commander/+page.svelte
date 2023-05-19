@@ -5,6 +5,7 @@
   import ContentGrid from '$lib/skeleton/ContentGrid.svelte';
   import { modalStore } from '@skeletonlabs/skeleton';
   import { goto } from '$app/navigation';
+  import PageTitle from '$lib/skeleton/PageTitle.svelte';
 
   export let data: PageData;
 
@@ -30,7 +31,7 @@
 </script>
 
 <ContentGrid>
-  <h1 class="col-span-12 mb-8">{$t('pages.commander.title')}</h1>
+  <PageTitle>{$t('pages.commander.title')}</PageTitle>
   <p class="col-span-12 mb-4">{$t('pages.commander.descr')}</p>
 
   <div class="col-span-12 grid grid-cols-1 gap-2 md:flex">
@@ -56,7 +57,7 @@
     {/if}
     {#if mission}
       <div class="col-span-6">
-        <h4 class=" mb-1">{$t('pages.commander.mission')}</h4>
+        <h4 class="mb-1 h4">{$t('pages.commander.mission')}</h4>
         <a class="text-base" href="/commander/mission/{mission.uuid}" data-sveltekit-preload-data>
           {mission.code}
           <small class="text-sm">({mission.uuid})</small>

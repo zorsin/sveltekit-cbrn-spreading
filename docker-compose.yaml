@@ -3,7 +3,7 @@ name: cbrn-spread
 services:
   ui:
     build: .
-    image: wirries/cbrn-spread:v0.1.0-alpha3
+    image: wirries/cbrn-spread:v0.1.0-alpha4
     ports:
       - "3000:3000"
     environment:

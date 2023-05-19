@@ -1,5 +1,6 @@
-import adapter from './src/adapter/adapter.js';
 import preprocess from 'svelte-preprocess';
+
+import adapter from './src/adapter/adapter.js';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
